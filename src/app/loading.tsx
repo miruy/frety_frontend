@@ -30,7 +30,7 @@ const Loading = () => {
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="bg-transparent justify-center items-center shadow-none border-0 outline-0">
                 <VisuallyHidden><DialogTitle/></VisuallyHidden>
-                <TbCircleDotted className="w-[70px] h-[70px] animate-spin-slow text-white"/>
+                <TbCircleDotted className="w-[50px] h-[50px] animate-spin-slow text-white"/>
             </DialogContent>
         </Dialog>
     )
