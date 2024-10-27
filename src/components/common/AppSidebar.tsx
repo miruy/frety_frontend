@@ -9,10 +9,12 @@ import {
     SidebarHeader,
     SidebarRail,
 } from "@/components/ui/sidebar"
-import {NavMain} from "@/components/ui/nav-main";
-import {NavUser} from "@/components/ui/nav-user";
+
 import {data} from "@/data/SidebarData";
 import {NavHome} from "@/components/common/NavHome";
+import {NavMain} from "@/components/common/NavMain";
+import {NavSecondary} from "@/components/common/NavSecondary";
+import {NavUser} from "@/components/common/NavUser";
 
 export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
     return (
@@ -22,6 +24,7 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
             </SidebarHeader>
             <SidebarContent>
                 <NavMain items={data.navMain}/>
+                <NavSecondary items={data.navSecondary}/>
             </SidebarContent>
             <SidebarFooter>
                 <NavUser user={data.user}/>

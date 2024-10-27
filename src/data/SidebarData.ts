@@ -1,118 +1,44 @@
 import {
-    BookOpen, Bot, Frame,
-    Map, PieChart,
-    Settings2,
-    SquareTerminal
+    Bookmark,
+    BookOpen, Guitar, ListMusic, Music2Icon, Send,
 } from "lucide-react";
 
 export const data = {
     navMain: [
         {
-            title: "Playground",
-            url: "#",
-            icon: SquareTerminal,
-            isActive: true,
-            items: [
-                {
-                    title: "History",
-                    url: "#",
-                },
-                {
-                    title: "Starred",
-                    url: "#",
-                },
-                {
-                    title: "Settings",
-                    url: "#",
-                },
-            ],
+            title: "악보 전체보기",
+            url: "/tabs",
+            icon: ListMusic,
         },
         {
-            title: "Models",
-            url: "#",
-            icon: Bot,
-            items: [
-                {
-                    title: "Genesis",
-                    url: "#",
-                },
-                {
-                    title: "Explorer",
-                    url: "#",
-                },
-                {
-                    title: "Quantum",
-                    url: "#",
-                },
-            ],
+            title: "악보 제작하기",
+            url: "/create-tab",
+            icon: Music2Icon,
         },
         {
-            title: "Documentation",
-            url: "#",
+            title: "내가 제작한 악보",
+            url: "/my-tabs",
             icon: BookOpen,
-            items: [
-                {
-                    title: "Introduction",
-                    url: "#",
-                },
-                {
-                    title: "Get Started",
-                    url: "#",
-                },
-                {
-                    title: "Tutorials",
-                    url: "#",
-                },
-                {
-                    title: "Changelog",
-                    url: "#",
-                },
-            ],
         },
         {
-            title: "Settings",
-            url: "#",
-            icon: Settings2,
-            items: [
-                {
-                    title: "General",
-                    url: "#",
-                },
-                {
-                    title: "Team",
-                    url: "#",
-                },
-                {
-                    title: "Billing",
-                    url: "#",
-                },
-                {
-                    title: "Limits",
-                    url: "#",
-                },
-            ],
+            title: "즐겨찾는 악보",
+            url: "/favorite-tabs",
+            icon: Bookmark,
         },
     ],
-    projects: [
+    navSecondary: [
         {
-            name: "Design Engineering",
-            url: "#",
-            icon: Frame,
+            title: "기타 코드 신청",
+            url: "/apply-for-chord",
+            icon: Guitar,
         },
         {
-            name: "Sales & Marketing",
-            url: "#",
-            icon: PieChart,
-        },
-        {
-            name: "Travel",
-            url: "#",
-            icon: Map,
+            title: "개선 및 추가기능 제안",
+            url: "/feedback",
+            icon: Send,
         },
     ],
     user: {
-        name: "shadcn",
-        email: "m@example.com",
-        avatar: "/image/guitar.png",
+        name: "tester",
     },
 }

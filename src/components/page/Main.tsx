@@ -36,7 +36,7 @@ const Main = () => {
                 <Button variant="outline"
                         className="w-[50%] p-8 hover:bg-primary hover:text-primary-foreground"
                         onClick={startFrety}>
-                    <span className="text-2xl font-bold tracking-wide">Frety 시작하기</span>
+                    <span className="text-2xl font-bold tracking-wide">시작하기</span>
                 </Button>
             </div>
         </div>
