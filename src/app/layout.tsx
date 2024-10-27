@@ -3,6 +3,8 @@ import {Inter as FontSans} from 'next/font/google';
 import "../css/globals.css";
 import ClientProviders from "@/provider/ClientProviders";
 import {cn} from "@/lib/utils";
+import TopBar from "@/components/common/TopBar";
+import SideSheet from "@/components/common/SideSheet";
 
 const fontSans = FontSans({
     subsets: ['latin'],
@@ -30,9 +32,9 @@ export default function RootLayout({
             )}
         >
         <ClientProviders>
-            {/*<CustomSidebar>*/}
-                {children}
-            {/*</CustomSidebar>*/}
+            <SideSheet/>
+            <TopBar/>
+            {children}
         </ClientProviders>
         </body>
         </html>

@@ -1,44 +1,34 @@
 'use client';
 
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
+import LatestTabs from "@/components/page_component/LatestTabs";
+import PopularTabs from "@/components/page_component/PopularTabs";
 import {useRouter} from "next/navigation";
-import {Button} from "@/components/ui/button"
 
 const Main = () => {
 
     const router = useRouter();
 
-    const startFrety = () => {
-        router.push("/tabs")
-    }
-
     return (
-        <div className="flex-1 flex justify-center items-center relative">
-            <div className="absolute top-0 bottom-0 left-0 p-20 flex flex-col justify-center space-y-5 items-center">
-                <div
-                    className="text-foreground/50 text-xl font-semibold tracking-wide animate-fade-up animate-delay-[500ms] animate-duration-[1700ms]">
-                    연주하고 싶은 곡의 기타악보를 찾지 못하셨나요?
-                </div>
-                <div
-                    className="text-foreground/80 text-xl font-semibold tracking-wide animate-fade-up animate-delay-[1500ms] animate-duration-[1700ms]">
-                    Frety에서 쉽고 간편하게 나만의 기타악보를 제작해보세요!
-                </div>
+        <div className="px-3 py-20 mx-auto lg:w-[70%] space-y-10">
+            <div className="space-y-2 border-b pb-2">
+                <div className="text-4xl font-bold tracking-wide">Frety</div>
+                <div className="text-lg font-semibold tracking-wide text-primary/50">프렛위에서 완성되는 당신의 기타 코드</div>
             </div>
 
-            <img src="/image/guitar.png" className="w-[25%] h-fit animate-jump" alt="fretyImage"/>
+            <Tabs defaultValue="latest" className="flex-1">
+                <TabsList>
+                    <TabsTrigger value="latest">최근 등록된 악보</TabsTrigger>
+                    <TabsTrigger value="popular">인기 악보</TabsTrigger>
+                </TabsList>
 
-            <div
-                className="absolute top-0 bottom-0 right-0 p-20 flex flex-col items-center justify-center w-fit space-y-[50px] animate-fade animate-delay-[2500ms] animate-duration-[1700ms]">
-                <div className="font-bold tracking-wide text-center space-y-5">
-                    <div className="text-4xl">프렛위에서 완성되는 당신의 기타 코드</div>
-                    <div className="text-7xl">Frety</div>
-                </div>
-
-                <Button variant="outline"
-                        className="w-[50%] p-8 hover:bg-primary hover:text-primary-foreground"
-                        onClick={startFrety}>
-                    <span className="text-2xl font-bold tracking-wide">시작하기</span>
-                </Button>
-            </div>
+                <TabsContent value="latest" className="py-5">
+                    <LatestTabs/>
+                </TabsContent>
+                <TabsContent value="popular" className="py-5">
+                    <PopularTabs/>
+                </TabsContent>
+            </Tabs>
         </div>
     );
 }
