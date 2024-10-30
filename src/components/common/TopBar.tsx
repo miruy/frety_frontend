@@ -23,12 +23,12 @@ const TopBar = () => {
                     <Input
                         id="search"
                         placeholder="악보 검색"
-                        className="pl-8 w-[350px]"
+                        className="pl-8 w-[350px] h-[40px]"
                     />
                     <Music2
-                        className="pointer-events-none absolute left-2 top-1/2 size-4 -translate-y-1/2 select-none opacity-70"/>
+                        className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 select-none opacity-70"/>
 
-                    <Button variant="ghost" size="sm" className="absolute right-0 top-1/2 -translate-y-1/2 select-none">
+                    <Button variant="ghost" size="sm" className="absolute right-1 p-2 w-fit h-fit top-1/2 -translate-y-1/2 select-none">
                         <Search/>
                     </Button>
                 </form>

@@ -8,16 +8,20 @@ import {
     PaginationLink, PaginationNext,
     PaginationPrevious
 } from "@/components/ui/pagination";
+import {useRouter} from "next/navigation";
 
 const PopularTabs = () => {
 
-    const handleDetailTab = () => {
-        console.log("detail")
+    const router = useRouter();
+
+    const handleDetailTab = (tabId: number) => {
+        router.push("/tab/" + tabId);
     }
 
     function generateSheetMusicData(count: number) {
         return Array.from({length: count}).map((_, index) => ({
             no: index + 1,
+            tabId: index + 1,
             artist: faker.music.songName(),
             song: faker.lorem.words(3),
             writer: faker.name.fullName(),
@@ -42,7 +46,8 @@ const PopularTabs = () => {
                 <TableBody>
                     {popularTabs.map((popularTab, index) => {
                         return (
-                            <TableRow key={index} className="cursor-pointer" onClick={handleDetailTab}>
+                            <TableRow key={index} className="cursor-pointer"
+                                      onClick={() => handleDetailTab(popularTab.tabId)}>
                                 <TableCell className="text-center">{popularTab.no}</TableCell>
                                 <TableCell className="text-center">{popularTab.artist}</TableCell>
                                 <TableCell className="text-center">{popularTab.song}</TableCell>
