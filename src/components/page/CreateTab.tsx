@@ -10,10 +10,12 @@ import {
     SelectTrigger,
     SelectValue
 } from "@/components/ui/select";
-import {Guitar, NotebookPen, PencilLine} from "lucide-react";
+import {NotebookPen, PencilLine} from "lucide-react";
 import {Textarea} from "@/components/ui/textarea";
 import {useEffect, useState} from "react";
 import {Button} from "@/components/ui/button";
+import ChordSelector from "@/components/page_component/common/ChordSelector";
+import HowToCreateTab from "@/components/page_component/createTab/HowToCreateTab";
 
 interface Syllable {
     text: string;
@@ -27,6 +29,8 @@ const CreateTab = () => {
     const [parsedLyrics, setParsedLyrics] = useState<{ lineData: Syllable[], comment: string }[]>([]);
     const [maxCharactersPerLine, setMaxCharactersPerLine] = useState(30); // 글자 제한 기본값
     const [lyricComment, setLyricComment] = useState<boolean[]>([]);
+    const [showChordSelector, setShowChordSelector] = useState<boolean>(false);
+    const [selectedSyllable, setSelectedSyllable] = useState<{ lineIndex: number; syllableIndex: number } | null>(null);
 
     // 가사 입력 후 엔터
     const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -79,10 +83,87 @@ const CreateTab = () => {
         setParsedLyrics((prevData) => [...prevData, {lineData, comment: ""}]);
     }
 
-    // 음절 클릭
-    const clickSyllable = (syllable: Syllable) => {
-        console.log('Clicked syllable:', syllable);
+    // 음절 클릭 시 코드 셀렉터 표시/숨기기 및 해당 위치 저장 (7)
+    const clickSyllable = (lineIndex: number, syllableIndex: number) => {
+        // 음절 선택하면 해당 줄 index, 해당 음절 index 저장
+        setSelectedSyllable((prev) =>
+            prev && prev.lineIndex === lineIndex && prev.syllableIndex === syllableIndex ? null : {
+                lineIndex,
+                syllableIndex
+            }
+        );
+
+        // 코드 셀렉터 표시 (8)
+        setShowChordSelector(true);
     };
+
+    // 코드선택기에서 코드 선택하면 음절위에 표시 (9)
+    const setChord = (chord: string) => {
+        if (selectedSyllable) {
+            const {lineIndex, syllableIndex} = selectedSyllable;
+
+            setParsedLyrics(prevData => {
+                const updatedLineData = [...prevData[lineIndex].lineData];
+
+                updatedLineData[syllableIndex] = {
+                    ...updatedLineData[syllableIndex],
+                    chord: chord // 선택된 코드 설정
+                };
+
+                return [
+                    ...prevData.slice(0, lineIndex), // 이전 행들
+                    {lineData: updatedLineData, comment: prevData[lineIndex].comment}, // 업데이트된 행
+                    ...prevData.slice(lineIndex + 1) // 이후 행들
+                ];
+            });
+
+            // 선택 후 코드 선택기 닫기
+            setShowChordSelector(false);
+            setSelectedSyllable(null);
+        }
+    }
+
+    // 코드 제거
+    const deleteChord = () => {
+        console.log("selectedSyllable", selectedSyllable)
+        if (selectedSyllable) {
+            const {lineIndex, syllableIndex} = selectedSyllable;
+
+            setParsedLyrics(prevData => {
+                const updatedLineData = [...prevData[lineIndex].lineData];
+
+                updatedLineData[syllableIndex] = {
+                    ...updatedLineData[syllableIndex],
+                    chord: null
+                };
+
+                return [
+                    ...prevData.slice(0, lineIndex), // Previous lines
+                    {lineData: updatedLineData, comment: prevData[lineIndex].comment}, // Updated line
+                    ...prevData.slice(lineIndex + 1) // Subsequent lines
+                ];
+            });
+
+            // 선택 후 코드 선택기 닫기
+            setShowChordSelector(false);
+            setSelectedSyllable(null);
+        }
+    }
+
+    // ESC 키를 누르면 코드 셀렉터 닫기
+    useEffect(() => {
+        const handleEscKey = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                setShowChordSelector(false);
+                setSelectedSyllable(null);
+            }
+        };
+
+        document.addEventListener('keydown', handleEscKey);
+        return () => {
+            document.removeEventListener('keydown', handleEscKey);
+        };
+    }, []);
 
     // 화면 크기에 따라 글자 제한을 설정
     useEffect(() => {
@@ -178,46 +259,56 @@ const CreateTab = () => {
                 </div>
 
                 {/* 악보 제작 방법 */}
-                <div className="py-10">
-                    <div className="flex space-x-2 items-center">
-                        <Guitar className="size-5"/>
-                        <div className="text-sm font-semibold">악보 제작 방법</div>
-                    </div>
-                    <div className="text-sm ml-1.5 space-y-1">
-                        <div className="ml-5">1. 입력칸에 가사를 <span className="font-bold">직접 입력</span>하거나 <span
-                            className="font-bold">붙여넣기</span>하여 가사를 업로드하세요.
-                        </div>
-                        <div className="text-muted-foreground ml-8"><span
-                            className="font-bold">- Shift + Enter : </span>가사 줄바꿈
-                        </div>
-                        <div className="text-muted-foreground ml-8"><span className="font-bold">- Enter : </span>가사 업로드
-                        </div>
-                        <div className="text-muted-foreground ml-8"><span className="font-bold">- ESC : </span>코드 선택기 닫기
-                        </div>
-                        <div className="ml-5">2. 가사의 각 <span className="font-bold">음절</span>을 클릭하여 <span
-                            className="font-bold">기타 코드</span>를 지정할 수 있습니다. (공백에도 코드 지정 가능)
-                        </div>
-                        <div className="ml-5">3. 악보 작성을 마쳤다면, <span className="font-bold">저장 버튼</span>을 눌러 당신의
-                            악보를 <span className="font-bold">Frety</span>에 공유하세요!
-                        </div>
-                    </div>
-                </div>
+                <HowToCreateTab/>
 
                 {/* 한 행씩 업로드 된 가사 표시 */}
                 <div>
                     {parsedLyrics.map(({lineData, comment}, lineIndex) => (
                         <div key={lineIndex} className="flex flex-col mt-10 space-y-3">
                             <div className="flex items-center justify-between">
-                                <div className="flex items-center">
+                                <div className="relative flex items-center">
                                     {lineData.map((syllable, syllableIndex) => (
-                                        <span
-                                            key={syllableIndex}
-                                            className="relative hover:bg-primary/20 hover:bg-opacity-40 cursor-pointer inline-block px-0.5"
-                                            onClick={() => clickSyllable(syllable)}
-                                            dangerouslySetInnerHTML={{
-                                                __html: syllable.text === ' ' ? '&nbsp;&nbsp;&nbsp;' : syllable.text,
-                                            }}
-                                        />
+                                        <div key={syllableIndex} className="relative">
+
+                                            {/* 선택한 코드 표시 (3) */}
+                                            {syllable.chord && (
+                                                <div
+                                                    className={`absolute text-sm font-semibold text-primary/60 mt-[-20px]
+                                                     ${syllable.chord.length === 1 && 'left-1 w-[10px]'} 
+                                                        ${syllable.chord.length === 2 && 'left-0 w-[20px]'}
+                                                        ${syllable.chord.length === 3 && '-left-[5px] w-[40px]'}
+                                                        ${syllable.chord.length === 4 && '-left-[9px] w-[50px]'}
+                                                        ${syllable.chord.length === 5 && '-left-[12px] w-[60px]'}
+                                                        ${syllable.chord.length === 6 && '-left-[16px] w-[60px]'}
+                                                    `}>
+                                                    {syllable.chord}
+                                                </div>
+                                            )}
+
+                                            {/* 각 음절 (1) */}
+                                            <span
+                                                className={`
+                                                ${
+                                                    selectedSyllable?.lineIndex === lineIndex &&
+                                                    selectedSyllable.syllableIndex === syllableIndex &&
+                                                    showChordSelector ? 'bg-primary/20' : 'bg-transparent'
+                                                } 
+                                                ${syllable.text === ' ' && 'bg-primary/5'}
+                                                relative hover:bg-primary/20 cursor-pointer inline-block min-w-[16px] mx-0.5 text-center`}
+                                                onClick={() => clickSyllable(lineIndex, syllableIndex)}
+                                                dangerouslySetInnerHTML={{
+                                                    __html: syllable.text === ' ' ? '&nbsp;&nbsp;&nbsp;' : syllable.text,
+                                                }}
+                                            />
+
+                                            {/* 코드 셀렉터 (2) */}
+                                            {showChordSelector && selectedSyllable?.lineIndex === lineIndex && selectedSyllable.syllableIndex === syllableIndex &&
+                                                <div className="absolute z-[1000] mt-2 ml-3">
+                                                    <ChordSelector setChord={setChord} deleteChord={deleteChord}/>
+                                                </div>
+                                            }
+
+                                        </div>
                                     ))}
                                 </div>
 
@@ -255,7 +346,6 @@ const CreateTab = () => {
 
                             {lyricComment[lineIndex] &&
                                 <div className="flex flex-col">
-
                                     <div>
                                         <label className="relative">
                                             <Input

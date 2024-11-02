@@ -1,8 +1,8 @@
 'use client';
 
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
-import LatestTabs from "@/components/page_component/LatestTabs";
-import PopularTabs from "@/components/page_component/PopularTabs";
+import LatestTabs from "@/components/page_component/main/LatestTabs";
+import PopularTabs from "@/components/page_component/main/PopularTabs";
 import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
 

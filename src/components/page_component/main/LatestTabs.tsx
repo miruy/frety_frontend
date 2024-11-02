@@ -25,6 +25,8 @@ const LatestTabs = () => {
             song: faker.lorem.words(3),
             writer: faker.name.fullName(),
             createAt: faker.date.past().toLocaleDateString(),
+            // updateAt: faker.date.past().toLocaleDateString(),
+            updateAt: ""
         }));
     }
 
@@ -40,6 +42,7 @@ const LatestTabs = () => {
                         <TableHead className="text-center">Song</TableHead>
                         <TableHead className="text-center">악보제작자</TableHead>
                         <TableHead className="text-center">등록일</TableHead>
+                        <TableHead className="text-center">수정일</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -52,6 +55,8 @@ const LatestTabs = () => {
                                 <TableCell className="text-center">{latestTab.song}</TableCell>
                                 <TableCell className="text-center">{latestTab.writer}</TableCell>
                                 <TableCell className="text-center">{latestTab.createAt}</TableCell>
+                                <TableCell
+                                    className="text-center">{latestTab.updateAt !== "" ? latestTab.updateAt : "-"}</TableCell>
                             </TableRow>
                         )
                     })}

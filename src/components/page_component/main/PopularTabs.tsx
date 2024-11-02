@@ -26,6 +26,8 @@ const PopularTabs = () => {
             song: faker.lorem.words(3),
             writer: faker.name.fullName(),
             createAt: faker.date.past().toLocaleDateString(),
+            // updateAt: faker.date.past().toLocaleDateString(),
+            updateAt: ""
         }));
     }
 
@@ -41,6 +43,7 @@ const PopularTabs = () => {
                         <TableHead className="text-center">Song</TableHead>
                         <TableHead className="text-center">악보제작자</TableHead>
                         <TableHead className="text-center">등록일</TableHead>
+                        <TableHead className="text-center">수정일</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -53,6 +56,8 @@ const PopularTabs = () => {
                                 <TableCell className="text-center">{popularTab.song}</TableCell>
                                 <TableCell className="text-center">{popularTab.writer}</TableCell>
                                 <TableCell className="text-center">{popularTab.createAt}</TableCell>
+                                <TableCell
+                                    className="text-center">{popularTab.updateAt !== "" ? popularTab.updateAt : "-"}</TableCell>
                             </TableRow>
                         )
                     })}
