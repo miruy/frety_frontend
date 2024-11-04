@@ -147,11 +147,21 @@ const EditTab = () => {
             event.preventDefault();
             // 줄 단위로 나누기 (1)
             const lines = lyricsData.split('\n');
-            lines.forEach(line => {
+            lines.forEach((line) => {
                 if (line.trim() !== '') {
 
                     // 가사 한 행씩 업로드 함수 호출 (2)
                     addLineToView(line);
+
+                    // 새로 가사 추가 시 hasComment를 false로 설정
+                    setIsDefaultComment(prevComments => {
+                        const updatedComments = [...prevComments];
+                        updatedComments[prevComments.length] = {
+                            index: prevComments.length, // 새 인덱스
+                            hasComment: false // 새 가사 추가 시 false로 설정
+                        };
+                        return updatedComments;
+                    });
                 }
             });
 
@@ -292,7 +302,6 @@ const EditTab = () => {
             hasComment: c.comment !== ""
         }));
 
-        console.log("commentStatusArray", commentStatusArray);
         // 상태 업데이트
         setIsDefaultComment(commentStatusArray);
     }, [tab]);
@@ -448,11 +457,8 @@ const EditTab = () => {
                                                                 hasComment: true // 해당 인덱스의 hasComment를 true로 설정
                                                             };
 
-                                                            console.log("False")
                                                             return updatedComments;
                                                         });
-                                                    }else{
-                                                        console.log("True")
                                                     }
 
                                                     // 코멘트 입력창 표시 토글
@@ -497,7 +503,6 @@ const EditTab = () => {
                                                     type="text"
                                                     value={comment}
                                                     onChange={(e) => {
-                                                        console.log("comment", comment)
                                                         const lyricComment = e.target.value; // 사용자가 입력한 코멘트
                                                         setParsedLyrics((prevData) => {
                                                             const updatedData = [...prevData];
