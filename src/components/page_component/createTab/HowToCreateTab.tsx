@@ -3,11 +3,12 @@ import * as React from "react";
 
 const HowToCreateTab = () => {
     return (
-        <div className="py-10">
+        <div className="py-10 space-y-2">
             <div className="flex space-x-2 items-center">
                 <Guitar className="size-5"/>
-                <div className="text-sm font-semibold">악보 제작 방법</div>
+                <div className="text-[15px] font-semibold">악보 제작 방법</div>
             </div>
+
             <div className="text-sm ml-1.5 space-y-1">
                 <div className="ml-5">1. 입력칸에 가사를 <span className="font-bold">직접 입력</span>하거나 <span
                     className="font-bold">붙여넣기</span>하여 가사를 업로드하세요.

@@ -15,7 +15,7 @@ import {Textarea} from "@/components/ui/textarea";
 import {useEffect, useState} from "react";
 import {Button} from "@/components/ui/button";
 import ChordSelector from "@/components/page_component/common/ChordSelector";
-import HowToCreateTab from "@/components/page_component/createTab/HowToCreateTab";
+import HowToEditTab from "@/components/page_component/editTab/HowToEditTab";
 import {Toggle} from "@/components/ui/toggle";
 
 interface Syllable {
@@ -23,15 +23,118 @@ interface Syllable {
     chord: string | null;
 }
 
-const CreateTab = () => {
+// 테스트 악보 데이터
+const tab = {
+    id: 1,
+    artist: "임창정",
+    song: "나란 놈이란",
+    capo: "No Capo",
+    style: "스트럼 (Strumming)",
+    content: [
+        {
+            comment: "내가 처음 여기 왔을 때",
+            lineData: [
+                {text: ' ', chord: null},
+                {text: ' ', chord: null},
+                {text: ' ', chord: null},
+                {text: 'w', chord: 'A'},
+                {text: 'h', chord: null},
+                {text: 'e', chord: null},
+                {text: 'n', chord: null},
+                {text: ' ', chord: null},
+                {text: 'y', chord: null},
+                {text: 'o', chord: null},
+                {text: 'u', chord: null},
+                {text: ' ', chord: null},
+                {text: 'w', chord: null},
+                {text: 'e', chord: null},
+                {text: 'r', chord: 'A#m7'},
+                {text: 'e', chord: null},
+                {text: ' ', chord: null},
+                {text: 't', chord: null},
+                {text: 'h', chord: null},
+                {text: 'e', chord: null},
+                {text: 'r', chord: null},
+                {text: 'e', chord: null},
+                {text: ' ', chord: null},
+                {text: 'f', chord: null},
+                {text: 'o', chord: null},
+                {text: 'r', chord: 'A#m7'},
+                {text: ' ', chord: null},
+                {text: 'm', chord: null},
+                {text: 'e', chord: null},
+                {text: ' ', chord: null},
+                {text: ' ', chord: null}
+            ]
+        },
+        {
+            comment: "난 널 제대로 쳐다볼 수도 없었어.",
+            lineData: [
+                {text: ' ', chord: null},
+                {text: ' ', chord: null},
+                {text: ' ', chord: null},
+                {text: 'f', chord: 'Dm7'},
+                {text: 'o', chord: null},
+                {text: 'r', chord: 'A#m7'},
+                {text: ' ', chord: null},
+                {text: ' ', chord: null},
+                {text: ' ', chord: null},
+            ]
+        },
+        {
+            comment: "넌 정원이치 친사람은 존재야.",
+            lineData: [
+                {text: ' ', chord: null},
+                {text: ' ', chord: null},
+                {text: ' ', chord: null},
+                {text: 'f', chord: 'Dm7'},
+                {text: 'o', chord: null},
+                {text: 'r', chord: 'A#m7'},
+                {text: 'W', chord: 'Fm7'},
+                {text: 'G', chord: 'Bm7'},
+                {text: 'r', chord: 'A#m7'},
+                {text: 'W', chord: 'Fm7'},
+                {text: 'G', chord: 'Bm7'},
+                {text: ' ', chord: null},
+                {text: ' ', chord: null},
+                {text: ' ', chord: null},
+            ]
+        },
+        {
+            comment: "",
+            lineData: [
+                {text: ' ', chord: null},
+                {text: ' ', chord: null},
+                {text: ' ', chord: null},
+                {text: '너', chord: 'Dm7'},
+                {text: '는', chord: null},
+                {text: '천', chord: 'A#m7'},
+                {text: '사', chord: 'Fm7'},
+                {text: '같', chord: 'Bm7'},
+                {text: '은', chord: 'A#m7'},
+                {text: '존', chord: 'Fm7'},
+                {text: '재', chord: 'Bm7'},
+                {text: '야', chord: null},
+                {text: ' ', chord: null},
+                {text: ' ', chord: null},
+                {text: ' ', chord: null},
+            ]
+        }
+    ]
+};
+
+
+const EditTab = () => {
 
     const [lyricsData, setLyricsData] = useState<string>("");
     const [isComposing, setIsComposing] = useState(false); // 태그 한글 입력 중인지 여부
-    const [parsedLyrics, setParsedLyrics] = useState<{ lineData: Syllable[], comment: string }[]>([]);
+    const [parsedLyrics, setParsedLyrics] = useState(tab.content);
     const [maxCharactersPerLine, setMaxCharactersPerLine] = useState(30); // 글자 제한 기본값
     const [lyricComment, setLyricComment] = useState<boolean[]>([]);
     const [showChordSelector, setShowChordSelector] = useState<boolean>(false);
     const [selectedSyllable, setSelectedSyllable] = useState<{ lineIndex: number; syllableIndex: number } | null>(null);
+    const [isDefaultComment, setIsDefaultComment] = useState<{ index: number, hasComment: boolean }[]>([]);
+
 
     // 가사 입력 후 엔터
     const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -183,12 +286,24 @@ const CreateTab = () => {
         };
     }, []);
 
+    useEffect(() => {
+        // 초기 렌더링 시 c.comment 값과 index를 저장하여 배열 생성
+        const commentStatusArray = tab.content.map((c, index) => ({
+            index: index,
+            hasComment: c.comment !== ""
+        }));
+
+        console.log("commentStatusArray", commentStatusArray);
+        // 상태 업데이트
+        setIsDefaultComment(commentStatusArray);
+    }, [tab]);
+
     return (
         <div className="px-3 py-10 mx-auto w-full lg:w-[70%] space-y-10">
             <div className="space-y-2 border-b pb-2">
-                <div className="text-4xl font-bold tracking-wide">악보 제작</div>
-                <div className="text-lg font-semibold tracking-wide text-primary/50">Frety에 직접 제작한 기타 악보를 등록하고, 다른 사람들과
-                    공유해보세요.
+                <div className="text-4xl font-bold tracking-wide">악보 수정</div>
+                <div className="text-lg font-semibold tracking-wide text-primary/50">
+                    악보를 수정하고, 새로운 가사와 코드를 추가할 수 있습니다.
                 </div>
             </div>
 
@@ -196,7 +311,10 @@ const CreateTab = () => {
                 {/* 가수 */}
                 <div>
                     <label className="relative">
-                        <Input id="artist" className="pl-20 w-full h-[50px]"/>
+                        <Input id="artist"
+                               className="pl-20 w-full h-[50px]"
+                               defaultValue={tab.artist}
+                        />
                         <div className="absolute left-5 top-1/2 -translate-y-1/2 select-none">Artist</div>
                     </label>
                 </div>
@@ -204,14 +322,16 @@ const CreateTab = () => {
                 {/* 제목 */}
                 <div>
                     <label className="relative">
-                        <Input id="song" className="pl-20 w-full h-[50px]"/>
+                        <Input id="song" className="pl-20 w-full h-[50px]"
+                               defaultValue={tab.song}
+                        />
                         <div className="absolute left-5 top-1/2 -translate-y-1/2 select-none">Song</div>
                     </label>
                 </div>
 
                 <div className="flex items-center space-x-2">
                     {/* 카포 셀렉트박스 */}
-                    <Select>
+                    <Select defaultValue={tab.capo}>
                         <SelectTrigger className="w-full h-[50px]">
                             <SelectValue placeholder="Capo"/>
                         </SelectTrigger>
@@ -238,7 +358,7 @@ const CreateTab = () => {
                     </Select>
 
                     {/* 주법 스타일 셀렉트박스 */}
-                    <Select>
+                    <Select defaultValue={tab.style}>
                         <SelectTrigger className="w-full h-[50px]">
                             <SelectValue placeholder="Style"/>
                         </SelectTrigger>
@@ -259,18 +379,17 @@ const CreateTab = () => {
                     </Select>
                 </div>
 
-                {/* 악보 제작 방법 */}
-                <HowToCreateTab/>
+                {/* 악보 수정 방법 */}
+                <HowToEditTab/>
 
-                {/* 한 행씩 업로드 된 가사 표시 */}
+                {/* 기존 가사와 코드 표시 */}
                 <div>
-                    {parsedLyrics.map(({lineData, comment}, lineIndex) => (
-                        <div key={lineIndex} className="flex flex-col mt-14 space-y-3">
-                            <div className="flex items-center justify-between">
-                                <div className="relative flex items-center">
-                                    {lineData.map((syllable, syllableIndex) => {
-                                        console.log("syllable", syllable)
-                                        return (
+                    {parsedLyrics.map(({lineData, comment}, lineIndex) => {
+                        return (
+                            <div key={lineIndex} className="flex flex-col mt-14 space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <div className="relative flex items-center">
+                                        {lineData.map((syllable, syllableIndex) => (
                                             <div key={syllableIndex} className="relative">
 
                                                 {/* 선택한 코드 표시 (3) */}
@@ -294,7 +413,7 @@ const CreateTab = () => {
                                                 ${
                                                         selectedSyllable?.lineIndex === lineIndex &&
                                                         selectedSyllable.syllableIndex === syllableIndex &&
-                                                        showChordSelector ? 'bg-primary/20' : ''                                                    } 
+                                                        showChordSelector ? 'bg-primary/20' : ''} 
                                                 ${!syllable.text.trim() ? 'bg-primary/5' : ''}
                                                 relative hover:bg-primary/20 cursor-pointer inline-block min-w-[16px] mx-0.5 text-center`}
                                                     onClick={() => clickSyllable(lineIndex, syllableIndex)}
@@ -311,75 +430,97 @@ const CreateTab = () => {
                                                 }
 
                                             </div>
-                                        )
-                                    })}
-                                </div>
+                                        ))}
+                                    </div>
 
-                                <div className="flex items-center space-x-0.5">
-                                    <Toggle aria-label="Toggle_Comment" size="sm" variant="outline"
-                                            onClick={() => {
-                                                // 코멘트 입력창 표시 토글
-                                                setLyricComment((prev) => {
-                                                    const newLyricComment = [...prev];
-                                                    newLyricComment[lineIndex] = !newLyricComment[lineIndex]; // 현재 행의 상태만 토글
-                                                    return newLyricComment;
-                                                });
-                                            }}
-                                    >
-                                        <PencilLine className="size-4"/>
-                                    </Toggle>
+                                    <div className="flex items-center space-x-0.5">
+                                        <Toggle pressed={!lyricComment[lineIndex] && isDefaultComment[lineIndex]?.hasComment}
+                                                aria-label="Toggle_Comment"
+                                                size="sm"
+                                                variant="outline"
+                                                onClick={() => {
 
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        className="p-2"
-                                        onClick={() => {
-                                            // 삭제할 행의 인덱스를 기억한 뒤, 해당 행의 코멘트 상태를 false로 설정하여 입력창을 숨김
-                                            setLyricComment((prev) => {
-                                                const newLyricComment = [...prev];
-                                                newLyricComment.splice(lineIndex, 1); // 삭제할 행의 상태 제거
-                                                return newLyricComment; // 업데이트된 상태 반환
-                                            });
+                                                    // isDefaultComment 배열을 복사한 후, 해당 index의 hasComment를 true로 설정
+                                                    if (!isDefaultComment[lineIndex].hasComment) {
+                                                        setIsDefaultComment(prevComments => {
+                                                            const updatedComments = [...prevComments];
+                                                            updatedComments[lineIndex] = {
+                                                                ...updatedComments[lineIndex],
+                                                                hasComment: true // 해당 인덱스의 hasComment를 true로 설정
+                                                            };
 
-                                            // 가사 행 삭제
-                                            setParsedLyrics((prevData) => prevData.filter((_, i) => i !== lineIndex));
-                                        }}>
-                                        <X/>
-                                    </Button>
-                                </div>
-                            </div>
+                                                            console.log("False")
+                                                            return updatedComments;
+                                                        });
+                                                    }else{
+                                                        console.log("True")
+                                                    }
 
-                            {lyricComment[lineIndex] &&
-                                <div className="flex flex-col">
-                                    <div>
-                                        <label className="relative">
-                                            <Input
-                                                id="comment"
-                                                className="pl-12 h-10 focus-visible:ring-0"
-                                                type="text"
-                                                value={comment}
-                                                onChange={(e) => {
-                                                    const lyricComment = e.target.value; // 사용자가 입력한 코멘트
-                                                    setParsedLyrics((prevData) => {
-                                                        const updatedData = [...prevData];
-                                                        updatedData[lineIndex] = {
-                                                            ...updatedData[lineIndex],
-                                                            comment: lyricComment
-                                                        }; // 해당 행의 comment 업데이트
-                                                        return updatedData;
+                                                    // 코멘트 입력창 표시 토글
+                                                    setLyricComment((prev) => {
+                                                        const newLyricComment = [...prev];
+                                                        newLyricComment[lineIndex] = !newLyricComment[lineIndex]; // 현재 행의 상태만 토글
+                                                        return newLyricComment;
                                                     });
                                                 }}
-                                            />
-                                            <div
-                                                className="absolute left-4 top-1/2 -translate-y-1/2 select-none text-xs">
-                                                <NotebookPen className="size-4 opacity-60"/>
-                                            </div>
-                                        </label>
+                                        >
+                                            <PencilLine className="size-4"/>
+                                        </Toggle>
+
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            className="p-2"
+                                            onClick={() => {
+                                                // 삭제할 행의 인덱스를 기억한 뒤, 해당 행의 코멘트 상태를 false로 설정하여 입력창을 숨김
+                                                setLyricComment((prev) => {
+                                                    const newLyricComment = [...prev];
+                                                    newLyricComment.splice(lineIndex, 1); // 삭제할 행의 상태 제거
+                                                    return newLyricComment; // 업데이트된 상태 반환
+                                                });
+
+                                                // 가사 행 삭제
+                                                setParsedLyrics((prevData) => prevData.filter((_, i) => i !== lineIndex));
+                                            }}>
+                                            <X/>
+                                        </Button>
                                     </div>
                                 </div>
-                            }
-                        </div>
-                    ))}
+
+                                {/* 기존 comment데이터가 있을 경우 */}
+                                {!lyricComment[lineIndex] && isDefaultComment[lineIndex]?.hasComment &&
+                                    <div className="flex flex-col">
+                                        <div>
+                                            <label className="relative">
+                                                <Input
+                                                    id="comment"
+                                                    className="pl-12 h-10 focus-visible:ring-0"
+                                                    type="text"
+                                                    value={comment}
+                                                    onChange={(e) => {
+                                                        console.log("comment", comment)
+                                                        const lyricComment = e.target.value; // 사용자가 입력한 코멘트
+                                                        setParsedLyrics((prevData) => {
+                                                            const updatedData = [...prevData];
+                                                            updatedData[lineIndex] = {
+                                                                ...updatedData[lineIndex],
+                                                                comment: lyricComment
+                                                            }; // 해당 행의 comment 업데이트
+                                                            return updatedData;
+                                                        });
+                                                    }}
+                                                />
+                                                <div
+                                                    className="absolute left-4 top-1/2 -translate-y-1/2 select-none text-xs">
+                                                    <NotebookPen className="size-4 opacity-60"/>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        )
+                    })}
                 </div>
 
                 {/* 가사 입력창 */}
@@ -423,4 +564,4 @@ const CreateTab = () => {
     )
 }
 
-export default CreateTab;
+export default EditTab;
