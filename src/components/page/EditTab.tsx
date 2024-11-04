@@ -229,7 +229,6 @@ const EditTab = () => {
 
     // 코드 제거
     const deleteChord = () => {
-        console.log("selectedSyllable", selectedSyllable)
         if (selectedSyllable) {
             const {lineIndex, syllableIndex} = selectedSyllable;
 
@@ -272,7 +271,7 @@ const EditTab = () => {
     // 화면 크기에 따라 글자 제한을 설정
     useEffect(() => {
         const updateMaxCharacters = () => {
-            setMaxCharactersPerLine(window.innerWidth >= 1024 ? 30 : 20); // lg 이상은 30자, 이하 20자
+            setMaxCharactersPerLine(window.innerWidth > 1024 ? 30 : 20); // lg 이상은 30자, 이하 20자
         };
 
         // 처음 화면 로드 시 설정
@@ -299,7 +298,7 @@ const EditTab = () => {
     }, [tab]);
 
     return (
-        <div className="px-3 py-10 mx-auto w-full lg:w-[70%] space-y-10">
+        <div className="px-3 py-10 mx-auto w-full md:w-[90%] xl:w-[70%] space-y-10">
             <div className="space-y-2 border-b pb-2">
                 <div className="text-4xl font-bold tracking-wide">악보 수정</div>
                 <div className="text-lg font-semibold tracking-wide text-primary/50">
