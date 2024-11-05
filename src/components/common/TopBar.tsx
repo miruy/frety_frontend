@@ -1,7 +1,7 @@
 'use client';
 
 import {Button} from "@/components/ui/button";
-import {Music2, Search} from "lucide-react";
+import {Music4, Search} from "lucide-react";
 import * as React from "react";
 import {Input} from "@/components/ui/input";
 import {useRouter} from "next/navigation";
@@ -19,23 +19,26 @@ const TopBar = () => {
             </div>
 
             <div className="flex space-x-2">
-                <form className="relative">
+                <div className="relative">
                     <Input
                         id="search"
                         placeholder="악보 검색"
-                        className="pl-8 w-[350px] h-[40px]"
+                        className="pl-9 w-[350px] h-[40px] select-none"
                     />
-                    <Music2
+                    <Music4
                         className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 select-none opacity-70"/>
 
-                    <Button variant="ghost" size="sm" className="absolute right-1 p-2 w-fit h-fit top-1/2 -translate-y-1/2 select-none">
+                    <Button
+                        onClick={() => router.push("/search")}
+                        variant="ghost" size="sm"
+                        className="absolute right-1 p-2 w-fit h-fit top-1/2 -translate-y-1/2 select-none">
                         <Search/>
                     </Button>
-                </form>
+                </div>
 
                 <div>
                     <Button variant="ghost" onClick={() => router.push("/login")}>로그인</Button>
-                    <Button variant="ghost"  onClick={() => router.push("/signup")}>회원가입</Button>
+                    <Button variant="ghost" onClick={() => router.push("/signup")}>회원가입</Button>
                 </div>
             </div>
         </div>

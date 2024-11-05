@@ -17,11 +17,7 @@ import {Button} from "@/components/ui/button";
 import ChordSelector from "@/components/page_component/common/ChordSelector";
 import HowToCreateTab from "@/components/page_component/createTab/HowToCreateTab";
 import {Toggle} from "@/components/ui/toggle";
-
-interface Syllable {
-    text: string;
-    chord: string | null;
-}
+import {Tab, Syllable} from "@/components/model/tab";
 
 const CreateTab = () => {
 
@@ -124,9 +120,14 @@ const CreateTab = () => {
         }
     }
 
+    // 악보 제작(저장)
+    const saveTab = (tab: Tab) => {
+
+        console.log("tab", tab)
+    }
+
     // 코드 제거
     const deleteChord = () => {
-        console.log("selectedSyllable", selectedSyllable)
         if (selectedSyllable) {
             const {lineIndex, syllableIndex} = selectedSyllable;
 
@@ -269,7 +270,6 @@ const CreateTab = () => {
                             <div className="flex items-center justify-between">
                                 <div className="relative flex items-center">
                                     {lineData.map((syllable, syllableIndex) => {
-                                        console.log("syllable", syllable)
                                         return (
                                             <div key={syllableIndex} className="relative">
 
@@ -294,7 +294,7 @@ const CreateTab = () => {
                                                 ${
                                                         selectedSyllable?.lineIndex === lineIndex &&
                                                         selectedSyllable.syllableIndex === syllableIndex &&
-                                                        showChordSelector ? 'bg-primary/20' : ''                                                    } 
+                                                        showChordSelector ? 'bg-primary/20' : ''} 
                                                 ${!syllable.text.trim() ? 'bg-primary/5' : ''}
                                                 relative hover:bg-primary/20 cursor-pointer inline-block min-w-[16px] mx-0.5 text-center`}
                                                     onClick={() => clickSyllable(lineIndex, syllableIndex)}
