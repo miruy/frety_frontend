@@ -66,9 +66,9 @@ const ChordSelector = ({setChord, deleteChord}: ChordSelectorProps) => {
                     코드 제거
                 </CommandItem>
                 {Object.keys(chordData).map((key, KeyIndex) => (
-                    <>
+                    <div key={KeyIndex}>
                         <CommandSeparator/>
-                        <CommandGroup key={KeyIndex} heading={key}
+                        <CommandGroup heading={key}
                                       className="[&_[cmdk-group-heading]]:text-[14px] [&_[cmdk-group-heading]]:cursor-default">
                             {chordData[key].map((value, valueIndex) => (
                                 <CommandItem
@@ -82,7 +82,7 @@ const ChordSelector = ({setChord, deleteChord}: ChordSelectorProps) => {
                                 </CommandItem>
                             ))}
                         </CommandGroup>
-                    </>
+                    </div>
                 ))}
             </CommandList>
         </Command>

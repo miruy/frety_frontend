@@ -3,7 +3,7 @@ export interface Syllable {
     chord: string | null;
 }
 
-interface Content {
+export interface Content {
     comment: string;
     lineData: Syllable[];
 }

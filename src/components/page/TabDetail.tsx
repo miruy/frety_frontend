@@ -1,9 +1,7 @@
 'use client';
 
-import {faker} from "@faker-js/faker";
 import {Switch} from "@/components/ui/switch";
-import {useEffect, useState} from "react";
-import {SVGuitarChord} from 'svguitar'
+import {useEffect, useRef, useState} from "react";
 import {chordsMap} from "@/data/chordsMap";
 import {commonConfigs, customConfigs} from "@/data/drawChordDiagram";
 import {
@@ -16,17 +14,119 @@ import {
     Ellipsis, Eraser, Star, Trash2,
 } from "lucide-react";
 import {useRouter} from "next/navigation";
+import {GetTabByIdResponse} from "@/openapi/model";
+import {Content, Syllable} from "@/components/model/tab";
+import {SVGuitarChord} from "svguitar";
 
-const TabDetail = () => {
+const TabDetail = ({tab}: { tab: GetTabByIdResponse }) => {
 
-    const [chords] = useState<boolean>(true);
     const [showDiagram, setShowDiagram] = useState<boolean>(true);
     const router = useRouter();
+    const tabContentRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
+
+        if (tabContentRef.current) {
+
+            tabContentRef.current.innerHTML = "";
+
+            // JSON 문자열을 객체로 변환
+            const parsedTab = JSON.parse(tab.content!);
+
+            const tabDiv = document.createElement('div');
+            tabDiv.className = "flex flex-col bg-red-100 py-[50px]";
+
+            parsedTab.forEach((item: Content, index) => {
+                const lineDiv = document.createElement('div');
+                lineDiv.className = `flex flex-col my-1 bg-yellow-100 pt-20 ${item.comment && `pb-5`}`; // 각 항목을 구분하기 위해 margin을 추가
+
+                const syllableContainerDiv = document.createElement('div');
+                syllableContainerDiv.className = "flex relative bg-green-100 p-1"; // 각 항목을 구분하기 위해 margin을 추가
+
+                item.lineData.forEach((line, lineIndex) => {
+                    const syllabelDiv = document.createElement('div');
+                    syllabelDiv.className = "flex flex-col relative bg-orange-100";
+
+                    const diagram_chordDiv = document.createElement('div');
+                    diagram_chordDiv.className = "flex flex-col items-center justify-center";
+
+                    if (line.chord) {
+                        // 코드 다이어그램 출력
+                        const chordDiagramDiv = document.createElement('div');
+                        chordDiagramDiv.className = `${showDiagram ? 'flex' : 'hidden'} w-14 h-14 absolute mt-[-90px]`;
+                        const chordDiagram = new SVGuitarChord(chordDiagramDiv);
+                        const chord = chordsMap[line.chord];
+                        const customConfig = customConfigs[line.chord]; // 프렛 설정을 위한 커스텀 설정
+
+                        chordDiagram
+                            .configure({
+                                ...commonConfigs,
+                                ...customConfig,
+                            })
+                            .chord(chord)
+                            .draw()
+
+                        // 프랫 위치 설정
+                        const tuningText = chordDiagramDiv.querySelectorAll('text.tuning');
+                        if (tuningText.length > 1) {
+
+                            const currentX = parseFloat(tuningText[0].getAttribute('x') || '0');
+                            const currentY = parseFloat(tuningText[0].getAttribute('y') || '0');
+
+                            tuningText[0].setAttribute('x', (currentX - 177).toString()); // 왼쪽으로 이동
+                            tuningText[0].setAttribute('y', (currentY + 50).toString());   // 아래로 이동
+                        }
+                        diagram_chordDiv.appendChild(chordDiagramDiv)
+
+
+                        // 코드 출력
+                        const chordDiv = document.createElement('div');
+                        chordDiv.className = `absolute text-sm font-semibold text-primary/60 mt-[-23px] text-center
+                                        ${line.chord?.length === 1 && `left-1 w-[10px]`}
+                                        ${line.chord?.length === 2 && `left-0 w-[20px]`}
+                                        ${line.chord?.length === 3 && `-left-[9px] w-[40px]`}
+                                        ${line.chord?.length === 4 && `-left-[9px] w-[50px]`}
+                                        ${line.chord?.length === 5 && `-left-[19px] w-[60px]`}
+                                        ${line.chord?.length === 6 && `-left-[16px] w-[60px]`}
+                    `;
+                        chordDiv.textContent = line.chord;
+                        diagram_chordDiv.appendChild(chordDiv)
+
+                    }
+                    syllabelDiv.appendChild(diagram_chordDiv);
+
+
+                    // 음절 출력
+                    const textDiv = document.createElement('div');
+                    textDiv.className = "relative inline-block min-w-[16px] mx-0.5 text-center";
+                    textDiv.innerHTML = line.text === ' ' ? '&nbsp;&nbsp;&nbsp;' : line.text;
+                    syllabelDiv.appendChild(textDiv);
+
+                    syllableContainerDiv.appendChild(syllabelDiv);
+                });
+
+                lineDiv.appendChild(syllableContainerDiv);
+
+                // comment 출력
+                const commentDiv = document.createElement('div');
+                commentDiv.className = "font-semibold text-lg";
+                commentDiv.textContent = item.comment;
+                lineDiv.appendChild(commentDiv);
+
+                // tabDiv에 각 항목 추가
+                tabDiv.appendChild(lineDiv);
+            });
+
+            tabContentRef.current.appendChild(tabDiv);
+        }
+
+
+        // 다이어그램
         const diagramElement = document.getElementById('chordDiagram');
 
-        if (diagramElement && chords) {
+        if (diagramElement && tab) {
+            diagramElement.textContent = "";
+
             const chordDiagram = new SVGuitarChord(diagramElement)
             const chord = chordsMap["A"];
             const customConfig = customConfigs["A"]; // 프렛 설정을 위한 커스텀 설정
@@ -50,21 +150,7 @@ const TabDetail = () => {
                 tuningText[0].setAttribute('y', (currentY + 50).toString());   // 아래로 이동
             }
         }
-    }, [chords]);
-
-
-    const tab = {
-        id: 1,
-        artist: "임창정",
-        song: "나란 놈이란",
-        writer: faker.name.fullName(),
-        capo: "No Capo",
-        style: "스트럼 (Strumming)",
-        createAt: faker.date.past().toLocaleDateString(),
-        voter: faker.date.past().toLocaleDateString(),
-        comment: faker.lorem.words(3),
-        reply: faker.lorem.words(3),
-    }
+    }, [tab, showDiagram]);
 
     return (
         <div className="px-3 py-10 mx-auto w-full lg:w-[70%]">
@@ -126,8 +212,12 @@ const TabDetail = () => {
                 </div>
             </div>
 
-            <div>
+
+            <div ref={tabContentRef}></div>
+
+            <div className="flex bg-blue-100 py-20">
                 <div id="chordDiagram" className={`${showDiagram ? 'flex' : 'hidden'} w-20 h-20`}/>
+                <div id="tab"/>
             </div>
         </div>
     )

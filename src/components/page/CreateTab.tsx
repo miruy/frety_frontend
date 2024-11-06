@@ -17,7 +17,12 @@ import {Button} from "@/components/ui/button";
 import ChordSelector from "@/components/page_component/common/ChordSelector";
 import HowToCreateTab from "@/components/page_component/createTab/HowToCreateTab";
 import {Toggle} from "@/components/ui/toggle";
-import {Tab, Syllable} from "@/components/model/tab";
+import {Syllable} from "@/components/model/tab";
+import {Controller, useForm} from "react-hook-form";
+import {CreateTabRequest} from "@/openapi/model";
+import {useCreateTab} from "@/openapi/api/tab/tab";
+import {Slide, toast} from "react-toastify";
+import {useRouter} from "next/navigation";
 
 const CreateTab = () => {
 
@@ -28,6 +33,42 @@ const CreateTab = () => {
     const [lyricComment, setLyricComment] = useState<boolean[]>([]);
     const [showChordSelector, setShowChordSelector] = useState<boolean>(false);
     const [selectedSyllable, setSelectedSyllable] = useState<{ lineIndex: number; syllableIndex: number } | null>(null);
+    const router = useRouter();
+
+    const createTabRequest = useForm<CreateTabRequest>({
+        defaultValues: {},
+    });
+
+    const {mutate: createTab} = useCreateTab({
+        mutation: {
+            onSuccess: async (tabId) => {
+                toast.success("성공적으로 악보가 제작되었습니다.", {
+                    position: "top-center",
+                    transition: Slide,
+                    className: "text-sm",
+                    theme: "colored",
+                });
+                router.push(`/tab/${tabId}`);
+            },
+            onError: (error) => {
+                console.log(error)
+                toast.error("관리자에게 문의하세요", {
+                    position: "top-center",
+                    transition: Slide,
+                    className: "text-sm",
+                    theme: "colored",
+                });
+            },
+        }
+    })
+
+    const onCreateTabSubmit = () => {
+        createTabRequest.setValue("content", JSON.stringify(parsedLyrics));
+
+        createTab({
+            data: createTabRequest.getValues()
+        });
+    }
 
     // 가사 입력 후 엔터
     const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -120,12 +161,6 @@ const CreateTab = () => {
         }
     }
 
-    // 악보 제작(저장)
-    const saveTab = (tab: Tab) => {
-
-        console.log("tab", tab)
-    }
-
     // 코드 제거
     const deleteChord = () => {
         if (selectedSyllable) {
@@ -197,7 +232,7 @@ const CreateTab = () => {
                 {/* 가수 */}
                 <div>
                     <label className="relative">
-                        <Input id="artist" className="pl-20 w-full h-[50px]"/>
+                        <Input id="artist"  {...createTabRequest.register("artist")} className="pl-20 w-full h-[50px]"/>
                         <div className="absolute left-5 top-1/2 -translate-y-1/2 select-none">Artist</div>
                     </label>
                 </div>
@@ -205,59 +240,93 @@ const CreateTab = () => {
                 {/* 제목 */}
                 <div>
                     <label className="relative">
-                        <Input id="song" className="pl-20 w-full h-[50px]"/>
+                        <Input id="song" {...createTabRequest.register("song")} className="pl-20 w-full h-[50px]"/>
                         <div className="absolute left-5 top-1/2 -translate-y-1/2 select-none">Song</div>
                     </label>
                 </div>
 
                 <div className="flex items-center space-x-2">
                     {/* 카포 셀렉트박스 */}
-                    <Select>
-                        <SelectTrigger className="w-full h-[50px]">
-                            <SelectValue placeholder="Capo"/>
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                <SelectItem value="No Capo">No Capo</SelectItem>
-                                <SelectItem value="Capo 1">Capo 1</SelectItem>
-                                <SelectItem value="Capo 2">Capo 2</SelectItem>
-                                <SelectItem value="Capo 3">Capo 3</SelectItem>
-                                <SelectItem value="Capo 4">Capo 4</SelectItem>
-                                <SelectItem value="Capo 5">Capo 5</SelectItem>
-                                <SelectItem value="Capo 6">Capo 6</SelectItem>
-                                <SelectItem value="Capo 7">Capo 7</SelectItem>
-                                <SelectItem value="Capo 8">Capo 8</SelectItem>
-                                <SelectItem value="Capo 9">Capo 9</SelectItem>
-                                <SelectItem value="한음 내림 튜닝 (Whole Step Down Tuning)">
-                                    한음 내림 튜닝 (Whole Step Down Tuning)
-                                </SelectItem>
-                                <SelectItem value="반음 내림 튜닝 (Half Step Down Tuning)">
-                                    반음 내림 튜닝 (Half Step Down Tuning)
-                                </SelectItem>
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
+                    <Controller
+                        control={createTabRequest.control}
+                        name="capo"
+                        render={({field}) => {
+                            return (
+                                <Select
+                                    value={field.value}
+                                    onValueChange={(value) => {
+                                        if (value) {
+                                            field.onChange(value);
+                                            createTabRequest.setValue("capo", value);
+                                        }
+                                    }}
+                                >
+                                    <SelectTrigger className="w-full h-[50px]">
+                                        <SelectValue placeholder="Capo"/>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            <SelectItem value="No Capo">No Capo</SelectItem>
+                                            <SelectItem value="Capo 1">Capo 1</SelectItem>
+                                            <SelectItem value="Capo 2">Capo 2</SelectItem>
+                                            <SelectItem value="Capo 3">Capo 3</SelectItem>
+                                            <SelectItem value="Capo 4">Capo 4</SelectItem>
+                                            <SelectItem value="Capo 5">Capo 5</SelectItem>
+                                            <SelectItem value="Capo 6">Capo 6</SelectItem>
+                                            <SelectItem value="Capo 7">Capo 7</SelectItem>
+                                            <SelectItem value="Capo 8">Capo 8</SelectItem>
+                                            <SelectItem value="Capo 9">Capo 9</SelectItem>
+                                            <SelectItem value="한음 내림 튜닝 (Whole Step Down Tuning)">
+                                                한음 내림 튜닝 (Whole Step Down Tuning)
+                                            </SelectItem>
+                                            <SelectItem value="반음 내림 튜닝 (Half Step Down Tuning)">
+                                                반음 내림 튜닝 (Half Step Down Tuning)
+                                            </SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            )
+                        }}
+                    />
 
                     {/* 주법 스타일 셀렉트박스 */}
-                    <Select>
-                        <SelectTrigger className="w-full h-[50px]">
-                            <SelectValue placeholder="Style"/>
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                <SelectItem value="스트럼 (Strumming)">스트럼 (Strumming)</SelectItem>
-                                <SelectItem value="퍼커시브 (Percussive Playing)">퍼커시브 (Percussive Playing)</SelectItem>
-                                <SelectItem value="아르페지오 (Arpeggio)">아르페지오 (Arpeggio)</SelectItem>
-                                <SelectItem value="칼립소 (Calypso)">칼립소 (Calypso)</SelectItem>
-                                <SelectItem value="슬로우 고고 (Slow Go-Go)">슬로우 고고 (Slow Go-Go)</SelectItem>
-                                <SelectItem value="컨트리 (Country Style)">컨트리 (Country Style)</SelectItem>
-                                <SelectItem value="슬로우 락 (Slow Rock)">슬로우 락 (Slow Rock)</SelectItem>
-                                <SelectItem value="셔플 (Shuffle)">셔플 (Shuffle)</SelectItem>
-                                <SelectItem value="쓰리핑거 (Three-Finger Picking)">쓰리핑거 (Three-Finger Picking)</SelectItem>
-                                <SelectItem value="보사노바 (Bossa Nova)">보사노바 (Bossa Nova)</SelectItem>
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
+                    <Controller
+                        control={createTabRequest.control}
+                        name="style"
+                        render={({field}) => {
+                            return (
+                                <Select
+                                    value={field.value}
+                                    onValueChange={(value) => {
+                                        if (value) {
+                                            field.onChange(value);
+                                            createTabRequest.setValue("style", value);
+                                        }
+                                    }}
+                                >
+                                    <SelectTrigger className="w-full h-[50px]">
+                                        <SelectValue placeholder="Style"/>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            <SelectItem value="스트럼 (Strumming)">스트럼 (Strumming)</SelectItem>
+                                            <SelectItem value="퍼커시브 (Percussive Playing)">퍼커시브 (Percussive
+                                                Playing)</SelectItem>
+                                            <SelectItem value="아르페지오 (Arpeggio)">아르페지오 (Arpeggio)</SelectItem>
+                                            <SelectItem value="칼립소 (Calypso)">칼립소 (Calypso)</SelectItem>
+                                            <SelectItem value="슬로우 고고 (Slow Go-Go)">슬로우 고고 (Slow Go-Go)</SelectItem>
+                                            <SelectItem value="컨트리 (Country Style)">컨트리 (Country Style)</SelectItem>
+                                            <SelectItem value="슬로우 락 (Slow Rock)">슬로우 락 (Slow Rock)</SelectItem>
+                                            <SelectItem value="셔플 (Shuffle)">셔플 (Shuffle)</SelectItem>
+                                            <SelectItem value="쓰리핑거 (Three-Finger Picking)">쓰리핑거 (Three-Finger
+                                                Picking)</SelectItem>
+                                            <SelectItem value="보사노바 (Bossa Nova)">보사노바 (Bossa Nova)</SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            )
+                        }}
+                    />
                 </div>
 
                 {/* 악보 제작 방법 */}
@@ -413,9 +482,7 @@ const CreateTab = () => {
                 </div>
 
                 <Button className="w-full h-[50px] tracking-wide"
-                        onClick={() => {
-                            console.log("parsedLyrics", parsedLyrics)
-                        }}>
+                        onClick={onCreateTabSubmit}>
                     저장
                 </Button>
             </div>

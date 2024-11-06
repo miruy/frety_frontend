@@ -5,6 +5,7 @@ import ClientProviders from "@/provider/ClientProviders";
 import {cn} from "@/lib/utils";
 import TopBar from "@/components/common/TopBar";
 import SideSheet from "@/components/common/SideSheet";
+import {TabProvider} from "@/context/TabContext";
 
 const fontSans = FontSans({
     subsets: ['latin'],
@@ -32,9 +33,11 @@ export default function RootLayout({
             )}
         >
         <ClientProviders>
-            <SideSheet/>
-            <TopBar/>
-            {children}
+            <TabProvider>
+                <SideSheet/>
+                <TopBar/>
+                {children}
+            </TabProvider>
         </ClientProviders>
         </body>
         </html>

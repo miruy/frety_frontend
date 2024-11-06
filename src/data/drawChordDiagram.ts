@@ -1,5 +1,36 @@
 import {ChordStyle, Orientation} from "svguitar";
 
+// export function drawChord(selector, chordData, configData) {
+//     var chord = new svguitar.SVGuitarChord(selector);
+//
+//     chord
+//         .chord(chordData)
+//         .configure(configData)
+//         .draw();
+//
+//     // 튜닝 위치 수동 설정 (프렛 번호)
+//     // 프랫 위치 설정
+//     const diagramElement = document.querySelector(selector);
+//     const tuningText = diagramElement.querySelectorAll('text.tuning');
+//     if (tuningText.length > 1) {
+//
+//         const currentX = parseFloat(tuningText[0].getAttribute('x') || '0');
+//         const currentY = parseFloat(tuningText[0].getAttribute('y') || '0');
+//
+//         tuningText[0].setAttribute('x', (currentX - 177).toString()); // 왼쪽으로 이동
+//         tuningText[0].setAttribute('y', (currentY + 50).toString());   // 아래로 이동
+//     }
+//     // const svgElement = document.querySelector(selector);
+//     // if (svgElement) {
+//     //     const tuningText = svgElement.querySelectorAll('text.tuning');
+//     //     if (tuningText.length > 1) {
+//     //         // 원하는 튜닝 위치로 이동
+//     //         tuningText[0].setAttribute('x', parseFloat(tuningText[0].getAttribute('x')) - 177); // x 값을 줄여서 왼쪽으로 이동
+//     //         tuningText[0].setAttribute('y', parseFloat(tuningText[0].getAttribute('y')) + 50); // y 값을 늘려서 아래로 이동
+//     //     }
+//     // }
+// }
+
 // 공통 설정
 export const commonConfigs = {
     position: 1,
