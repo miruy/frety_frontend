@@ -65,9 +65,67 @@ const CreateTab = () => {
     const onCreateTabSubmit = () => {
         createTabRequest.setValue("content", JSON.stringify(parsedLyrics));
 
-        createTab({
-            data: createTabRequest.getValues()
-        });
+        if (!createTabRequest.getValues().artist) {
+            toast.warn("가수명을 입력하세요.", {
+                position: "top-center",
+                transition: Slide,
+                className: "text-sm",
+                theme: "colored",
+            });
+            return
+        }
+
+        if (!createTabRequest.getValues().song) {
+            toast.warn("제목을 입력하세요.", {
+                position: "top-center",
+                transition: Slide,
+                className: "text-sm",
+                theme: "colored",
+            });
+            return
+        }
+
+        if (!createTabRequest.getValues().capo) {
+            toast.warn("카포를 선택하세요.", {
+                position: "top-center",
+                transition: Slide,
+                className: "text-sm",
+                theme: "colored",
+            });
+            return
+        }
+
+        if (!createTabRequest.getValues().style) {
+            toast.warn("주법을 선택하세요.", {
+                position: "top-center",
+                transition: Slide,
+                className: "text-sm",
+                theme: "colored",
+            });
+            return
+        }
+
+        if (parsedLyrics.length === 0) {
+            toast.warn("내용을 입력하세요.", {
+                position: "top-center",
+                transition: Slide,
+                className: "text-sm",
+                theme: "colored",
+            });
+            return
+        }
+
+        if (createTabRequest.getValues().artist &&
+            createTabRequest.getValues().song &&
+            createTabRequest.getValues().capo &&
+            createTabRequest.getValues().style &&
+            parsedLyrics.length > 0) {
+
+            createTab({
+                data: createTabRequest.getValues()
+            });
+
+        }
     }
 
     // 가사 입력 후 엔터
@@ -399,6 +457,7 @@ const CreateTab = () => {
                                     </Toggle>
 
                                     <Button
+                                        type="button"
                                         variant="outline"
                                         size="sm"
                                         className="p-2"

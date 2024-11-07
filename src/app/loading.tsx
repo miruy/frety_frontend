@@ -3,7 +3,7 @@
 import {Dialog} from "@radix-ui/react-dialog";
 import {DialogContent, DialogTitle} from "@/components/ui/dialog";
 import {useEffect, useState} from "react";
-import {Bounce, Slide, toast} from "react-toastify";
+import {Slide, toast} from "react-toastify";
 import {useRouter} from "next/navigation";
 import {VisuallyHidden} from "@radix-ui/react-visually-hidden";
 import {TbCircleDotted} from "react-icons/tb";

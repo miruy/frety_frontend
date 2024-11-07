@@ -5,8 +5,9 @@ import LatestTabs from "@/components/page_component/main/LatestTabs";
 import PopularTabs from "@/components/page_component/main/PopularTabs";
 import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
+import {SearchTabsResponse} from "@/openapi/model";
 
-const Main = () => {
+const Main = ({tabs}: { tabs: SearchTabsResponse[] }) => {
 
     const router = useRouter();
 
@@ -32,10 +33,10 @@ const Main = () => {
                 </div>
 
                 <TabsContent value="latest" className="py-5">
-                    <LatestTabs/>
+                    <LatestTabs tabs={tabs}/>
                 </TabsContent>
                 <TabsContent value="popular" className="py-5">
-                    <PopularTabs/>
+                    <PopularTabs tabs={tabs}/>
                 </TabsContent>
             </Tabs>
         </div>

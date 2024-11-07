@@ -95,7 +95,27 @@ const EditTab = ({tab, tabId}: EditTabProps) => {
             return
         }
 
-        if (!data.content) {
+        if (!data.capo) {
+            toast.warn("카포를 선택하세요.", {
+                position: "top-center",
+                transition: Slide,
+                className: "text-sm",
+                theme: "colored",
+            });
+            return
+        }
+
+        if (!data.style) {
+            toast.warn("주법을 선택하세요.", {
+                position: "top-center",
+                transition: Slide,
+                className: "text-sm",
+                theme: "colored",
+            });
+            return
+        }
+
+        if (parsedLyrics.length === 0) {
             toast.warn("내용을 입력하세요.", {
                 position: "top-center",
                 transition: Slide,
@@ -105,7 +125,7 @@ const EditTab = ({tab, tabId}: EditTabProps) => {
             return
         }
 
-        if (data.artist && data.song && data.content) {
+        if (data.artist && data.song && data.capo && data.style && parsedLyrics.length !== 0) {
             onUpdateTabSubmit(data)
         }
     }
@@ -113,7 +133,6 @@ const EditTab = ({tab, tabId}: EditTabProps) => {
     const onUpdateTabSubmit = (data: UpdateTabRequest) => {
 
         const serializedContent = JSON.stringify(parsedLyrics);
-        console.log("serializedContent", serializedContent);
 
         updateTab({
             tabId: Number(tabId),
@@ -525,6 +544,7 @@ const EditTab = ({tab, tabId}: EditTabProps) => {
                                         </Toggle>
 
                                         <Button
+                                            type="button"
                                             variant="outline"
                                             size="sm"
                                             className="p-2"

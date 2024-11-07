@@ -1,16 +1,15 @@
 import TabDetail from "@/components/page/TabDetail";
 import NotFound from "@/app/not-found";
 import {getTabById} from "@/openapi/api/tab/tab";
+import {GetServerSidePropsContext} from "next";
 
-interface TabProps {
-    params: {
-        tabId: string;
-    };
-}
+const TabDetailPage = async (context: GetServerSidePropsContext) => {
 
-const TabDetailPage = async ({params}: TabProps) => {
+    const {tabId} = context.params!;
 
-    const {tabId} = params;
+    if (typeof tabId !== 'string') {
+        return <NotFound/>;
+    }
 
     try {
 

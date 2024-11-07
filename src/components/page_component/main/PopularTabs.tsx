@@ -9,8 +9,10 @@ import {
     PaginationPrevious
 } from "@/components/ui/pagination";
 import {useRouter} from "next/navigation";
+import {SearchTabsResponse} from "@/openapi/model";
+import {formatDate} from "@/utils/formatDate";
 
-const PopularTabs = () => {
+const PopularTabs = ({tabs}: { tabs: SearchTabsResponse[] }) => {
 
     const router = useRouter();
 
@@ -47,17 +49,17 @@ const PopularTabs = () => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {popularTabs.map((popularTab, index) => {
+                    {tabs.map((popularTab, index) => {
                         return (
                             <TableRow key={index} className="cursor-pointer"
-                                      onClick={() => handleDetailTab(popularTab.tabId)}>
-                                <TableCell className="text-center">{popularTab.no}</TableCell>
+                                      onClick={() => handleDetailTab(popularTab.id!)}>
+                                <TableCell className="text-center">{index + 1}</TableCell>
                                 <TableCell className="text-center">{popularTab.artist}</TableCell>
                                 <TableCell className="text-center">{popularTab.song}</TableCell>
-                                <TableCell className="text-center">{popularTab.writer}</TableCell>
-                                <TableCell className="text-center">{popularTab.createAt}</TableCell>
+                                <TableCell className="text-center">미구현</TableCell>
+                                <TableCell className="text-center">{formatDate(popularTab.createdAt!)}</TableCell>
                                 <TableCell
-                                    className="text-center">{popularTab.updateAt !== "" ? popularTab.updateAt : "-"}</TableCell>
+                                    className="text-center">{popularTab.updatedAt !== "" ? formatDate(popularTab.updatedAt!) : "-"}</TableCell>
                             </TableRow>
                         )
                     })}

@@ -1,5 +1,4 @@
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
-import {faker} from "@faker-js/faker";
 import {
     Pagination,
     PaginationContent, PaginationEllipsis,
@@ -8,29 +7,16 @@ import {
     PaginationPrevious
 } from "@/components/ui/pagination";
 import {useRouter} from "next/navigation";
+import {SearchTabsResponse} from "@/openapi/model";
+import {formatDate} from "@/utils/formatDate";
 
-const LatestTabs = () => {
+const LatestTabs = ({tabs}: { tabs: SearchTabsResponse[] }) => {
 
     const router = useRouter();
 
     const handleDetailTab = (tabId: number) => {
         router.push("/tab/" + tabId);
     }
-
-    function generateSheetMusicData(count: number) {
-        return Array.from({length: count}).map((_, index) => ({
-            no: index + 1,
-            tabId: index + 1,
-            artist: faker.music.songName(),
-            song: faker.lorem.words(3),
-            writer: faker.name.fullName(),
-            createAt: faker.date.past().toLocaleDateString(),
-            // updateAt: faker.date.past().toLocaleDateString(),
-            updateAt: ""
-        }));
-    }
-
-    const latestTabs = generateSheetMusicData(10); // 예시로 10개의 데이터를 생성
 
     return (
         <div className="space-y-10">
@@ -46,17 +32,17 @@ const LatestTabs = () => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {latestTabs.map((latestTab, index) => {
+                    {tabs.map((latestTab, index) => {
                         return (
                             <TableRow key={index} className="cursor-pointer"
-                                      onClick={() => handleDetailTab(latestTab.tabId)}>
-                                <TableCell className="text-center">{latestTab.no}</TableCell>
+                                      onClick={() => handleDetailTab(latestTab.id!)}>
+                                <TableCell className="text-center">{index + 1}</TableCell>
                                 <TableCell className="text-center">{latestTab.artist}</TableCell>
                                 <TableCell className="text-center">{latestTab.song}</TableCell>
-                                <TableCell className="text-center">{latestTab.writer}</TableCell>
-                                <TableCell className="text-center">{latestTab.createAt}</TableCell>
+                                <TableCell className="text-center">미구현</TableCell>
+                                <TableCell className="text-center">{formatDate(latestTab.createdAt!)}</TableCell>
                                 <TableCell
-                                    className="text-center">{latestTab.updateAt !== "" ? latestTab.updateAt : "-"}</TableCell>
+                                    className="text-center">{latestTab.updatedAt !== "" ? formatDate(latestTab.updatedAt!) : "-"}</TableCell>
                             </TableRow>
                         )
                     })}

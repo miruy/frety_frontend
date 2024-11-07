@@ -1,17 +1,15 @@
 import EditTab from "@/components/page/EditTab";
 import {getTabById} from "@/openapi/api/tab/tab";
-import TabDetail from "@/components/page/TabDetail";
 import NotFound from "@/app/not-found";
+import {GetServerSidePropsContext} from "next";
 
-interface TabProps {
-    params: {
-        tabId: string;
-    };
-}
+const EditTabPage = async (context: GetServerSidePropsContext) => {
 
-const EditTabPage = async ({params}: TabProps) => {
+    const {tabId} = context.params!;
 
-    const {tabId} = params;
+    if (typeof tabId !== 'string') {
+        return <NotFound/>;
+    }
 
     try {
 

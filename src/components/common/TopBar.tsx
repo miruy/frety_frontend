@@ -5,10 +5,17 @@ import {Music4, Search} from "lucide-react";
 import * as React from "react";
 import {Input} from "@/components/ui/input";
 import {useRouter} from "next/navigation";
+import {useState} from "react";
 
 const TopBar = () => {
 
     const router = useRouter();
+    const [keyword, setKeyword] = useState<string>("");
+
+    const handleSearchTab = () => {
+        router.push(`/search/${keyword}`);
+        setKeyword("");
+    }
 
     return (
         <div className="hidden md:flex h-[70px] items-center justify-between p-5">
@@ -22,14 +29,21 @@ const TopBar = () => {
                 <div className="relative">
                     <Input
                         id="search"
+                        value={keyword}
                         placeholder="악보 검색"
                         className="pl-9 w-[350px] h-[40px] select-none"
+                        onChange={(e) => setKeyword(e.target.value)}
+                        onKeyDown={(event) => {
+                            if (event.key === 'Enter') {
+                                handleSearchTab()
+                            }
+                        }}
                     />
                     <Music4
                         className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 select-none opacity-70"/>
 
                     <Button
-                        onClick={() => router.push("/search")}
+                        onClick={handleSearchTab}
                         variant="ghost" size="sm"
                         className="absolute right-1 p-2 w-fit h-fit top-1/2 -translate-y-1/2 select-none">
                         <Search/>
