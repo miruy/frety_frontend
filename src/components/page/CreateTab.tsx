@@ -205,7 +205,7 @@ const CreateTab = () => {
     // 화면 크기에 따라 글자 제한을 설정
     useEffect(() => {
         const updateMaxCharacters = () => {
-            setMaxCharactersPerLine(window.innerWidth >= 1024 ? 30 : 20); // lg 이상은 30자, 이하 20자
+            setMaxCharactersPerLine(window.innerWidth >= 1024 ? 40 : 20); // lg 이상은 30자, 이하 20자
         };
 
         // 처음 화면 로드 시 설정

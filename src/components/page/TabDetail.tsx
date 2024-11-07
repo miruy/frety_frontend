@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import {useRouter} from "next/navigation";
 import {GetTabByIdResponse} from "@/openapi/model";
-import {Content, Syllable} from "@/components/model/tab";
+import {Content} from "@/components/model/tab";
 import {SVGuitarChord} from "svguitar";
 
 const TabDetail = ({tab}: { tab: GetTabByIdResponse }) => {
@@ -34,18 +34,18 @@ const TabDetail = ({tab}: { tab: GetTabByIdResponse }) => {
             const parsedTab = JSON.parse(tab.content!);
 
             const tabDiv = document.createElement('div');
-            tabDiv.className = "flex flex-col bg-red-100 py-[50px]";
+            tabDiv.className = "flex flex-col py-[70px]";
 
-            parsedTab.forEach((item: Content, index) => {
+            parsedTab.forEach((item: Content) => {
                 const lineDiv = document.createElement('div');
-                lineDiv.className = `flex flex-col my-1 bg-yellow-100 pt-20 ${item.comment && `pb-5`}`; // 각 항목을 구분하기 위해 margin을 추가
+                lineDiv.className = `flex flex-col items-center my-1 pt-16`;
 
                 const syllableContainerDiv = document.createElement('div');
-                syllableContainerDiv.className = "flex relative bg-green-100 p-1"; // 각 항목을 구분하기 위해 margin을 추가
+                syllableContainerDiv.className = "flex relative p-1";
 
-                item.lineData.forEach((line, lineIndex) => {
+                item.lineData.forEach((line) => {
                     const syllabelDiv = document.createElement('div');
-                    syllabelDiv.className = "flex flex-col relative bg-orange-100";
+                    syllabelDiv.className = "flex flex-col relative";
 
                     const diagram_chordDiv = document.createElement('div');
                     diagram_chordDiv.className = "flex flex-col items-center justify-center";
@@ -109,7 +109,7 @@ const TabDetail = ({tab}: { tab: GetTabByIdResponse }) => {
 
                 // comment 출력
                 const commentDiv = document.createElement('div');
-                commentDiv.className = "font-semibold text-lg";
+                commentDiv.className = "font-semibold py-1";
                 commentDiv.textContent = item.comment;
                 lineDiv.appendChild(commentDiv);
 
@@ -120,36 +120,6 @@ const TabDetail = ({tab}: { tab: GetTabByIdResponse }) => {
             tabContentRef.current.appendChild(tabDiv);
         }
 
-
-        // 다이어그램
-        const diagramElement = document.getElementById('chordDiagram');
-
-        if (diagramElement && tab) {
-            diagramElement.textContent = "";
-
-            const chordDiagram = new SVGuitarChord(diagramElement)
-            const chord = chordsMap["A"];
-            const customConfig = customConfigs["A"]; // 프렛 설정을 위한 커스텀 설정
-
-            chordDiagram
-                .configure({
-                    ...commonConfigs,
-                    ...customConfig,
-                })
-                .chord(chord)
-                .draw()
-
-            // 프랫 위치 설정
-            const tuningText = diagramElement.querySelectorAll('text.tuning');
-            if (tuningText.length > 1) {
-
-                const currentX = parseFloat(tuningText[0].getAttribute('x') || '0');
-                const currentY = parseFloat(tuningText[0].getAttribute('y') || '0');
-
-                tuningText[0].setAttribute('x', (currentX - 177).toString()); // 왼쪽으로 이동
-                tuningText[0].setAttribute('y', (currentY + 50).toString());   // 아래로 이동
-            }
-        }
     }, [tab, showDiagram]);
 
     return (
@@ -214,11 +184,6 @@ const TabDetail = ({tab}: { tab: GetTabByIdResponse }) => {
 
 
             <div ref={tabContentRef}></div>
-
-            <div className="flex bg-blue-100 py-20">
-                <div id="chordDiagram" className={`${showDiagram ? 'flex' : 'hidden'} w-20 h-20`}/>
-                <div id="tab"/>
-            </div>
         </div>
     )
 }
