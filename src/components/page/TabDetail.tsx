@@ -38,7 +38,7 @@ const TabDetail = ({tab}: { tab: GetTabByIdResponse }) => {
 
             parsedTab.forEach((item: Content) => {
                 const lineDiv = document.createElement('div');
-                lineDiv.className = `flex flex-col items-center my-1 pt-16`;
+                lineDiv.className = `flex flex-col items-center my-1 pt-16 mx-auto`;
 
                 const syllableContainerDiv = document.createElement('div');
                 syllableContainerDiv.className = "flex relative p-1";
@@ -123,7 +123,7 @@ const TabDetail = ({tab}: { tab: GetTabByIdResponse }) => {
     }, [tab, showDiagram]);
 
     return (
-        <div className="px-3 py-10 mx-auto w-full lg:w-[70%]">
+        <div className="px-3 py-10 mx-auto w-full xl:w-[70%] h-screen">
             <div className="space-y-2 border-b pb-2">
                 <div className="text-4xl font-bold tracking-wide">{tab.song}</div>
                 <div className="text-lg font-semibold tracking-wide text-primary/50">{tab.artist}</div>
@@ -145,7 +145,7 @@ const TabDetail = ({tab}: { tab: GetTabByIdResponse }) => {
                 </div>
 
                 <div className="flex items-center space-x-2">
-                    <div className="flex items-center border h-10 rounded-md px-3">
+                    <div className="hidden sm:flex items-center border h-10 rounded-md px-3">
                         <label className="label cursor-pointer">
                             <div className="flex items-center space-x-2">
                                 <img id="offChord" src="/image/offChord.png" alt="chord_off" className="w-[22px]"/>
