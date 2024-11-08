@@ -22,6 +22,7 @@ import {Slide, toast} from "react-toastify";
 import {TabContext} from "@/context/TabContext";
 import DetailTab_TabInfo from "@/components/page_component/detailTab/DetailTab_TabInfo";
 import DetailTab_TabComments from "@/components/page_component/detailTab/DetailTab_TabComments";
+import UpdateCommentModal from "@/components/page_component/detailTab/comment/UpdateCommentModal";
 
 const DetailTab = ({tab}: { tab: GetTabByIdResponse }) => {
 
@@ -59,7 +60,6 @@ const DetailTab = ({tab}: { tab: GetTabByIdResponse }) => {
             }
         }
     })
-
 
     const DeleteAlert = () => {
 
@@ -194,77 +194,81 @@ const DetailTab = ({tab}: { tab: GetTabByIdResponse }) => {
     }, [tab, showDiagram]);
 
     return (
-        <div className="px-3 py-10 mx-auto w-full xl:w-[70%] h-screen">
-            <div className="space-y-2 border-b pb-2">
-                <div className="text-4xl font-bold tracking-wide">{tab.song}</div>
-                <div className="text-lg font-semibold tracking-wide text-primary/50">{tab.artist}</div>
-            </div>
+        <>
+            <div className="px-3 py-10 mx-auto w-full xl:w-[70%] h-screen">
+                <div className="space-y-2 border-b pb-2">
+                    <div className="text-4xl font-bold tracking-wide">{tab.song}</div>
+                    <div className="text-lg font-semibold tracking-wide text-primary/50">{tab.artist}</div>
+                </div>
 
-            <div className="flex justify-between py-2">
-                <div>
-                    <div className="flex items-center space-x-2 tracking-wide text-sm">
-                        <div>Capo</div>
-                        <div>:</div>
-                        <div>{tab.capo}</div>
+                <div className="flex justify-between py-2">
+                    <div>
+                        <div className="flex items-center space-x-2 tracking-wide text-sm">
+                            <div>Capo</div>
+                            <div>:</div>
+                            <div>{tab.capo}</div>
+                        </div>
+
+                        <div className="flex items-center space-x-2 tracking-wide text-sm">
+                            <div>Style</div>
+                            <div>:</div>
+                            <div>{tab.style}</div>
+                        </div>
                     </div>
 
-                    <div className="flex items-center space-x-2 tracking-wide text-sm">
-                        <div>Style</div>
-                        <div>:</div>
-                        <div>{tab.style}</div>
+                    <div className="flex items-center space-x-2">
+                        <div className="hidden sm:flex items-center border h-10 rounded-md px-3">
+                            <label className="label cursor-pointer">
+                                <div className="flex items-center space-x-2">
+                                    <img id="offChord" src="/image/offChord.png" alt="chord_off" className="w-[22px]"/>
+                                    <Switch checked={showDiagram} className="h-5 w-10"
+                                            onClick={() => setShowDiagram(!showDiagram)}/>
+                                    <img id="onChord" src="/image/onChord.png" alt="chord_on" className="w-[20px]"/>
+                                </div>
+                            </label>
+                        </div>
+
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" size="sm" className="h-10"><Ellipsis/></Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent side="bottom" align="end" className="w-fit h-fit p-2">
+                                <DropdownMenuGroup>
+                                    <DropdownMenuItem className="cursor-pointer">
+                                        <Star/>
+                                        <span className="text-[14px]">즐겨찾기 추가</span>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
+                                        className="cursor-pointer"
+                                        onClick={() => router.push(`/edit/${tab.id}`)}>
+                                        <Eraser/>
+                                        <span className="text-[14px]">수정</span>
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem
+                                        className="cursor-pointer"
+                                        onClick={onDeleteSubmit}
+                                    >
+                                        <Trash2/>
+                                        <span className="text-[14px]">삭제</span>
+                                    </DropdownMenuItem>
+                                </DropdownMenuGroup>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
                 </div>
 
-                <div className="flex items-center space-x-2">
-                    <div className="hidden sm:flex items-center border h-10 rounded-md px-3">
-                        <label className="label cursor-pointer">
-                            <div className="flex items-center space-x-2">
-                                <img id="offChord" src="/image/offChord.png" alt="chord_off" className="w-[22px]"/>
-                                <Switch checked={showDiagram} className="h-5 w-10"
-                                        onClick={() => setShowDiagram(!showDiagram)}/>
-                                <img id="onChord" src="/image/onChord.png" alt="chord_on" className="w-[20px]"/>
-                            </div>
-                        </label>
-                    </div>
+                {/* 악보 내용 */}
+                <div ref={tabContentRef}/>
 
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="outline" size="sm" className="h-10"><Ellipsis/></Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent side="bottom" align="end" className="w-fit h-fit p-2">
-                            <DropdownMenuGroup>
-                                <DropdownMenuItem className="cursor-pointer">
-                                    <Star/>
-                                    <span className="text-[14px]">즐겨찾기 추가</span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    className="cursor-pointer"
-                                    onClick={() => router.push(`/edit/${tab.id}`)}>
-                                    <Eraser/>
-                                    <span className="text-[14px]">수정</span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    className="cursor-pointer"
-                                    onClick={onDeleteSubmit}
-                                >
-                                    <Trash2/>
-                                    <span className="text-[14px]">삭제</span>
-                                </DropdownMenuItem>
-                            </DropdownMenuGroup>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </div>
+                {/* 악보 정보 */}
+                <DetailTab_TabInfo tab={tab}/>
+
+                {/* 댓글 */}
+                <DetailTab_TabComments tabId={tab.id!}/>
             </div>
 
-            {/* 악보 내용 */}
-            <div ref={tabContentRef} />
-
-            {/* 악보 정보 */}
-            <DetailTab_TabInfo tab={tab}/>
-
-            {/* 댓글 */}
-            <DetailTab_TabComments tabId={tab.id!}/>
-        </div>
+            <UpdateCommentModal/>
+        </>
     )
 }
 

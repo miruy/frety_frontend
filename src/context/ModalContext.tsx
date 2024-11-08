@@ -1,6 +1,7 @@
 'use client'
 
 import React, {ReactNode, useState} from "react";
+import {GetCommentByIdResponse} from "@/openapi/model";
 
 interface IModalContext {
     modalState: IModal;
@@ -10,23 +11,31 @@ interface IModalContext {
 
 export enum ModalTypes {
 
-    // 메모 검색
-    MEMO_SEARCH = "MEMO_SEARCH",
+    // 악보 댓글/답글 수정
+    TAB_COMMENT_UPDATE = "TAB_COMMENT_UPDATE",
 }
 
 type IModal = {
-    // 메모 검색
-    [ModalTypes.MEMO_SEARCH]: {
+    // 악보 댓글/답글 수정
+    [ModalTypes.TAB_COMMENT_UPDATE]: {
         isVisible: boolean,
-        data: object,
+        data: {
+            tabId: number,
+            commentId: number,
+            comment: GetCommentByIdResponse,
+        },
     },
 }
 
 const initialModalState: IModal = {
-    // 메모 검색
-    [ModalTypes.MEMO_SEARCH]: {
+    // 악보 댓글/답글 수정
+    [ModalTypes.TAB_COMMENT_UPDATE]: {
         isVisible: false,
-        data: {},
+        data: {
+            tabId: 0,
+            commentId: 0,
+            comment: {}
+        },
     },
 };
 
@@ -55,7 +64,13 @@ export function ModalProvider({children}: { children: ReactNode }) {
     const openModal: IModalContext["openModal"] = ({name, data}) => {
         setModalState((prev) => ({
             ...prev,
-            [name]: {isVisible: true, data: data ?? {}},
+            [name]: {
+                isVisible: true, data: data ?? {
+                    tabId: 0,
+                    commentId: 0,
+                    comment: {}
+                }
+            },
         }));
     };
 
