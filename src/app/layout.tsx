@@ -34,7 +34,7 @@ export default function RootLayout({
         >
         <ClientProviders>
             <TabProvider>
-                <SideSheet/>
+                {/*<SideSheet/>*/}
                 <TopBar/>
                 {children}
             </TabProvider>

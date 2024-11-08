@@ -27,9 +27,14 @@ const PopularTabs = ({tabs}: { tabs: SearchTabsResponse[] }) => {
                         <TableHead className="text-center">no</TableHead>
                         <TableHead className="text-center">Artist</TableHead>
                         <TableHead className="text-center">Song</TableHead>
-                        <TableHead className="text-center">악보제작자</TableHead>
-                        <TableHead className="text-center">등록</TableHead>
-                        <TableHead className="text-center">수정</TableHead>
+                        <div className="flex flex-1 items-center">
+                            <TableHead
+                                className="hidden md:flex flex-1 justify-center items-center text-center">제작자</TableHead>
+                            <TableHead
+                                className="hidden md:flex flex-1 justify-center items-center text-center">등록</TableHead>
+                            <TableHead
+                                className="hidden md:flex flex-1 justify-center items-center text-center">수정</TableHead>
+                        </div>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -40,10 +45,14 @@ const PopularTabs = ({tabs}: { tabs: SearchTabsResponse[] }) => {
                                 <TableCell className="text-center">{index + 1}</TableCell>
                                 <TableCell className="text-center">{popularTab.artist}</TableCell>
                                 <TableCell className="text-center">{popularTab.song}</TableCell>
-                                <TableCell className="text-center">미구현</TableCell>
-                                <TableCell className="text-center">{formatDate(popularTab.createdAt!)}</TableCell>
-                                <TableCell
-                                    className="text-center">{popularTab.updatedAt !== "" ? formatDate(popularTab.updatedAt!) : "-"}</TableCell>
+                                <div className="flex flex-1 items-center">
+                                    <TableCell
+                                        className="hidden md:flex flex-1 justify-center items-center text-center">미구현</TableCell>
+                                    <TableCell
+                                        className="hidden md:flex flex-1 justify-center items-center text-center">{formatDate(popularTab.createdAt!)}</TableCell>
+                                    <TableCell
+                                        className="hidden md:flex flex-1 justify-center items-center text-center">{popularTab.updatedAt !== "" ? formatDate(popularTab.updatedAt!) : "-"}</TableCell>
+                                </div>
                             </TableRow>
                         )
                     })}

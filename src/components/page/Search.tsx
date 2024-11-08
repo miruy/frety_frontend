@@ -10,6 +10,7 @@ import {
     PaginationPrevious
 } from "@/components/ui/pagination";
 import {useState} from "react";
+import {formatDate} from "@/utils/formatDate";
 
 const Search = () => {
 
@@ -25,7 +26,8 @@ const Search = () => {
             artist: faker.music.songName(),
             song: faker.lorem.words(3),
             writer: faker.name.fullName(),
-            createAt: faker.date.past().toLocaleDateString(),
+            createdAt: faker.date.past().toLocaleDateString(),
+            updatedAt: faker.date.past().toLocaleDateString(),
         }));
     }
 
@@ -34,8 +36,8 @@ const Search = () => {
     return (
         <div className="px-3 py-10 mx-auto w-full lg:w-[70%] space-y-10">
             <div className="space-y-2 border-b pb-2">
-                <div className="text-4xl font-bold tracking-wide">{searchKeyword}</div>
-                <div className="text-lg font-semibold tracking-wide text-primary/50">검색결과</div>
+                <div className="text-2xl sm:text-4xl font-bold tracking-wide">{searchKeyword}</div>
+                <div className="text-md sm:text-lg font-semibold tracking-wide text-primary/50">검색결과</div>
             </div>
 
             <div className="space-y-10">
@@ -45,8 +47,14 @@ const Search = () => {
                             <TableHead className="text-center">no</TableHead>
                             <TableHead className="text-center">Artist</TableHead>
                             <TableHead className="text-center">Song</TableHead>
-                            <TableHead className="text-center">악보제작자</TableHead>
-                            <TableHead className="text-center">등록일</TableHead>
+                            <div className="flex flex-1 items-center">
+                                <TableHead
+                                    className="hidden md:flex flex-1 justify-center items-center text-center">제작자</TableHead>
+                                <TableHead
+                                    className="hidden md:flex flex-1 justify-center items-center text-center">등록</TableHead>
+                                <TableHead
+                                    className="hidden md:flex flex-1 justify-center items-center text-center">수정</TableHead>
+                            </div>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -56,8 +64,14 @@ const Search = () => {
                                     <TableCell className="text-center">{searchedTab.no}</TableCell>
                                     <TableCell className="text-center">{searchedTab.artist}</TableCell>
                                     <TableCell className="text-center">{searchedTab.song}</TableCell>
-                                    <TableCell className="text-center">{searchedTab.writer}</TableCell>
-                                    <TableCell className="text-center">{searchedTab.createAt}</TableCell>
+                                    <div className="flex flex-1 items-center">
+                                        <TableCell
+                                            className="hidden md:flex flex-1 justify-center items-center text-center">미구현</TableCell>
+                                        <TableCell
+                                            className="hidden md:flex flex-1 justify-center items-center text-center">{formatDate(searchedTab.createdAt!)}</TableCell>
+                                        <TableCell
+                                            className="hidden md:flex flex-1 justify-center items-center text-center">{searchedTab.updatedAt !== "" ? formatDate(searchedTab.updatedAt!) : "-"}</TableCell>
+                                    </div>
                                 </TableRow>
                             )
                         })}

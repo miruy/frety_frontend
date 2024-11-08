@@ -23,6 +23,7 @@ import {TabContext} from "@/context/TabContext";
 import DetailTab_TabInfo from "@/components/page_component/detailTab/DetailTab_TabInfo";
 import DetailTab_TabComments from "@/components/page_component/detailTab/DetailTab_TabComments";
 import UpdateCommentModal from "@/components/page_component/detailTab/comment/UpdateCommentModal";
+import CreateChildCommentModal from "@/components/page_component/detailTab/comment/CreateChildCommentModal";
 
 const DetailTab = ({tab}: { tab: GetTabByIdResponse }) => {
 
@@ -197,8 +198,8 @@ const DetailTab = ({tab}: { tab: GetTabByIdResponse }) => {
         <>
             <div className="px-3 py-10 mx-auto w-full xl:w-[70%] h-screen">
                 <div className="space-y-2 border-b pb-2">
-                    <div className="text-4xl font-bold tracking-wide">{tab.song}</div>
-                    <div className="text-lg font-semibold tracking-wide text-primary/50">{tab.artist}</div>
+                    <div className="text-2xl sm:text-4xl font-bold tracking-wide">{tab.song}</div>
+                    <div className="text-md sm:text-lg font-semibold tracking-wide text-primary/50">{tab.artist}</div>
                 </div>
 
                 <div className="flex justify-between py-2">
@@ -268,6 +269,7 @@ const DetailTab = ({tab}: { tab: GetTabByIdResponse }) => {
             </div>
 
             <UpdateCommentModal/>
+            <CreateChildCommentModal/>
         </>
     )
 }

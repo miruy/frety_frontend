@@ -19,6 +19,7 @@ const DetailTab_TabComments = ({tabId}: { tabId: number }) => {
 
     const [commentValue, setCommentValue] = useState<string>("");
     const {openModal} = useContext(ModalContext);
+    const [childComment, setChildComment] = useState<number | null>(null); // 자식 댓글의 부모 댓글 ID를 저장
 
     // 댓글 아이디 전체 조회
     const {
@@ -148,19 +149,19 @@ const DetailTab_TabComments = ({tabId}: { tabId: number }) => {
             {/* 댓글 등록 */}
             <div className="flex flex-col">
                 {comments && (
-                    <div className="mb-1 font-semibold text-gray-700 dark:text-gray-300">
+                    <div className="mb-1 font-semibold text-gray-700 dark:text-gray-300 select-none">
                         {comments.length}
                         개의 댓글
                     </div>
                 )}
 
                 <div className="flex flex-1 space-x-2">
-                <textarea
-                    value={commentValue}
-                    onChange={(event) => setCommentValue(event.target.value)}
-                    placeholder="댓글을 작성해보세요!"
-                    className="flex-1 resize-none border bg-background outline-none rounded h-40 p-2">
-                </textarea>
+                    <textarea
+                        value={commentValue}
+                        onChange={(event) => setCommentValue(event.target.value)}
+                        placeholder="댓글을 작성해보세요!"
+                        className="flex-1 resize-none border bg-background outline-none rounded h-40 p-2">
+                    </textarea>
 
                     <Button
                         onClick={() => {
@@ -172,22 +173,10 @@ const DetailTab_TabComments = ({tabId}: { tabId: number }) => {
                                     className: "text-sm",
                                     theme: "colored",
                                 });
-                                return
+                                return;
                             }
-
-                            // if (!isLogined) {
-                            //     toast.warning("로그인 후 이용가능합니다.", {
-                            //         position: "top-center",
-                            //         autoClose: 2500,
-                            //         transition: Slide,
-                            //         className: "text-sm",
-                            //         theme: "colored",
-                            //     });
-                            //     return
-                            // }
-
                             if (commentValue) {
-                                onCreateCommentSubmit()
+                                onCreateCommentSubmit();
                             }
                         }}
                         className="flex w-24 h-40 rounded p-2 justify-center items-center">
@@ -196,59 +185,83 @@ const DetailTab_TabComments = ({tabId}: { tabId: number }) => {
                 </div>
             </div>
 
-            {/* 댓글 등록 */}
+            {/* 댓글 리스트 */}
             <div className="py-10">
                 {comments?.map((comment, index) => {
                     return (
                         <div key={index}>
                             <div className="p-3 border rounded-lg my-5">
-                                <div className="flex justify-between items-center">
-                                    <div className="text-sm">댓글 작성자 미구현</div>
 
-                                    <div className="flex items-center space-x-2">
-                                        <div className="text-[14px]">답글 달기</div>
+                                <>
+                                    <div className="flex justify-between items-center">
+                                        <div className="text-sm">댓글 작성자 미구현</div>
 
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <Button variant="outline" size="icon"
-                                                        className="h-7"><Ellipsis/></Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent side="bottom" align="end" className="w-fit h-fit p-2">
-                                                <DropdownMenuGroup>
-                                                    <DropdownMenuItem
-                                                        className="cursor-pointer"
-                                                        onClick={() => {
-                                                            openModal({
-                                                                name: ModalTypes.TAB_COMMENT_UPDATE,
-                                                                data: {
-                                                                    tabId: tabId,
-                                                                    commentId: comment!.data!.id!,
-                                                                    comment: comment.data!
-                                                                }
-                                                            });
-                                                        }}
-                                                    >
-                                                        <Eraser/>
-                                                        <span className="text-[14px]">댓글 수정</span>
-                                                    </DropdownMenuItem>
-                                                    <DropdownMenuItem
-                                                        className="cursor-pointer"
-                                                        onClick={() => onDeleteSubmit(comment!.data!.id!)}
-                                                    >
-                                                        <Trash2/>
-                                                        <span className="text-[14px]">댓글 삭제</span>
-                                                    </DropdownMenuItem>
-                                                </DropdownMenuGroup>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
+                                        <div className="flex items-center space-x-2">
+                                            <Button
+                                                variant="outline"
+                                                className="text-[13px] w-fit h-7 px-2.5"
+                                                onClick={() => {
+                                                    openModal({
+                                                        name: ModalTypes.TAB_CHILD_COMMENT_CREATE,
+                                                        data: {
+                                                            tabId: tabId,
+                                                            parentCommentId: comment!.data!.id!,
+                                                            setChildComment: () => setChildComment(comment!.data!.id!), // 부모 댓글 ID 설정
+                                                        }
+                                                    });
+                                                }}
+                                            >
+                                                답글 달기
+                                            </Button>
+
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="outline" size="icon"
+                                                            className="h-7"><Ellipsis/></Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent side="bottom" align="end"
+                                                                     className="w-fit h-fit p-2">
+                                                    <DropdownMenuGroup>
+                                                        <DropdownMenuItem
+                                                            className="cursor-pointer"
+                                                            onClick={() => {
+                                                                openModal({
+                                                                    name: ModalTypes.TAB_COMMENT_UPDATE,
+                                                                    data: {
+                                                                        tabId: tabId,
+                                                                        commentId: comment!.data!.id!,
+                                                                        comment: comment.data!
+                                                                    }
+                                                                });
+                                                            }}
+                                                        >
+                                                            <Eraser/>
+                                                            <span className="text-[13px]">댓글 수정</span>
+                                                        </DropdownMenuItem>
+                                                        <DropdownMenuItem
+                                                            className="cursor-pointer"
+                                                            onClick={() => onDeleteSubmit(comment!.data!.id!)}
+                                                        >
+                                                            <Trash2/>
+                                                            <span className="text-[13px]">댓글 삭제</span>
+                                                        </DropdownMenuItem>
+                                                    </DropdownMenuGroup>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div>{comment.data?.content}</div>
-                                <div
-                                    className="text-xs text-primary/50">{comment.data?.updatedAt ? comment.data?.updatedAt : comment.data?.createdAt} 등록일
-                                    또는 수정일 미구현
-                                </div>
+                                    <div>{comment.data?.content}</div>
+                                    <div
+                                        className="text-xs text-primary/50">{comment.data?.updatedAt ? comment.data?.updatedAt : comment.data?.createdAt} 등록일
+                                        또는 수정일 미구현
+                                    </div>
+                                </>
+
+                                {/* 자식 댓글 (답글) 표시 */}
+                                {comment.data?.id === childComment &&
+                                    <div className="pl-10 bg-secondary py-5">{comment.data?.content}</div>
+                                }
                             </div>
                         </div>
                     )

@@ -7,8 +7,8 @@ const Signup = () => {
     return (
         <div className="px-3 py-10 mx-auto w-full md:w-[60%] xl:w-[40%] space-y-10">
             <div className="space-y-2 border-b pb-2">
-                <div className="text-4xl font-bold tracking-wide">회원가입</div>
-                <div className="text-lg font-semibold tracking-wide text-primary/50">간단한 회원가입으로 Frety를 자유롭게 이용해 보세요.</div>
+                <div className="text-2xl sm:text-4xl font-bold tracking-wide">회원가입</div>
+                <div className="text-md sm:text-lg font-semibold tracking-wide text-primary/50">간단한 회원가입으로 Frety를 자유롭게 이용해 보세요.</div>
             </div>
 
             <div className="flex justify-center items-center">

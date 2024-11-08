@@ -18,11 +18,11 @@ const DetailTab_TabInfo = ({tab}: { tab: GetTabByIdResponse }) => {
             {/* 악보 제작자 */}
             <div className="flex items-center justify-end mb-2 space-x-0.5">
                 <div className="flex items-center space-x-1">
-                    <UserRoundPen className="w-5"/>
-                    <div className="text-sm">제작 :</div>
+                    <UserRoundPen className="w-4 sm:w-5"/>
+                    <div className="text-xs sm:text-sm">제작 :</div>
                 </div>
 
-                <div className="text-sm">미구현</div>
+                <div className="text-xs sm:text-sm">미구현</div>
             </div>
 
             {/* 등록일, 수정일 */}

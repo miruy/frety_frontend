@@ -13,6 +13,9 @@ export enum ModalTypes {
 
     // 악보 댓글/답글 수정
     TAB_COMMENT_UPDATE = "TAB_COMMENT_UPDATE",
+
+    // 악보 답글 달기 모달
+    TAB_CHILD_COMMENT_CREATE = "TAB_CHILD_COMMENT_CREATE",
 }
 
 type IModal = {
@@ -25,6 +28,16 @@ type IModal = {
             comment: GetCommentByIdResponse,
         },
     },
+
+    // 악보 답글 달기 모달
+    [ModalTypes.TAB_CHILD_COMMENT_CREATE]: {
+        isVisible: boolean,
+        data: {
+            tabId: number, // targetId
+            parentCommentId: number, // commentId
+            setChildComment: (childCommentId : number) => void // 답글인지 확인하는 함수
+        },
+    },
 }
 
 const initialModalState: IModal = {
@@ -35,6 +48,16 @@ const initialModalState: IModal = {
             tabId: 0,
             commentId: 0,
             comment: {}
+        },
+    },
+
+    // 악보 답글 달기 모달
+    [ModalTypes.TAB_CHILD_COMMENT_CREATE]: {
+        isVisible: false,
+        data: {
+            tabId: 0, // targetId
+            parentCommentId: 0, // commentId
+            setChildComment: () => {}
         },
     },
 };
@@ -65,11 +88,7 @@ export function ModalProvider({children}: { children: ReactNode }) {
         setModalState((prev) => ({
             ...prev,
             [name]: {
-                isVisible: true, data: data ?? {
-                    tabId: 0,
-                    commentId: 0,
-                    comment: {}
-                }
+                isVisible: true, data: data ?? {}
             },
         }));
     };

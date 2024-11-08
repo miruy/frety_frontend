@@ -350,8 +350,8 @@ const EditTab = ({tab, tabId}: EditTabProps) => {
     return (
         <div className="px-3 py-10 mx-auto w-full md:w-[90%] xl:w-[70%] space-y-10">
             <div className="space-y-2 border-b pb-2">
-                <div className="text-4xl font-bold tracking-wide">악보 수정</div>
-                <div className="text-lg font-semibold tracking-wide text-primary/50">
+                <div className="text-2xl sm:text-4xl font-bold tracking-wide">악보 수정</div>
+                <div className="text-md sm:text-lg font-semibold tracking-wide text-primary/50">
                     악보를 수정하고, 새로운 가사와 코드를 추가할 수 있습니다.
                 </div>
             </div>

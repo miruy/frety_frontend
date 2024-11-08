@@ -287,8 +287,8 @@ const CreateTab = () => {
     return (
         <div className="px-3 py-10 mx-auto w-full md:w-[90%] xl:w-[70%] space-y-10">
             <div className="space-y-2 border-b pb-2">
-                <div className="text-4xl font-bold tracking-wide">악보 제작</div>
-                <div className="text-lg font-semibold tracking-wide text-primary/50">Frety에 직접 제작한 기타 악보를 등록하고, 다른 사람들과
+                <div className="text-2xl sm:text-4xl font-bold tracking-wide">악보 제작</div>
+                <div className="text-md sm:text-lg font-semibold tracking-wide text-primary/50">Frety에 직접 제작한 기타 악보를 등록하고, 다른 사람들과
                     공유해보세요.
                 </div>
             </div>
