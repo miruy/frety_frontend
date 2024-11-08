@@ -1,9 +1,9 @@
-import TabDetail from "@/components/page/TabDetail";
 import NotFound from "@/app/not-found";
 import {getTabById} from "@/openapi/api/tab/tab";
 import {GetServerSidePropsContext} from "next";
+import DetailTab from "@/components/page/DetailTab";
 
-const TabDetailPage = async (context: GetServerSidePropsContext) => {
+const DetailTabPage = async (context: GetServerSidePropsContext) => {
 
     const {tabId} = context.params!;
 
@@ -16,11 +16,11 @@ const TabDetailPage = async (context: GetServerSidePropsContext) => {
         const tab = await getTabById(Number(tabId));
 
         return (
-            <TabDetail tab={tab}/>
+            <DetailTab tab={tab}/>
         )
     } catch {
         return <NotFound/>;
     }
 }
 
-export default TabDetailPage;
+export default DetailTabPage;

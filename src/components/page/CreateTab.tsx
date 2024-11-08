@@ -44,6 +44,7 @@ const CreateTab = () => {
             onSuccess: async (tabId) => {
                 toast.success("성공적으로 악보가 제작되었습니다.", {
                     position: "top-center",
+                    autoClose: 2500,
                     transition: Slide,
                     className: "text-sm",
                     theme: "colored",
@@ -54,6 +55,7 @@ const CreateTab = () => {
                 console.log(error)
                 toast.error("관리자에게 문의하세요", {
                     position: "top-center",
+                    autoClose: 2500,
                     transition: Slide,
                     className: "text-sm",
                     theme: "colored",
@@ -68,6 +70,7 @@ const CreateTab = () => {
         if (!createTabRequest.getValues().artist) {
             toast.error("가수명을 입력하세요.", {
                 position: "top-center",
+                autoClose: 2500,
                 transition: Slide,
                 className: "text-sm",
                 theme: "colored",
@@ -78,6 +81,7 @@ const CreateTab = () => {
         if (!createTabRequest.getValues().song) {
             toast.error("제목을 입력하세요.", {
                 position: "top-center",
+                autoClose: 2500,
                 transition: Slide,
                 className: "text-sm",
                 theme: "colored",
@@ -88,6 +92,7 @@ const CreateTab = () => {
         if (!createTabRequest.getValues().capo) {
             toast.error("카포를 선택하세요.", {
                 position: "top-center",
+                autoClose: 2500,
                 transition: Slide,
                 className: "text-sm",
                 theme: "colored",
@@ -98,6 +103,7 @@ const CreateTab = () => {
         if (!createTabRequest.getValues().style) {
             toast.error("주법을 선택하세요.", {
                 position: "top-center",
+                autoClose: 2500,
                 transition: Slide,
                 className: "text-sm",
                 theme: "colored",
@@ -108,6 +114,7 @@ const CreateTab = () => {
         if (parsedLyrics.length === 0) {
             toast.error("내용을 입력하세요.", {
                 position: "top-center",
+                autoClose: 2500,
                 transition: Slide,
                 className: "text-sm",
                 theme: "colored",

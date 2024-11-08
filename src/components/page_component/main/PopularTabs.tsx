@@ -1,5 +1,4 @@
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
-import {faker} from "@faker-js/faker";
 import {
     Pagination,
     PaginationContent,
@@ -20,21 +19,6 @@ const PopularTabs = ({tabs}: { tabs: SearchTabsResponse[] }) => {
         router.push("/tab/" + tabId);
     }
 
-    function generateSheetMusicData(count: number) {
-        return Array.from({length: count}).map((_, index) => ({
-            no: index + 1,
-            tabId: index + 1,
-            artist: faker.music.songName(),
-            song: faker.lorem.words(3),
-            writer: faker.name.fullName(),
-            createAt: faker.date.past().toLocaleDateString(),
-            // updateAt: faker.date.past().toLocaleDateString(),
-            updateAt: ""
-        }));
-    }
-
-    const popularTabs = generateSheetMusicData(10); // 예시로 10개의 데이터를 생성
-
     return (
         <div className="space-y-10">
             <Table>
@@ -44,8 +28,8 @@ const PopularTabs = ({tabs}: { tabs: SearchTabsResponse[] }) => {
                         <TableHead className="text-center">Artist</TableHead>
                         <TableHead className="text-center">Song</TableHead>
                         <TableHead className="text-center">악보제작자</TableHead>
-                        <TableHead className="text-center">등록일</TableHead>
-                        <TableHead className="text-center">수정일</TableHead>
+                        <TableHead className="text-center">등록</TableHead>
+                        <TableHead className="text-center">수정</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>

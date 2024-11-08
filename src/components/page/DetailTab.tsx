@@ -20,8 +20,10 @@ import {SVGuitarChord} from "svguitar";
 import {useDeleteTab} from "@/openapi/api/tab/tab";
 import {Slide, toast} from "react-toastify";
 import {TabContext} from "@/context/TabContext";
+import DetailTab_TabInfo from "@/components/page_component/detailTab/DetailTab_TabInfo";
+import DetailTab_TabComments from "@/components/page_component/detailTab/DetailTab_TabComments";
 
-const TabDetail = ({tab}: { tab: GetTabByIdResponse }) => {
+const DetailTab = ({tab}: { tab: GetTabByIdResponse }) => {
 
     const [showDiagram, setShowDiagram] = useState<boolean>(true);
     const router = useRouter();
@@ -33,8 +35,11 @@ const TabDetail = ({tab}: { tab: GetTabByIdResponse }) => {
     const {mutate: deleteTab} = useDeleteTab({
         mutation: {
             onSuccess: async () => {
-                toast.success("악보가 삭제되었습니다.", {
+                toast.dismiss();
+
+                toast.success("성공적으로 악보가 삭제되었습니다.", {
                     position: "top-center",
+                    autoClose: 2500,
                     transition: Slide,
                     className: "text-sm",
                     theme: "colored",
@@ -46,6 +51,7 @@ const TabDetail = ({tab}: { tab: GetTabByIdResponse }) => {
                 console.log(error)
                 toast.error("관리자에게 문의하세요", {
                     position: "top-center",
+                    autoClose: 2500,
                     transition: Slide,
                     className: "text-sm",
                     theme: "colored",
@@ -63,7 +69,6 @@ const TabDetail = ({tab}: { tab: GetTabByIdResponse }) => {
 
         const handleDelete = () => {
             deleteTab({tabId: tab.id!});
-            toast.dismiss();
         };
 
         return (
@@ -251,10 +256,16 @@ const TabDetail = ({tab}: { tab: GetTabByIdResponse }) => {
                 </div>
             </div>
 
+            {/* 악보 내용 */}
+            <div ref={tabContentRef} />
 
-            <div ref={tabContentRef}></div>
+            {/* 악보 정보 */}
+            <DetailTab_TabInfo tab={tab}/>
+
+            {/* 댓글 */}
+            <DetailTab_TabComments tabId={tab.id!}/>
         </div>
     )
 }
 
-export default TabDetail;
+export default DetailTab;

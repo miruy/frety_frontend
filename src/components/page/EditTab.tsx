@@ -46,6 +46,7 @@ const EditTab = ({tab, tabId}: EditTabProps) => {
             onSuccess: async () => {
                 toast.success("성공적으로 악보가 수정되었습니다.", {
                     position: "top-center",
+                    autoClose: 2500,
                     transition: Slide,
                     className: "text-sm",
                     theme: "colored",
@@ -56,6 +57,7 @@ const EditTab = ({tab, tabId}: EditTabProps) => {
                 console.log(error)
                 toast.error("관리자에게 문의하세요", {
                     position: "top-center",
+                    autoClose: 2500,
                     transition: Slide,
                     className: "text-sm",
                     theme: "colored",
@@ -78,6 +80,7 @@ const EditTab = ({tab, tabId}: EditTabProps) => {
         if (!data.artist) {
             toast.error("가수명을 입력하세요.", {
                 position: "top-center",
+                autoClose: 2500,
                 transition: Slide,
                 className: "text-sm",
                 theme: "colored",
@@ -88,6 +91,7 @@ const EditTab = ({tab, tabId}: EditTabProps) => {
         if (!data.song) {
             toast.error("제목을 입력하세요.", {
                 position: "top-center",
+                autoClose: 2500,
                 transition: Slide,
                 className: "text-sm",
                 theme: "colored",
@@ -98,6 +102,7 @@ const EditTab = ({tab, tabId}: EditTabProps) => {
         if (!data.capo) {
             toast.warn("카포를 선택하세요.", {
                 position: "top-center",
+                autoClose: 2500,
                 transition: Slide,
                 className: "text-sm",
                 theme: "colored",
@@ -108,6 +113,7 @@ const EditTab = ({tab, tabId}: EditTabProps) => {
         if (!data.style) {
             toast.error("주법을 선택하세요.", {
                 position: "top-center",
+                autoClose: 2500,
                 transition: Slide,
                 className: "text-sm",
                 theme: "colored",
@@ -118,6 +124,7 @@ const EditTab = ({tab, tabId}: EditTabProps) => {
         if (parsedLyrics.length === 0) {
             toast.error("내용을 입력하세요.", {
                 position: "top-center",
+                autoClose: 2500,
                 transition: Slide,
                 className: "text-sm",
                 theme: "colored",

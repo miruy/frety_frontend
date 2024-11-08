@@ -27,8 +27,8 @@ const LatestTabs = ({tabs}: { tabs: SearchTabsResponse[] }) => {
                         <TableHead className="text-center">Artist</TableHead>
                         <TableHead className="text-center">Song</TableHead>
                         <TableHead className="text-center">악보제작자</TableHead>
-                        <TableHead className="text-center">등록일</TableHead>
-                        <TableHead className="text-center">수정일</TableHead>
+                        <TableHead className="text-center">등록</TableHead>
+                        <TableHead className="text-center">수정</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
