@@ -548,6 +548,7 @@ const CreateTab = () => {
                 </div>
 
                 <Button className="w-full h-[50px] tracking-wide"
+                        type="button"
                         onClick={onCreateTabSubmit}>
                     저장
                 </Button>
