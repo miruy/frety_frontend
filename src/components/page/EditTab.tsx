@@ -76,7 +76,7 @@ const EditTab = ({tab, tabId}: EditTabProps) => {
 
     const handleUpdateTabSubmit = (data: UpdateTabRequest) => {
         if (!data.artist) {
-            toast.warn("가수명을 입력하세요.", {
+            toast.error("가수명을 입력하세요.", {
                 position: "top-center",
                 transition: Slide,
                 className: "text-sm",
@@ -86,7 +86,7 @@ const EditTab = ({tab, tabId}: EditTabProps) => {
         }
 
         if (!data.song) {
-            toast.warn("제목을 입력하세요.", {
+            toast.error("제목을 입력하세요.", {
                 position: "top-center",
                 transition: Slide,
                 className: "text-sm",
@@ -106,7 +106,7 @@ const EditTab = ({tab, tabId}: EditTabProps) => {
         }
 
         if (!data.style) {
-            toast.warn("주법을 선택하세요.", {
+            toast.error("주법을 선택하세요.", {
                 position: "top-center",
                 transition: Slide,
                 className: "text-sm",
@@ -116,7 +116,7 @@ const EditTab = ({tab, tabId}: EditTabProps) => {
         }
 
         if (parsedLyrics.length === 0) {
-            toast.warn("내용을 입력하세요.", {
+            toast.error("내용을 입력하세요.", {
                 position: "top-center",
                 transition: Slide,
                 className: "text-sm",

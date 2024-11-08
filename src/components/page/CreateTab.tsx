@@ -66,7 +66,7 @@ const CreateTab = () => {
         createTabRequest.setValue("content", JSON.stringify(parsedLyrics));
 
         if (!createTabRequest.getValues().artist) {
-            toast.warn("가수명을 입력하세요.", {
+            toast.error("가수명을 입력하세요.", {
                 position: "top-center",
                 transition: Slide,
                 className: "text-sm",
@@ -76,7 +76,7 @@ const CreateTab = () => {
         }
 
         if (!createTabRequest.getValues().song) {
-            toast.warn("제목을 입력하세요.", {
+            toast.error("제목을 입력하세요.", {
                 position: "top-center",
                 transition: Slide,
                 className: "text-sm",
@@ -86,7 +86,7 @@ const CreateTab = () => {
         }
 
         if (!createTabRequest.getValues().capo) {
-            toast.warn("카포를 선택하세요.", {
+            toast.error("카포를 선택하세요.", {
                 position: "top-center",
                 transition: Slide,
                 className: "text-sm",
@@ -96,7 +96,7 @@ const CreateTab = () => {
         }
 
         if (!createTabRequest.getValues().style) {
-            toast.warn("주법을 선택하세요.", {
+            toast.error("주법을 선택하세요.", {
                 position: "top-center",
                 transition: Slide,
                 className: "text-sm",
@@ -106,7 +106,7 @@ const CreateTab = () => {
         }
 
         if (parsedLyrics.length === 0) {
-            toast.warn("내용을 입력하세요.", {
+            toast.error("내용을 입력하세요.", {
                 position: "top-center",
                 transition: Slide,
                 className: "text-sm",

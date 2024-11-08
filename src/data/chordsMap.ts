@@ -151,6 +151,7 @@ export const chordsMap: { [key: string]: Chord } = {
             [3, 3],
             [4, 3],
             [5, 1],
+            [6,'x'],
         ],
         barres: [
             {
