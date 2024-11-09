@@ -26,7 +26,7 @@ const Main = ({tabs}: { tabs: SearchTabsResponse[] }) => {
     }
 
     return (
-        <div className="flex flex-col px-3 py-10 mx-auto w-full lg:w-[70%] space-y-14">
+        <div className="flex flex-col px-3 py-10 mx-auto w-full lg:w-[70%]">
             <div className="space-y-2 border-b pb-2">
                 <div className="text-4xl font-bold tracking-wide">Frety</div>
                 <div className="text-md sm:text-lg font-semibold tracking-wide text-primary/50">프렛위에서 완성되는 당신의 기타 코드</div>
@@ -34,7 +34,7 @@ const Main = ({tabs}: { tabs: SearchTabsResponse[] }) => {
 
             <div className="flex flex-col space-y-5">
                 {/* md이하일때 검색창 표시 */}
-                <div className="flex sm:hidden w-full relative">
+                <div className="flex sm:hidden w-full relative mt-5">
                     <Input
                         id="search"
                         value={keyword}

@@ -13,7 +13,7 @@ import {useState} from "react";
 import {formatDate} from "@/utils/formatDate";
 import {Badge} from "@/components/ui/badge";
 
-const Search = () => {
+const Bookmark = () => {
 
     const [searchKeyword] = useState<string>("임창정");
 
@@ -106,4 +106,4 @@ const Search = () => {
     )
 }
 
-export default Search;
+export default Bookmark;

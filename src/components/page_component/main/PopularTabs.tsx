@@ -10,6 +10,7 @@ import {
 import {useRouter} from "next/navigation";
 import {SearchTabsResponse} from "@/openapi/model";
 import {formatDate} from "@/utils/formatDate";
+import {Badge} from "@/components/ui/badge";
 
 const PopularTabs = ({tabs}: { tabs: SearchTabsResponse[] }) => {
 
@@ -44,7 +45,13 @@ const PopularTabs = ({tabs}: { tabs: SearchTabsResponse[] }) => {
                                       onClick={() => handleDetailTab(popularTab.id!)}>
                                 <TableCell className="text-center">{index + 1}</TableCell>
                                 <TableCell className="text-center">{popularTab.artist}</TableCell>
-                                <TableCell className="text-center">{popularTab.song}</TableCell>
+                                <TableCell>
+                                    <div className="flex justify-center items-center space-x-1">
+                                        <span>{popularTab.song}</span>
+                                        <span><Badge variant="secondary"
+                                                     className="rounded w-fit h-fit px-1.5 py-0.5 text-xs">코멘트 수</Badge></span>
+                                    </div>
+                                </TableCell>
                                 <div className="flex flex-1 items-center">
                                     <TableCell
                                         className="hidden md:flex flex-1 justify-center items-center text-center">미구현</TableCell>
