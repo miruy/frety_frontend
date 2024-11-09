@@ -51,7 +51,7 @@ const PopularTabs = ({tabs}: { tabs: SearchTabsResponse[] }) => {
                                     <TableCell
                                         className="hidden md:flex flex-1 justify-center items-center text-center">{formatDate(popularTab.createdAt!)}</TableCell>
                                     <TableCell
-                                        className="hidden md:flex flex-1 justify-center items-center text-center">{popularTab.updatedAt !== "" ? formatDate(popularTab.updatedAt!) : "-"}</TableCell>
+                                        className="hidden md:flex flex-1 justify-center items-center text-center">{popularTab.updatedAt !== popularTab.createdAt ? formatDate(popularTab.updatedAt!) : "-"}</TableCell>
                                 </div>
                             </TableRow>
                         )

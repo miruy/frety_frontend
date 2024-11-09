@@ -12,14 +12,14 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import {Ellipsis, Eraser, Trash2} from "lucide-react";
+import {CornerDownRight, Ellipsis, Eraser, Trash2} from "lucide-react";
 import {ModalContext, ModalTypes} from "@/context/ModalContext";
+import formatTimeSince from "@/utils/formatTimeSince";
 
 const DetailTab_TabComments = ({tabId}: { tabId: number }) => {
 
     const [commentValue, setCommentValue] = useState<string>("");
     const {openModal} = useContext(ModalContext);
-    const [childComment, setChildComment] = useState<number | null>(null); // 자식 댓글의 부모 댓글 ID를 저장
 
     // 댓글 아이디 전체 조회
     const {
@@ -34,6 +34,7 @@ const DetailTab_TabComments = ({tabId}: { tabId: number }) => {
                 queryKey: ['TabComments', tabId],
             }
         });
+
 
     // 전체 조회된 댓글 아이디로 댓글 내용 조회(= 댓글 단건 조회)
     const commentIdArray = commentIds?.map(commentId => commentId.id);
@@ -50,7 +51,7 @@ const DetailTab_TabComments = ({tabId}: { tabId: number }) => {
         mutation: {
             onSuccess: async () => {
                 setCommentValue("");
-                toast.success("성공적으로 댓글이 등록되었습니다.", {
+                toast.success("성공적으로 등록되었습니다.", {
                     position: "top-center",
                     autoClose: 2500,
                     transition: Slide,
@@ -78,14 +79,14 @@ const DetailTab_TabComments = ({tabId}: { tabId: number }) => {
             onSuccess: async () => {
                 toast.dismiss();
 
-                toast.success("성공적으로 댓글이 삭제되었습니다.", {
+                toast.success("성공적으로 삭제되었습니다.", {
                     position: "top-center",
                     autoClose: 2500,
                     transition: Slide,
                     className: "text-sm",
                     theme: "colored",
                 });
-                await commentIdsRefetch;
+                commentIdsRefetch();
 
             },
             onError: (error) => {
@@ -120,13 +121,13 @@ const DetailTab_TabComments = ({tabId}: { tabId: number }) => {
         };
 
         return (
-            <div className="flex flex-col space-y-0.5 px-3">
-                <div>정말 댓글을 삭제하시겠습니까?</div>
-                <div className="flex justify-end items-center">
-                    <Button type="button" variant="ghost" size="sm" className="text-xs w-fit h-fit px-2 py-1.5"
-                            onClick={handleCancel}>취소</Button>
+            <div className="flex items-center justify-between space-x-2">
+                <div>정말 삭제하시겠습니까?</div>
+                <div className="flex items-center">
                     <Button type="button" variant="ghost" size="sm" className="text-xs w-fit h-fit px-2 py-1.5"
                             onClick={handleDelete}>삭제</Button>
+                    <Button type="button" variant="ghost" size="sm" className="text-xs w-fit h-fit px-2 py-1.5"
+                            onClick={handleCancel}>취소</Button>
                 </div>
             </div>
         );
@@ -189,10 +190,11 @@ const DetailTab_TabComments = ({tabId}: { tabId: number }) => {
             <div className="py-10">
                 {comments?.map((comment, index) => {
                     return (
-                        <div key={index}>
-                            <div className="p-3 border rounded-lg my-5">
+                        comment.data?.parentCommentId === null && (
+                            <div key={index} className="p-3 border rounded-lg my-5">
 
-                                <>
+                                {/* 댓글 표시 */}
+                                <div className="pb-5">
                                     <div className="flex justify-between items-center">
                                         <div className="text-sm">댓글 작성자 미구현</div>
 
@@ -206,7 +208,6 @@ const DetailTab_TabComments = ({tabId}: { tabId: number }) => {
                                                         data: {
                                                             tabId: tabId,
                                                             parentCommentId: comment!.data!.id!,
-                                                            setChildComment: () => setChildComment(comment!.data!.id!), // 부모 댓글 ID 설정
                                                         }
                                                     });
                                                 }}
@@ -253,17 +254,78 @@ const DetailTab_TabComments = ({tabId}: { tabId: number }) => {
 
                                     <div>{comment.data?.content}</div>
                                     <div
-                                        className="text-xs text-primary/50">{comment.data?.updatedAt ? comment.data?.updatedAt : comment.data?.createdAt} 등록일
-                                        또는 수정일 미구현
+                                        className="text-xs text-primary/50">
+                                        {comment.data?.updatedAt !== comment.data?.createdAt ?
+                                            <>{comment.data?.updatedAt && formatTimeSince(new Date(comment.data.updatedAt))} 수정됨</>
+                                            :
+                                            <>{comment.data?.createdAt && formatTimeSince(new Date(comment.data.createdAt))}</>
+                                        }
                                     </div>
-                                </>
+                                </div>
 
-                                {/* 자식 댓글 (답글) 표시 */}
-                                {comment.data?.id === childComment &&
-                                    <div className="pl-10 bg-secondary py-5">{comment.data?.content}</div>
-                                }
+                                {/* 답글 표시 */}
+                                {comments
+                                    .filter((childComment) => childComment.data?.parentCommentId === comment.data?.id) // 자식 댓글 필터링
+                                    .map((childComment, childIndex) => (
+                                        <div key={childIndex} className="flex items-center">
+                                            <CornerDownRight className="w-5 ml-2 mr-5 text-primary/50"/>
+
+                                            <div className="flex flex-1 border-t">
+                                                <div className="flex flex-1 flex-col py-3">
+                                                    <div className="flex justify-between items-center">
+                                                        <div className="text-sm">답글 작성자 미구현</div>
+
+                                                        <DropdownMenu>
+                                                            <DropdownMenuTrigger asChild>
+                                                                <Button variant="outline" size="icon"
+                                                                        className="h-7"><Ellipsis/></Button>
+                                                            </DropdownMenuTrigger>
+                                                            <DropdownMenuContent side="bottom" align="end"
+                                                                                 className="w-fit h-fit p-2">
+                                                                <DropdownMenuGroup>
+                                                                    <DropdownMenuItem
+                                                                        className="cursor-pointer"
+                                                                        onClick={() => {
+                                                                            openModal({
+                                                                                name: ModalTypes.TAB_COMMENT_UPDATE,
+                                                                                data: {
+                                                                                    tabId: tabId,
+                                                                                    commentId: childComment!.data!.id!,
+                                                                                    comment: childComment.data!
+                                                                                }
+                                                                            });
+                                                                        }}
+                                                                    >
+                                                                        <Eraser/>
+                                                                        <span className="text-[13px]">답글 수정</span>
+                                                                    </DropdownMenuItem>
+                                                                    <DropdownMenuItem
+                                                                        className="cursor-pointer"
+                                                                        onClick={() => onDeleteSubmit(childComment!.data!.id!)}
+                                                                    >
+                                                                        <Trash2/>
+                                                                        <span className="text-[13px]">답글 삭제</span>
+                                                                    </DropdownMenuItem>
+                                                                </DropdownMenuGroup>
+                                                            </DropdownMenuContent>
+                                                        </DropdownMenu>
+                                                    </div>
+
+                                                    <div>{childComment.data?.content}</div>
+                                                    <div
+                                                        className="text-xs text-primary/50">
+                                                        {childComment.data?.updatedAt !== childComment.data?.createdAt ?
+                                                            <>{childComment.data?.updatedAt && formatTimeSince(new Date(childComment.data.updatedAt))} 수정됨</>
+                                                            :
+                                                            <>{childComment.data?.createdAt && formatTimeSince(new Date(childComment.data.createdAt))}</>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
                             </div>
-                        </div>
+                        )
                     )
                 })}
             </div>

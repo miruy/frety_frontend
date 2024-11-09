@@ -47,7 +47,7 @@ const UpdateCommentModal = () => {
     const {mutate: updateMemoComment} = useUpdateComment({
         mutation: {
             onSuccess: async () => {
-                toast.success("성공적으로 댓글이 수정되었습니다.", {
+                toast.success("성공적으로 수정되었습니다.", {
                     position: "top-center",
                     autoClose: 2500,
                     transition: Slide,

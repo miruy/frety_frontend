@@ -70,7 +70,7 @@ const Search = () => {
                                         <TableCell
                                             className="hidden md:flex flex-1 justify-center items-center text-center">{formatDate(searchedTab.createdAt!)}</TableCell>
                                         <TableCell
-                                            className="hidden md:flex flex-1 justify-center items-center text-center">{searchedTab.updatedAt !== "" ? formatDate(searchedTab.updatedAt!) : "-"}</TableCell>
+                                            className="hidden md:flex flex-1 justify-center items-center text-center">{searchedTab.updatedAt !== searchedTab.createdAt ? formatDate(searchedTab.updatedAt!) : "-"}</TableCell>
                                     </div>
                                 </TableRow>
                             )

@@ -9,7 +9,7 @@ const CreateChildCommentModal = () => {
 
     const {modalState, closeModal} = useContext(ModalContext);
     const [commentValue, setCommentValue] = useState<string>("");
-    const {tabId, parentCommentId, setChildComment} = modalState[ModalTypes.TAB_CHILD_COMMENT_CREATE].data;
+    const {tabId, parentCommentId} = modalState[ModalTypes.TAB_CHILD_COMMENT_CREATE].data;
 
     // 댓글 아이디 전체 조회
     const {
@@ -26,7 +26,7 @@ const CreateChildCommentModal = () => {
 
     const {mutate: createComment} = useCreateComment({
         mutation: {
-            onSuccess: async (childCommentId) => {
+            onSuccess: async () => {
                 setCommentValue("");
                 toast.success("성공적으로 답글이 등록되었습니다.", {
                     position: "top-center",
@@ -38,7 +38,6 @@ const CreateChildCommentModal = () => {
                 closeModal({
                     name: ModalTypes.TAB_CHILD_COMMENT_CREATE,
                 });
-                setChildComment(childCommentId); // 부모 댓글에 대한 답글임을 설정
                 await commentIdsRefetch();
             },
             onError: (error) => {

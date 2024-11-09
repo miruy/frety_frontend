@@ -35,7 +35,6 @@ type IModal = {
         data: {
             tabId: number, // targetId
             parentCommentId: number, // commentId
-            setChildComment: (childCommentId : number) => void // 답글인지 확인하는 함수
         },
     },
 }
@@ -57,7 +56,6 @@ const initialModalState: IModal = {
         data: {
             tabId: 0, // targetId
             parentCommentId: 0, // commentId
-            setChildComment: () => {}
         },
     },
 };

@@ -50,7 +50,7 @@ const LatestTabs = ({tabs}: { tabs: SearchTabsResponse[] }) => {
                                     <TableCell
                                         className="hidden md:flex flex-1 justify-center items-center text-center">{formatDate(latestTab.createdAt!)}</TableCell>
                                     <TableCell
-                                        className="hidden md:flex flex-1 justify-center items-center text-center">{latestTab.updatedAt !== "" ? formatDate(latestTab.updatedAt!) : "-"}</TableCell>
+                                        className="hidden md:flex flex-1 justify-center items-center text-center">{latestTab.updatedAt !== latestTab.createdAt ? formatDate(latestTab.updatedAt!) : "-"}</TableCell>
                                 </div>
                             </TableRow>
                         )
