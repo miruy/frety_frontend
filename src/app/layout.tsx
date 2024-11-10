@@ -4,7 +4,6 @@ import "../css/globals.css";
 import ClientProviders from "@/provider/ClientProviders";
 import {cn} from "@/lib/utils";
 import TopBar from "@/components/common/TopBar";
-import SideSheet from "@/components/common/SideSheet";
 import {TabProvider} from "@/context/TabContext";
 
 const fontSans = FontSans({

@@ -1,7 +1,7 @@
 'use client';
 
 import {Button} from "@/components/ui/button";
-import {DoorOpen, IdCard, Menu, Music4, Search, Star, X} from "lucide-react";
+import {DoorOpen, IdCard, Menu, Music4, Search, Send, Smile, Star, X} from "lucide-react";
 import * as React from "react";
 import {Input} from "@/components/ui/input";
 import {useRouter} from "next/navigation";
@@ -11,6 +11,7 @@ import {
     SheetContent, SheetTitle,
     SheetTrigger
 } from "@/components/ui/sheet";
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
 
 const TopBar = () => {
 
@@ -18,10 +19,18 @@ const TopBar = () => {
     const [keyword, setKeyword] = useState<string>("");
     const [openSidebar, setOpenSidebar] = useState<boolean>(false);
     const [hasLogin, setHasLogin] = useState<boolean>(false);
+    const [addChord, setAddChord] = useState<string>("");
+    const [showAddChordCard, setShowAddChordCard] = useState<boolean>(false);
 
     const handleSearchTab = () => {
         router.push(`/search/${keyword}`);
         setKeyword("");
+    }
+
+    const sendEmailForAddChord = () => {
+        setAddChord("");
+        setShowAddChordCard(false);
+        console.log(addChord)
     }
 
     return (
@@ -83,6 +92,53 @@ const TopBar = () => {
                         }
                     </div>
                 </div>
+
+                <div className="fixed bottom-5 right-5">
+                    <TooltipProvider>
+                        <Tooltip delayDuration={100}>
+                            <TooltipTrigger asChild onClick={() => {
+                                setAddChord("");
+                                setShowAddChordCard(prev => !prev);
+                            }}>
+                                <Button
+                                    className={`flex pt-3 px-3 pb-2.5 rounded-full shadow-lg ${showAddChordCard ? `bg-accent` : `bg-background`}`}
+                                    variant="outline">
+                                    <Send className="w-5"/>
+                                </Button>
+                            </TooltipTrigger>
+
+                            <TooltipContent side="left" sideOffset={10} className={showAddChordCard ? `hidden` : ``}>
+                                <div className="text-xs">기타 코드 신청하기</div>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                </div>
+
+                {showAddChordCard &&
+                    <div className="fixed bottom-[65px] right-[65px]">
+                        <div className="border rounded-lg shadow-lg w-fit h-fit p-4 space-y-3">
+                            <div className="">
+                                <div className="font-bold text-sm">찾으시는 기타 코드가 없으신가요?</div>
+                                <div className="text-xs text-primary/70">
+                                    필요한 기타 코드를 입력 후 제출하시면, 검토 후 업데이트하갰습니다.
+                                </div>
+                            </div>
+
+                            <div className="flex items-center space-x-2">
+                                <Input
+                                    type="text"
+                                    className="h-7 placeholder:text-xs text-xs"
+                                    placeholder="D#m7"
+                                    value={addChord}
+                                    onChange={(event) => {
+                                        setAddChord(event.target.value)
+                                    }}
+                                />
+                                <Button className="h-7 text-xs" onClick={sendEmailForAddChord}>제출</Button>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
 
             <div className="flex sm:hidden h-[70px] items-center justify-between p-5 relative">
