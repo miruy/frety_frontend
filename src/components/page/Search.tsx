@@ -10,8 +10,7 @@ import {
     PaginationPrevious
 } from "@/components/ui/pagination";
 import {useState} from "react";
-import {formatDate} from "@/utils/formatDate";
-import {Badge} from "@/components/ui/badge";
+import {Heart} from "lucide-react";
 
 const Search = () => {
 
@@ -50,11 +49,9 @@ const Search = () => {
                             <TableHead className="text-center">Song</TableHead>
                             <div className="flex flex-1 items-center">
                                 <TableHead
-                                    className="hidden md:flex flex-1 justify-center items-center text-center">제작자</TableHead>
-                                <TableHead
-                                    className="hidden md:flex flex-1 justify-center items-center text-center">등록</TableHead>
-                                <TableHead
-                                    className="hidden md:flex flex-1 justify-center items-center text-center">수정</TableHead>
+                                    className="hidden md:flex flex-1 justify-center items-center text-center">
+                                    <Heart className="w-4"/>
+                                </TableHead>
                             </div>
                         </TableRow>
                     </TableHeader>
@@ -64,20 +61,10 @@ const Search = () => {
                                 <TableRow key={index} className="cursor-pointer" onClick={handleDetailTab}>
                                     <TableCell className="text-center">{searchedTab.no}</TableCell>
                                     <TableCell className="text-center">{searchedTab.artist}</TableCell>
-                                    <TableCell>
-                                        <div className="flex justify-center items-center space-x-1">
-                                            <span>{searchedTab.song}</span>
-                                            <span><Badge variant="secondary"
-                                                         className="rounded w-fit h-fit px-1.5 py-0.5 text-xs">코멘트 수</Badge></span>
-                                        </div>
-                                    </TableCell>
+                                    <TableCell className="text-center">{searchedTab.song}</TableCell>
                                     <div className="flex flex-1 items-center">
                                         <TableCell
                                             className="hidden md:flex flex-1 justify-center items-center text-center">미구현</TableCell>
-                                        <TableCell
-                                            className="hidden md:flex flex-1 justify-center items-center text-center">{formatDate(searchedTab.createdAt!)}</TableCell>
-                                        <TableCell
-                                            className="hidden md:flex flex-1 justify-center items-center text-center">{searchedTab.updatedAt !== searchedTab.createdAt ? formatDate(searchedTab.updatedAt!) : "-"}</TableCell>
                                     </div>
                                 </TableRow>
                             )

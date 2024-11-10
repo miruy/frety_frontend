@@ -92,11 +92,13 @@ const DetailTab_TabInfo = ({tab}: { tab: GetTabByIdResponse }) => {
                         <div>{formatDate(tab.createdAt!)}</div>
                     </div>
 
-                    <div
-                        className="flex flex-col items-center justify-center bg-secondary rounded-lg text-xs text-black py-2 px-3 space-y-0.5 tracking-wider">
-                        <div>수정</div>
-                        <div>{tab.updatedAt ? formatDate(tab.updatedAt!) : "-"}</div>
-                    </div>
+                    {tab.updatedAt !== tab.createdAt &&
+                        <div
+                            className="flex flex-col items-center justify-center bg-secondary rounded-lg text-xs text-black py-2 px-3 space-y-0.5 tracking-wider">
+                            <div>수정</div>
+                            <div>{formatDate(tab.updatedAt!)}</div>
+                        </div>
+                    }
                 </div>
 
                 {/* 좋아요 */}
