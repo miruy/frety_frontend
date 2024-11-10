@@ -11,7 +11,10 @@ import {Music4, Search} from "lucide-react";
 import * as React from "react";
 import {useState} from "react";
 
-const Main = ({tabs}: { tabs: SearchTabsResponse[] }) => {
+const Main = ({tabsByCreateAt, tabsByRatingCount}: {
+    tabsByCreateAt: SearchTabsResponse[],
+    tabsByRatingCount: SearchTabsResponse[]
+}) => {
 
     const router = useRouter();
     const [keyword, setKeyword] = useState<string>("");
@@ -29,7 +32,8 @@ const Main = ({tabs}: { tabs: SearchTabsResponse[] }) => {
         <div className="flex flex-col px-3 py-10 mx-auto w-full lg:w-[70%]">
             <div className="space-y-2 border-b pb-2">
                 <div className="text-4xl font-bold tracking-wide">Frety</div>
-                <div className="text-md sm:text-lg font-semibold tracking-wide text-primary/50">프렛위에서 완성되는 당신의 기타 코드</div>
+                <div className="text-md sm:text-lg font-semibold tracking-wide text-primary/50">프렛위에서 완성되는 당신의 기타 코드
+                </div>
             </div>
 
             <div className="flex flex-col space-y-5">
@@ -69,10 +73,10 @@ const Main = ({tabs}: { tabs: SearchTabsResponse[] }) => {
                     </div>
 
                     <TabsContent value="latest" className="py-5">
-                        <LatestTabs tabs={tabs}/>
+                        <LatestTabs tabs={tabsByCreateAt}/>
                     </TabsContent>
                     <TabsContent value="popular" className="py-5">
-                        <PopularTabs tabs={tabs}/>
+                        <PopularTabs tabs={tabsByRatingCount}/>
                     </TabsContent>
                 </Tabs>
             </div>

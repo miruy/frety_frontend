@@ -1,6 +1,7 @@
 import Search from "@/components/page/Search";
 import {GetServerSidePropsContext} from "next";
 import NotFound from "@/app/not-found";
+import {searchTabsByKeyword} from "@/openapi/api/tab/tab";
 
 const SearchTabPage = async (context: GetServerSidePropsContext) => {
 
@@ -11,11 +12,10 @@ const SearchTabPage = async (context: GetServerSidePropsContext) => {
     }
 
     try {
-
-        // const tab = await getTabById(Number(tabId));
+        const tabs = await searchTabsByKeyword(keyword);
 
         return (
-            <Search/>
+            <Search tabs={tabs} keyword={keyword} />
         );
     } catch {
         return <NotFound/>;

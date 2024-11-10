@@ -21,7 +21,7 @@ const TopBar = () => {
     const [hasLogin, setHasLogin] = useState<boolean>(false);
 
     const handleSearchTab = () => {
-        router.push(`/search/${keyword}`);
+        router.push(`/${keyword}`);
         setKeyword("");
     }
 

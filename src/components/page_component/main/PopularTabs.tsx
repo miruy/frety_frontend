@@ -45,7 +45,7 @@ const PopularTabs = ({tabs}: { tabs: SearchTabsResponse[] }) => {
                                 <TableCell className="text-center">{popularTab.song}</TableCell>
                                 <div className="flex flex-1 items-center">
                                     <TableCell
-                                        className="hidden md:flex flex-1 justify-center items-center text-center">미구현</TableCell>
+                                        className="hidden md:flex flex-1 justify-center items-center text-center">{popularTab.ratingCount}</TableCell>
                                 </div>
                             </TableRow>
                         )

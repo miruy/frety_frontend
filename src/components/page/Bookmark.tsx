@@ -28,6 +28,7 @@ const Bookmark = () => {
             writer: faker.name.fullName(),
             createdAt: faker.date.past().toLocaleDateString(),
             updatedAt: faker.date.past().toLocaleDateString(),
+            ratingCount: 4
         }));
     }
 
@@ -64,7 +65,7 @@ const Bookmark = () => {
                                     <TableCell className="text-center">{searchedTab.song}</TableCell>
                                     <div className="flex flex-1 items-center">
                                         <TableCell
-                                            className="hidden md:flex flex-1 justify-center items-center text-center">미구현</TableCell>
+                                            className="hidden md:flex flex-1 justify-center items-center text-center">{searchedTab.ratingCount}</TableCell>
                                     </div>
                                 </TableRow>
                             )
