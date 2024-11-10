@@ -100,7 +100,7 @@ const SendEmail = () => {
                         <div>
                             <div className="font-bold text-sm">찾으시는 기타 코드가 없으신가요?</div>
                             <div className="hidden sm:flex text-xs text-primary/70">
-                                필요한 기타 코드를 입력 후 신청하시면, 검토 후 업데이트하갰습니다.
+                                필요한 기타 코드를 신청해주세요. 빠른 시일 내에 검토 후 업데이트하겠습니다.
                             </div>
                         </div>
 
