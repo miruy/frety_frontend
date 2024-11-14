@@ -2,22 +2,42 @@
 
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import LatestTabs from "@/components/page_component/main/LatestTabs";
-import PopularTabs from "@/components/page_component/main/PopularTabs";
 import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
-import {SearchTabsResponse} from "@/openapi/model";
 import {Input} from "@/components/ui/input";
 import {Music4, Search} from "lucide-react";
 import * as React from "react";
 import {useState} from "react";
+import {searchTabs} from "@/openapi/api/tab/tab";
+import {useQuery} from "@tanstack/react-query";
+import {ServerSidePrefetchSearchTabsResponse} from "@/response/ServerSidePrefetchSearchTabsResponse";
+import NotFound from "@/app/not-found";
+import Loading from "@/app/loading";
 
-const Main = ({tabsByCreateAt, tabsByRatingCount}: {
-    tabsByCreateAt: SearchTabsResponse[],
-    tabsByRatingCount: SearchTabsResponse[]
-}) => {
+interface MainProps {
+    recentTabsData: ServerSidePrefetchSearchTabsResponse;
+    voteTabsData: ServerSidePrefetchSearchTabsResponse;
+}
+
+const Main = ({recentTabsData, voteTabsData}: MainProps) => {
 
     const router = useRouter();
     const [keyword, setKeyword] = useState<string>("");
+    const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 상태
+
+    // 최근등록순 악보 전체조회 클라이언트사이드 렌더링 + 페이지네이션
+    const {
+        data: recentTabs,
+        isLoading: isLoadingRecent,
+        isError: isErrorRecent,
+    } = useQuery(
+        ['RecentTabs', currentPage], // 쿼리 키
+        () => searchTabs({sort: 'RECENT', page: currentPage, pageSize: 10}),
+        {
+            keepPreviousData: true,
+            initialData: currentPage === 0 ? recentTabsData : undefined,
+        }
+    );
 
     const handleCreateTab = () => {
         router.push("/create");
@@ -26,6 +46,13 @@ const Main = ({tabsByCreateAt, tabsByRatingCount}: {
     const handleSearchTab = () => {
         router.push(`/search/${keyword}`);
         setKeyword("");
+    }
+
+    if (isLoadingRecent) {
+        return <Loading/>
+    }
+    if (isErrorRecent) {
+        return <NotFound/>
     }
 
     return (
@@ -69,14 +96,17 @@ const Main = ({tabsByCreateAt, tabsByRatingCount}: {
                             <TabsTrigger value="popular" className="text-xs sm:text-sm">인기 악보</TabsTrigger>
                         </TabsList>
 
-                        <Button onClick={handleCreateTab} className="text-xs sm:text-sm">악보 제작</Button>
+                        <Button onClick={
+                            handleCreateTab
+                        } className="text-xs sm:text-sm">악보 제작</Button>
                     </div>
 
                     <TabsContent value="latest" className="py-5">
-                        <LatestTabs tabs={tabsByCreateAt}/>
+                        <LatestTabs tabs={recentTabs.data} meta={recentTabs.meta} currentPage={currentPage}
+                                    setCurrentPage={setCurrentPage}/>
                     </TabsContent>
                     <TabsContent value="popular" className="py-5">
-                        <PopularTabs tabs={tabsByRatingCount}/>
+                        {/*<PopularTabs tabs={tabs}/>*/}
                     </TabsContent>
                 </Tabs>
             </div>

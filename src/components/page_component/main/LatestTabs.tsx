@@ -1,16 +1,25 @@
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
-import {
-    Pagination,
-    PaginationContent, PaginationEllipsis,
-    PaginationItem,
-    PaginationLink, PaginationNext,
-    PaginationPrevious
-} from "@/components/ui/pagination";
 import {useRouter} from "next/navigation";
-import {SearchTabsResponse} from "@/openapi/model";
 import {Heart} from "lucide-react";
+import Pagination from "@/components/page_component/common/Pagination";
+import {SearchTabsResponse} from "@/openapi/model/searchTabsResponse";
 
-const LatestTabs = ({tabs}: { tabs: SearchTabsResponse[] }) => {
+interface LatestTabsProps {
+    page: number;
+    pageSize: number;
+    totalCount: number;
+    totalPage: number;
+    hasPreviousPage: boolean;
+    hasNextPage: boolean;
+}
+
+const LatestTabs = ({tabs, meta, currentPage, setCurrentPage}: {
+    tabs: SearchTabsResponse[],
+    meta: LatestTabsProps,
+    currentPage: number,
+    setCurrentPage: (newPage: number) => void
+}) => {
+
     const router = useRouter();
 
     const handleDetailTab = (tabId: number) => {
@@ -51,22 +60,16 @@ const LatestTabs = ({tabs}: { tabs: SearchTabsResponse[] }) => {
                 </TableBody>
             </Table>
 
-            <Pagination>
-                <PaginationContent>
-                    <PaginationItem>
-                        <PaginationPrevious href="#"/>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationLink href="#">1</PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationEllipsis/>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationNext href="#"/>
-                    </PaginationItem>
-                </PaginationContent>
-            </Pagination>
+            <div>
+                <Pagination
+                    totalPage={meta.totalPage || 1}
+                    setCurrentPage={setCurrentPage}
+                    currentPage={currentPage}
+                    buttonSize={5}
+                    hasPreviousPage={meta.hasPreviousPage}
+                    hasNextPage={meta.hasNextPage}
+                />
+            </div>
         </div>
     )
 }
