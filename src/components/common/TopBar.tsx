@@ -5,20 +5,26 @@ import {DoorOpen, IdCard, Menu, Music4, Search, Star, X} from "lucide-react";
 import * as React from "react";
 import {Input} from "@/components/ui/input";
 import {useRouter} from "next/navigation";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import {
     Sheet, SheetClose,
     SheetContent, SheetTitle,
     SheetTrigger
 } from "@/components/ui/sheet";
 import SendEmail from "@/components/page_component/topbar/SendEmail";
+import {AuthContext} from "@/context/AuthContext";
 
 const TopBar = () => {
 
     const router = useRouter();
     const [keyword, setKeyword] = useState<string>("");
     const [openSidebar, setOpenSidebar] = useState<boolean>(false);
-    const [hasLogin, setHasLogin] = useState<boolean>(false);
+    const {isLoggedIn, loginId, logout} = useContext(AuthContext);
+
+    const handleLogout = () => {
+        logout();
+        router.push("/");
+    };
 
     const handleSearchTab = () => {
         router.push(`/${keyword}`);
@@ -60,13 +66,13 @@ const TopBar = () => {
                     </div>
 
                     <div>
-                        {hasLogin ?
+                        {isLoggedIn ?
                             <>
                                 <Button className="gap-1" variant="ghost" onClick={() => router.push("/bookmark")}>
                                     <Star/>
                                     <span>즐겨찾는 악보</span>
                                 </Button>
-                                <Button className="gap-1" variant="ghost">
+                                <Button className="gap-1" variant="ghost" onClick={handleLogout}>
                                     <DoorOpen/>
                                     <span>로그아웃</span>
                                 </Button></>
@@ -117,7 +123,7 @@ const TopBar = () => {
                         </SheetClose>
 
                         <div className="pt-12 space-y-1">
-                            {hasLogin ?
+                            {isLoggedIn ?
                                 <>
                                     <div
                                         className="flex items-center space-x-1 p-2 hover:bg-secondary rounded-lg text-sm cursor-pointer"
@@ -132,7 +138,7 @@ const TopBar = () => {
                                         className="flex items-center space-x-1 p-2 hover:bg-secondary rounded-lg text-sm cursor-pointer"
                                         onClick={() => {
                                             setOpenSidebar(false);
-                                            router.push("/login");
+                                            handleLogout();
                                         }}>
                                         <DoorOpen className="w-4"/>
                                         <span>로그아웃</span>

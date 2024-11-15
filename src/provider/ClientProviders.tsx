@@ -6,6 +6,7 @@ import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Loading from "@/app/loading";
 import {ModalProvider} from "@/context/ModalContext";
+import {AuthProvider} from "@/context/AuthContext";
 
 interface ClientProvidersProps {
     children: ReactNode;
@@ -27,11 +28,13 @@ const ClientProviders = ({children}: ClientProvidersProps) => {
     return (
         <QueryClientProvider client={queryClient}>
             <ToastContainer/>
-            <ModalProvider>
-                <Suspense fallback={<Loading/>}>
-                    {children}
-                </Suspense>
-            </ModalProvider>
+            <AuthProvider>
+                <ModalProvider>
+                    <Suspense fallback={<Loading/>}>
+                        {children}
+                    </Suspense>
+                </ModalProvider>
+            </AuthProvider>
         </QueryClientProvider>
     );
 };

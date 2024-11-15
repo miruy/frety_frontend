@@ -1,6 +1,15 @@
 import {Button} from "@/components/ui/button";
 import {ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight} from "lucide-react";
 
+interface PaginationProps {
+    totalPage: number,
+    setCurrentPage: (newPage: number) => void,
+    currentPage: number,
+    buttonSize: number,
+    hasPreviousPage: boolean | undefined,
+    hasNextPage: boolean | undefined,
+}
+
 const Pagination = ({
                         totalPage,
                         setCurrentPage,
@@ -8,16 +17,7 @@ const Pagination = ({
                         buttonSize,
                         hasPreviousPage,
                         hasNextPage
-                    }:
-                        {
-                            totalPage: number,
-                            setCurrentPage: (newPage: number) => void,
-                            currentPage: number,
-                            buttonSize: number,
-                            hasPreviousPage: boolean,
-                            hasNextPage: boolean,
-                        }
-) => {
+                    }: PaginationProps) => {
     const halfMaxPagesToShow = Math.floor(buttonSize / 3);
 
     let startPage = Math.max(1, currentPage - halfMaxPagesToShow);

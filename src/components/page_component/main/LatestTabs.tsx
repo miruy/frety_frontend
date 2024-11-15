@@ -2,20 +2,10 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/c
 import {useRouter} from "next/navigation";
 import {Heart} from "lucide-react";
 import Pagination from "@/components/page_component/common/Pagination";
-import {SearchTabsResponse} from "@/openapi/model/searchTabsResponse";
+import {PageRsSearchTabsResponse} from "@/openapi/model";
 
-interface LatestTabsProps {
-    page: number;
-    pageSize: number;
-    totalCount: number;
-    totalPage: number;
-    hasPreviousPage: boolean;
-    hasNextPage: boolean;
-}
-
-const LatestTabs = ({tabs, meta, currentPage, setCurrentPage}: {
-    tabs: SearchTabsResponse[],
-    meta: LatestTabsProps,
+const LatestTabs = ({tabs, currentPage, setCurrentPage}: {
+    tabs: PageRsSearchTabsResponse,
     currentPage: number,
     setCurrentPage: (newPage: number) => void
 }) => {
@@ -43,7 +33,7 @@ const LatestTabs = ({tabs, meta, currentPage, setCurrentPage}: {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {tabs.map((latestTab, index) => {
+                    {tabs.data?.map((latestTab, index) => {
                         return (
                             <TableRow key={index} className="cursor-pointer"
                                       onClick={() => handleDetailTab(latestTab.id!)}>
@@ -62,12 +52,12 @@ const LatestTabs = ({tabs, meta, currentPage, setCurrentPage}: {
 
             <div>
                 <Pagination
-                    totalPage={meta.totalPage || 1}
+                    totalPage={tabs.meta?.totalPage || 1}
                     setCurrentPage={setCurrentPage}
                     currentPage={currentPage}
                     buttonSize={5}
-                    hasPreviousPage={meta.hasPreviousPage}
-                    hasNextPage={meta.hasNextPage}
+                    hasPreviousPage={tabs.meta?.hasPreviousPage}
+                    hasNextPage={tabs.meta?.hasNextPage}
                 />
             </div>
         </div>

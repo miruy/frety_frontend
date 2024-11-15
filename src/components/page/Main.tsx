@@ -10,13 +10,13 @@ import * as React from "react";
 import {useState} from "react";
 import {searchTabs} from "@/openapi/api/tab/tab";
 import {useQuery} from "@tanstack/react-query";
-import {ServerSidePrefetchSearchTabsResponse} from "@/response/ServerSidePrefetchSearchTabsResponse";
 import NotFound from "@/app/not-found";
 import Loading from "@/app/loading";
+import {PageRsSearchTabsResponse} from "@/openapi/model";
 
 interface MainProps {
-    recentTabsData: ServerSidePrefetchSearchTabsResponse;
-    voteTabsData: ServerSidePrefetchSearchTabsResponse;
+    recentTabsData: PageRsSearchTabsResponse;
+    voteTabsData: PageRsSearchTabsResponse;
 }
 
 const Main = ({recentTabsData, voteTabsData}: MainProps) => {
@@ -30,14 +30,11 @@ const Main = ({recentTabsData, voteTabsData}: MainProps) => {
         data: recentTabs,
         isLoading: isLoadingRecent,
         isError: isErrorRecent,
-    } = useQuery(
-        ['RecentTabs', currentPage], // 쿼리 키
-        () => searchTabs({sort: 'RECENT', page: currentPage, pageSize: 10}),
-        {
-            keepPreviousData: true,
-            initialData: currentPage === 0 ? recentTabsData : undefined,
-        }
-    );
+    } = useQuery({
+        queryKey: ['RecentTabs', currentPage], // 쿼리 키
+        queryFn: () => searchTabs({sort: 'RECENT', page: currentPage, pageSize: 10}),
+        initialData: currentPage === 0 ? recentTabsData : undefined,
+    });
 
     const handleCreateTab = () => {
         router.push("/create");
@@ -102,7 +99,7 @@ const Main = ({recentTabsData, voteTabsData}: MainProps) => {
                     </div>
 
                     <TabsContent value="latest" className="py-5">
-                        <LatestTabs tabs={recentTabs.data} meta={recentTabs.meta} currentPage={currentPage}
+                        <LatestTabs tabs={recentTabs!} currentPage={currentPage}
                                     setCurrentPage={setCurrentPage}/>
                     </TabsContent>
                     <TabsContent value="popular" className="py-5">
