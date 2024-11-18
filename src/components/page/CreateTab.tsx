@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/select";
 import {NotebookPen, PencilLine, X} from "lucide-react";
 import {Textarea} from "@/components/ui/textarea";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {Button} from "@/components/ui/button";
 import ChordSelector from "@/components/page_component/common/ChordSelector";
 import HowToCreateTab from "@/components/page_component/createTab/HowToCreateTab";
@@ -23,6 +23,7 @@ import {CreateTabRequest} from "@/openapi/model";
 import {useCreateTab} from "@/openapi/api/tab/tab";
 import {Slide, toast} from "react-toastify";
 import {useRouter} from "next/navigation";
+import {AuthContext} from "@/context/AuthContext";
 
 const CreateTab = () => {
 
@@ -34,11 +35,13 @@ const CreateTab = () => {
     const [showChordSelector, setShowChordSelector] = useState<boolean>(false);
     const [selectedSyllable, setSelectedSyllable] = useState<{ lineIndex: number; syllableIndex: number } | null>(null);
     const router = useRouter();
+    const {loginId} = useContext(AuthContext);
 
     const createTabRequest = useForm<CreateTabRequest>({
         defaultValues: {},
     });
 
+    // 악보 제작
     const {mutate: createTab} = useCreateTab({
         mutation: {
             onSuccess: async (tabId) => {
@@ -66,6 +69,7 @@ const CreateTab = () => {
 
     const onCreateTabSubmit = () => {
         createTabRequest.setValue("content", JSON.stringify(parsedLyrics));
+        createTabRequest.setValue("authorName", loginId!);
 
         if (!createTabRequest.getValues().artist) {
             toast.error("가수명을 입력하세요.", {
@@ -126,6 +130,7 @@ const CreateTab = () => {
             createTabRequest.getValues().song &&
             createTabRequest.getValues().capo &&
             createTabRequest.getValues().style &&
+            createTabRequest.getValues().authorName &&
             parsedLyrics.length > 0) {
 
             createTab({
@@ -288,7 +293,8 @@ const CreateTab = () => {
         <div className="px-3 py-10 mx-auto w-full md:w-[90%] xl:w-[70%] space-y-10">
             <div className="space-y-2 border-b pb-2">
                 <div className="text-2xl sm:text-4xl font-bold tracking-wide">악보 제작</div>
-                <div className="text-md sm:text-lg font-semibold tracking-wide text-primary/50">Frety에 직접 제작한 기타 악보를 등록하고, 다른 사람들과
+                <div className="text-md sm:text-lg font-semibold tracking-wide text-primary/50">Frety에 직접 제작한 기타 악보를
+                    등록하고, 다른 사람들과
                     공유해보세요.
                 </div>
             </div>

@@ -7,12 +7,14 @@ import {useRouter} from "next/navigation";
 import {Input} from "@/components/ui/input";
 import {Music4, Search} from "lucide-react";
 import * as React from "react";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import {searchTabs} from "@/openapi/api/tab/tab";
 import {useQuery} from "@tanstack/react-query";
 import NotFound from "@/app/not-found";
 import Loading from "@/app/loading";
 import {PageRsSearchTabsResponse} from "@/openapi/model";
+import {AuthContext} from "@/context/AuthContext";
+import {Slide, toast} from "react-toastify";
 
 interface MainProps {
     recentTabsData: PageRsSearchTabsResponse;
@@ -24,6 +26,7 @@ const Main = ({recentTabsData, voteTabsData}: MainProps) => {
     const router = useRouter();
     const [keyword, setKeyword] = useState<string>("");
     const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 상태
+    const {isLoggedIn} = useContext(AuthContext);
 
     // 최근등록순 악보 전체조회 클라이언트사이드 렌더링 + 페이지네이션
     const {
@@ -37,7 +40,20 @@ const Main = ({recentTabsData, voteTabsData}: MainProps) => {
     });
 
     const handleCreateTab = () => {
-        router.push("/create");
+
+        if (!isLoggedIn) {
+            toast.warn("로그인 후 이용가능합니다.", {
+                position: "top-center",
+                autoClose: 2500,
+                transition: Slide,
+                className: "text-sm",
+                theme: "colored",
+            });
+
+            return;
+        } else {
+            router.push("/create");
+        }
     }
 
     const handleSearchTab = () => {
@@ -93,9 +109,9 @@ const Main = ({recentTabsData, voteTabsData}: MainProps) => {
                             <TabsTrigger value="popular" className="text-xs sm:text-sm">인기 악보</TabsTrigger>
                         </TabsList>
 
-                        <Button onClick={
-                            handleCreateTab
-                        } className="text-xs sm:text-sm">악보 제작</Button>
+                        <Button
+                            onClick={handleCreateTab}
+                            className="text-xs sm:text-sm">악보 제작</Button>
                     </div>
 
                     <TabsContent value="latest" className="py-5">

@@ -5,10 +5,10 @@ import {type QueryKey, type UseQueryResult} from "@tanstack/react-query";
 import {ErrorType} from "@/axios/axios_instance";
 import {useParams} from "next/navigation";
 import {useGetTabById, useSearchTabs} from "@/openapi/api/tab/tab";
-import {SearchTabsResponse} from "@/openapi/model/searchTabsResponse";
+import {GetTabByIdResponse, PageRsSearchTabsResponse} from "@/openapi/model";
 
 export const TabContext = createContext<{
-    findAllTab: UseQueryResult<SearchTabsResponse[], ErrorType<unknown>> & { queryKey: QueryKey },
+    findAllTab: UseQueryResult<PageRsSearchTabsResponse, ErrorType<unknown>> & { queryKey: QueryKey },
     findTab: UseQueryResult<GetTabByIdResponse, ErrorType<unknown>> & { queryKey: QueryKey },
     tabId: number | undefined,
 }>(undefined!);

@@ -7,7 +7,6 @@ import {useForm} from "react-hook-form";
 import {CreateTokenRequest} from "@/openapi/model";
 import {Slide, toast} from "react-toastify";
 import {useCreateToken} from "@/openapi/api/auth/auth";
-import axios from "axios";
 import {useContext} from "react";
 import {AuthContext} from "@/context/AuthContext";
 
@@ -23,9 +22,6 @@ const Login = () => {
     const {mutate: createToken} = useCreateToken({
         mutation: {
             onSuccess: async (tokens) => {
-
-                // API 요청 시 Authorization 헤더에 Bearer 토큰을 추가
-                axios.defaults.headers['Authorization'] = `Bearer ${tokens.accessToken}`;
 
                 // 로그인 성공 후 상태 업데이트
                 login(createTokenRequest.getValues("loginId"), tokens.accessToken!);

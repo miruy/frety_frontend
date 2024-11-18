@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/select";
 import {NotebookPen, PencilLine, X} from "lucide-react";
 import {Textarea} from "@/components/ui/textarea";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {Button} from "@/components/ui/button";
 import ChordSelector from "@/components/page_component/common/ChordSelector";
 import HowToEditTab from "@/components/page_component/editTab/HowToEditTab";
@@ -23,13 +23,10 @@ import {Controller, useForm} from "react-hook-form";
 import {useUpdateTab} from "@/openapi/api/tab/tab";
 import {Slide, toast} from "react-toastify";
 import {useRouter} from "next/navigation";
+import {AuthContext} from "@/context/AuthContext";
+import {TabContext} from "@/context/TabContext";
 
-interface EditTabProps {
-    tab: GetTabByIdResponse;
-    tabId: string;
-}
-
-const EditTab = ({tab, tabId}: EditTabProps) => {
+const EditTab = ({tab}: { tab: GetTabByIdResponse }) => {
 
     const [lyricsData, setLyricsData] = useState<string>("");
     const [isComposing, setIsComposing] = useState(false); // 태그 한글 입력 중인지 여부
@@ -40,6 +37,8 @@ const EditTab = ({tab, tabId}: EditTabProps) => {
     const [selectedSyllable, setSelectedSyllable] = useState<{ lineIndex: number; syllableIndex: number } | null>(null);
     const [isDefaultComment, setIsDefaultComment] = useState<{ index: number, hasComment: boolean }[]>([]);
     const router = useRouter();
+    const {loginId} = useContext(AuthContext);
+    const {findTab, tabId} = useContext(TabContext);
 
     const {mutate: updateTab} = useUpdateTab({
         mutation: {
@@ -51,6 +50,7 @@ const EditTab = ({tab, tabId}: EditTabProps) => {
                     className: "text-sm",
                     theme: "colored",
                 });
+                await findTab.refetch();
                 router.push(`/tab/${tabId}`)
             },
             onError: (error) => {
@@ -73,6 +73,7 @@ const EditTab = ({tab, tabId}: EditTabProps) => {
             capo: "",
             style: "",
             content: "",
+            authorName: ""
         }
     });
 
@@ -132,13 +133,12 @@ const EditTab = ({tab, tabId}: EditTabProps) => {
             return
         }
 
-        if (data.artist && data.song && data.capo && data.style && parsedLyrics.length !== 0) {
+        if (data.artist && data.song && data.capo && data.style && data.authorName && parsedLyrics.length !== 0) {
             onUpdateTabSubmit(data)
         }
     }
 
     const onUpdateTabSubmit = (data: UpdateTabRequest) => {
-
         const serializedContent = JSON.stringify(parsedLyrics);
 
         updateTab({
@@ -149,7 +149,7 @@ const EditTab = ({tab, tabId}: EditTabProps) => {
                 capo: data.capo,
                 style: data.style,
                 content: serializedContent,
-
+                authorName: loginId!
             }
         });
     }
@@ -322,6 +322,7 @@ const EditTab = ({tab, tabId}: EditTabProps) => {
                     capo: tab.capo,
                     style: tab.style,
                     content: tab.content,
+                    authorName: tab.authorName
                 }
             )
 

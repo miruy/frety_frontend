@@ -16,7 +16,7 @@ const EditTabPage = async (context: GetServerSidePropsContext) => {
         const tab = await getTabById(Number(tabId));
 
         return (
-            <EditTab tab={tab} tabId={tabId}/>
+            <EditTab tab={tab}/>
         )
     } catch {
         return <NotFound/>;

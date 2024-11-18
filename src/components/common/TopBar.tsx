@@ -66,7 +66,7 @@ const TopBar = () => {
                     </div>
 
                     <div>
-                        {isLoggedIn ?
+                        {isLoggedIn && loginId ?
                             <>
                                 <Button className="gap-1" variant="ghost" onClick={() => router.push("/bookmark")}>
                                     <Star/>
@@ -123,7 +123,7 @@ const TopBar = () => {
                         </SheetClose>
 
                         <div className="pt-12 space-y-1">
-                            {isLoggedIn ?
+                            {isLoggedIn && loginId ?
                                 <>
                                     <div
                                         className="flex items-center space-x-1 p-2 hover:bg-secondary rounded-lg text-sm cursor-pointer"

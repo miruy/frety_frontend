@@ -17,21 +17,39 @@ import {useRouter} from "next/navigation";
 import {GetTabByIdResponse} from "@/openapi/model";
 import {Content} from "@/components/model/tab";
 import {SVGuitarChord} from "svguitar";
-import {useDeleteTab} from "@/openapi/api/tab/tab";
+import {getTabById, useDeleteTab} from "@/openapi/api/tab/tab";
 import {Slide, toast} from "react-toastify";
 import {TabContext} from "@/context/TabContext";
 import DetailTab_TabInfo from "@/components/page_component/detailTab/DetailTab_TabInfo";
 import DetailTab_TabComments from "@/components/page_component/detailTab/DetailTab_TabComments";
 import UpdateCommentModal from "@/components/page_component/detailTab/comment/UpdateCommentModal";
 import CreateChildCommentModal from "@/components/page_component/detailTab/comment/CreateChildCommentModal";
+import {useQuery} from "@tanstack/react-query";
+import {AuthContext} from "@/context/AuthContext";
+import Loading from "@/app/loading";
+import NotFound from "@/app/not-found";
 
-const DetailTab = ({tab}: { tab: GetTabByIdResponse }) => {
+const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: number }) => {
 
     const [showDiagram, setShowDiagram] = useState<boolean>(true);
     const router = useRouter();
     const tabContentRef = useRef<HTMLDivElement | null>(null);
+    const {findAllTab, findTab} = useContext(TabContext);
+    const [loading, setLoading] = useState(false);
 
-    const {findAllTab} = useContext(TabContext);
+    const {loginId, isLoggedIn} = useContext(AuthContext);
+
+    // 최근등록순 악보 전체조회 클라이언트사이드 렌더링 + 페이지네이션
+    const {
+        data: tab,
+        isLoading: isLoading,
+        isError: isError,
+    } = useQuery({
+        queryKey: ['DetailTab', tabId],
+        queryFn: () => getTabById(tabId),
+        initialData: detailTab ? detailTab : undefined,
+        staleTime: 0
+    });
 
     // 악보 삭제
     const {mutate: deleteTab} = useDeleteTab({
@@ -46,6 +64,7 @@ const DetailTab = ({tab}: { tab: GetTabByIdResponse }) => {
                     className: "text-sm",
                     theme: "colored",
                 });
+                await findTab.refetch();
                 await findAllTab.refetch();
                 router.push("/");
             },
@@ -69,7 +88,7 @@ const DetailTab = ({tab}: { tab: GetTabByIdResponse }) => {
         }
 
         const handleDelete = () => {
-            deleteTab({tabId: tab.id!});
+            deleteTab({tabId: tab!.id!});
         };
 
         return (
@@ -102,58 +121,62 @@ const DetailTab = ({tab}: { tab: GetTabByIdResponse }) => {
 
             tabContentRef.current.innerHTML = "";
 
-            // JSON 문자열을 객체로 변환
-            const parsedTab = JSON.parse(tab.content!);
+            if (tab) {
+                setLoading(false);
 
-            const tabDiv = document.createElement('div');
-            tabDiv.className = "flex flex-col py-[70px]";
+                try {
+                    // JSON 문자열을 객체로 변환
+                    const parsedTab = JSON.parse(tab.content!);
 
-            parsedTab.forEach((item: Content) => {
-                const lineDiv = document.createElement('div');
-                lineDiv.className = `flex flex-col items-center my-1 pt-20 mx-auto`;
+                    const tabDiv = document.createElement('div');
+                    tabDiv.className = "flex flex-col py-[70px]";
 
-                const syllableContainerDiv = document.createElement('div');
-                syllableContainerDiv.className = "flex relative p-1";
+                    parsedTab.forEach((item: Content) => {
+                        const lineDiv = document.createElement('div');
+                        lineDiv.className = `flex flex-col items-center my-1 pt-20 mx-auto`;
 
-                item.lineData.forEach((line) => {
-                    const syllabelDiv = document.createElement('div');
-                    syllabelDiv.className = "flex flex-col relative";
+                        const syllableContainerDiv = document.createElement('div');
+                        syllableContainerDiv.className = "flex relative p-1";
 
-                    const diagram_chordDiv = document.createElement('div');
-                    diagram_chordDiv.className = "flex flex-col items-center justify-center";
+                        item.lineData.forEach((line) => {
+                            const syllabelDiv = document.createElement('div');
+                            syllabelDiv.className = "flex flex-col relative";
 
-                    if (line.chord) {
-                        // 코드 다이어그램 출력
-                        const chordDiagramDiv = document.createElement('div');
-                        const chordDiagram = new SVGuitarChord(chordDiagramDiv);
-                        const chord = chordsMap[line.chord];
-                        const customConfig = customConfigs[line.chord]; // 프렛 설정을 위한 커스텀 설정
-                        chordDiagramDiv.className = `${showDiagram ? 'flex' : 'hidden'} ${customConfig ? 'w-[55px] h-[55px] ' : 'w-12 h-12'} items-center absolute mt-[-96px]`;
+                            const diagram_chordDiv = document.createElement('div');
+                            diagram_chordDiv.className = "flex flex-col items-center justify-center";
 
-                        chordDiagram
-                            .configure({
-                                ...commonConfigs,
-                                ...customConfig,
-                            })
-                            .chord(chord)
-                            .draw()
+                            if (line.chord) {
+                                // 코드 다이어그램 출력
+                                const chordDiagramDiv = document.createElement('div');
+                                const chordDiagram = new SVGuitarChord(chordDiagramDiv);
+                                const chord = chordsMap[line.chord];
+                                const customConfig = customConfigs[line.chord]; // 프렛 설정을 위한 커스텀 설정
+                                chordDiagramDiv.className = `${showDiagram ? 'flex' : 'hidden'} ${customConfig ? 'w-[55px] h-[55px] ' : 'w-12 h-12'} items-center absolute mt-[-96px]`;
 
-                        // 프랫 위치 설정
-                        const tuningText = chordDiagramDiv.querySelectorAll('text.tuning');
-                        if (tuningText.length > 1) {
+                                chordDiagram
+                                    .configure({
+                                        ...commonConfigs,
+                                        ...customConfig,
+                                    })
+                                    .chord(chord)
+                                    .draw()
 
-                            const currentX = parseFloat(tuningText[0].getAttribute('x') || '0');
-                            const currentY = parseFloat(tuningText[0].getAttribute('y') || '0');
+                                // 프랫 번호 위치 설정
+                                const tuningText = chordDiagramDiv.querySelectorAll('text.tuning');
+                                if (tuningText.length > 1) {
 
-                            tuningText[0].setAttribute('x', (currentX - 177).toString()); // 왼쪽으로 이동
-                            tuningText[0].setAttribute('y', (currentY + 50).toString());   // 아래로 이동
-                        }
-                        diagram_chordDiv.appendChild(chordDiagramDiv);
+                                    const currentX = parseFloat(tuningText[0].getAttribute('x') || '0');
+                                    const currentY = parseFloat(tuningText[0].getAttribute('y') || '0');
+
+                                    tuningText[0].setAttribute('x', (currentX - 177).toString()); // 왼쪽으로 이동
+                                    tuningText[0].setAttribute('y', (currentY + 40).toString());   // 아래로 이동
+                                }
+                                diagram_chordDiv.appendChild(chordDiagramDiv);
 
 
-                        // 코드 출력
-                        const chordDiv = document.createElement('div');
-                        chordDiv.className = `absolute text-sm font-semibold text-primary/60 mt-[-23px] text-center
+                                // 코드 출력
+                                const chordDiv = document.createElement('div');
+                                chordDiv.className = `absolute text-sm font-semibold text-primary/60 mt-[-26px] text-center
                                         ${line.chord?.length === 1 && `left-1 w-[10px]`}
                                         ${line.chord?.length === 2 && `left-0 w-[20px]`}
                                         ${line.chord?.length === 3 && `-left-[9px] w-[40px]`}
@@ -161,45 +184,59 @@ const DetailTab = ({tab}: { tab: GetTabByIdResponse }) => {
                                         ${line.chord?.length === 5 && `-left-[19px] w-[60px]`}
                                         ${line.chord?.length === 6 && `-left-[16px] w-[60px]`}
                     `;
-                        chordDiv.textContent = line.chord;
-                        diagram_chordDiv.appendChild(chordDiv);
+                                chordDiv.textContent = line.chord;
+                                diagram_chordDiv.appendChild(chordDiv);
 
-                    }
-                    syllabelDiv.appendChild(diagram_chordDiv);
+                            }
+                            syllabelDiv.appendChild(diagram_chordDiv);
 
 
-                    // 음절 출력
-                    const textDiv = document.createElement('div');
-                    textDiv.className = "relative inline-block min-w-[16px] mx-0.5 text-center";
-                    textDiv.innerHTML = line.text === ' ' ? '&nbsp;&nbsp;&nbsp;' : line.text;
-                    syllabelDiv.appendChild(textDiv);
+                            // 음절 출력
+                            const textDiv = document.createElement('div');
+                            textDiv.className = "relative inline-block min-w-[16px] mx-0.5 text-center";
+                            textDiv.innerHTML = line.text === ' ' ? '&nbsp;&nbsp;&nbsp;' : line.text;
+                            syllabelDiv.appendChild(textDiv);
 
-                    syllableContainerDiv.appendChild(syllabelDiv);
-                });
+                            syllableContainerDiv.appendChild(syllabelDiv);
+                        });
 
-                lineDiv.appendChild(syllableContainerDiv);
+                        lineDiv.appendChild(syllableContainerDiv);
 
-                // comment 출력
-                const commentDiv = document.createElement('div');
-                commentDiv.className = "font-semibold py-1";
-                commentDiv.textContent = item.comment;
-                lineDiv.appendChild(commentDiv);
+                        // comment 출력
+                        const commentDiv = document.createElement('div');
+                        commentDiv.className = "font-semibold py-1";
+                        commentDiv.textContent = item.comment;
+                        lineDiv.appendChild(commentDiv);
 
-                // tabDiv에 각 항목 추가
-                tabDiv.appendChild(lineDiv);
-            });
+                        // tabDiv에 각 항목 추가
+                        tabDiv.appendChild(lineDiv);
+                    });
 
-            tabContentRef.current.appendChild(tabDiv);
+                    tabContentRef.current.appendChild(tabDiv);
+
+                } catch (error) {
+                    console.log("코드 파싱 실패", error)
+                }
+            }
+
         }
 
-    }, [tab, showDiagram]);
+    }, [detailTab, tab, tabId, showDiagram]);
+
+    if (isLoading || loading) {
+        return <Loading/>
+    }
+
+    if (isError) {
+        return <NotFound/>
+    }
 
     return (
         <>
             <div className="px-3 py-10 mx-auto w-full xl:w-[70%] h-screen">
                 <div className="space-y-2 border-b pb-2">
-                    <div className="text-2xl sm:text-4xl font-bold tracking-wide">{tab.song}</div>
-                    <div className="text-md sm:text-lg font-semibold tracking-wide text-primary/50">{tab.artist}</div>
+                    <div className="text-2xl sm:text-4xl font-bold tracking-wide">{tab?.song}</div>
+                    <div className="text-md sm:text-lg font-semibold tracking-wide text-primary/50">{tab?.artist}</div>
                 </div>
 
                 <div className="flex justify-between py-2">
@@ -207,13 +244,13 @@ const DetailTab = ({tab}: { tab: GetTabByIdResponse }) => {
                         <div className="flex items-center space-x-2 tracking-wide text-sm">
                             <div>Capo</div>
                             <div>:</div>
-                            <div>{tab.capo}</div>
+                            <div>{tab?.capo}</div>
                         </div>
 
                         <div className="flex items-center space-x-2 tracking-wide text-sm">
                             <div>Style</div>
                             <div>:</div>
-                            <div>{tab.style}</div>
+                            <div>{tab?.style}</div>
                         </div>
                     </div>
 
@@ -229,32 +266,36 @@ const DetailTab = ({tab}: { tab: GetTabByIdResponse }) => {
                             </label>
                         </div>
 
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="outline" size="sm" className="h-10"><Ellipsis/></Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent side="bottom" align="end" className="w-fit h-fit p-2">
-                                <DropdownMenuGroup>
-                                    <DropdownMenuItem className="cursor-pointer">
-                                        <Star/>
-                                        <span className="text-[14px]">즐겨찾기 추가</span>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem
-                                        className="cursor-pointer"
-                                        onClick={() => router.push(`/edit/${tab.id}`)}>
-                                        <Eraser/>
-                                        <span className="text-[14px]">수정</span>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem
-                                        className="cursor-pointer"
-                                        onClick={onDeleteSubmit}
-                                    >
-                                        <Trash2/>
-                                        <span className="text-[14px]">삭제</span>
-                                    </DropdownMenuItem>
-                                </DropdownMenuGroup>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        {isLoggedIn &&
+                        loginId === tab?.authorName ?
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="outline" size="sm" className="h-10"><Ellipsis/></Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent side="bottom" align="end" className="w-fit h-fit p-2">
+                                    <DropdownMenuGroup>
+                                        <DropdownMenuItem className="cursor-pointer">
+                                            <Star/>
+                                            <span className="text-[14px]">즐겨찾기 추가</span>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            className="cursor-pointer"
+                                            onClick={() => router.push(`/edit/${tab?.id}`)}>
+                                            <Eraser/>
+                                            <span className="text-[14px]">수정</span>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            className="cursor-pointer"
+                                            onClick={onDeleteSubmit}
+                                        >
+                                            <Trash2/>
+                                            <span className="text-[14px]">삭제</span>
+                                        </DropdownMenuItem>
+                                    </DropdownMenuGroup>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                            : <></>
+                        }
                     </div>
                 </div>
 
@@ -262,10 +303,10 @@ const DetailTab = ({tab}: { tab: GetTabByIdResponse }) => {
                 <div ref={tabContentRef}/>
 
                 {/* 악보 정보 */}
-                <DetailTab_TabInfo tab={tab}/>
+                <DetailTab_TabInfo tab={tab!}/>
 
                 {/* 댓글 */}
-                <DetailTab_TabComments tabId={tab.id!}/>
+                <DetailTab_TabComments tabId={tab!.id!}/>
             </div>
 
             <UpdateCommentModal/>

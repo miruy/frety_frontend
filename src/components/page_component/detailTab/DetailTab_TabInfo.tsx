@@ -4,11 +4,12 @@ import {HandHeart, UserRoundPen} from "lucide-react";
 import {formatDate} from "@/utils/formatDate";
 import {GetTabByIdResponse} from "@/openapi/model";
 import {Slide, toast} from "react-toastify";
-import {useState} from "react";
+import {useContext, useState} from "react";
+import {AuthContext} from "@/context/AuthContext";
 
 const DetailTab_TabInfo = ({tab}: { tab: GetTabByIdResponse }) => {
 
-    const [hasLogin, setHasLogin] = useState<boolean>(true);
+    const {isLoggedIn, loginId} = useContext(AuthContext);
 
     // // 악보 평가 아이디 전체 조회
     // const {
@@ -79,7 +80,7 @@ const DetailTab_TabInfo = ({tab}: { tab: GetTabByIdResponse }) => {
                     <div className="text-xs sm:text-sm">제작 :</div>
                 </div>
 
-                <div className="text-xs sm:text-sm">미구현</div>
+                <div className="text-xs sm:text-sm">{tab?.authorName}</div>
             </div>
 
             {/* 등록일, 수정일 */}
@@ -88,10 +89,10 @@ const DetailTab_TabInfo = ({tab}: { tab: GetTabByIdResponse }) => {
                     <div
                         className="flex flex-col items-center justify-center bg-secondary rounded-lg text-xs text-black py-2 px-3 space-y-0.5 tracking-wider">
                         <div>등록</div>
-                        <div>{formatDate(tab.createdAt!)}</div>
+                        <div>{tab?.createdAt && formatDate(tab.createdAt)}</div>
                     </div>
 
-                    {tab.updatedAt !== tab.createdAt &&
+                    {tab?.updatedAt !== tab?.createdAt &&
                         <div
                             className="flex flex-col items-center justify-center bg-secondary rounded-lg text-xs text-black py-2 px-3 space-y-0.5 tracking-wider">
                             <div>수정</div>

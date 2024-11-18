@@ -1,30 +1,26 @@
 import NotFound from "@/app/not-found";
-import {getTabById, prefetchGetTabById, prefetchSearchTabs} from "@/openapi/api/tab/tab";
+import {prefetchGetTabById} from "@/openapi/api/tab/tab";
 import {GetServerSidePropsContext} from "next";
+import {dehydrate, HydrationBoundary, QueryClient} from "@tanstack/react-query";
 import DetailTab from "@/components/page/DetailTab";
-import {dehydrate, QueryClient} from "@tanstack/react-query";
-import {PageRsSearchTabsResponse} from "@/openapi/model";
+import {GetTabByIdResponse} from "@/openapi/model";
 
 const DetailTabPage = async (context: GetServerSidePropsContext) => {
 
-    const {tabId} = context.params!;
-
-    if (typeof tabId !== 'string') {
-        return <NotFound/>;
-    }
+    const tabId = Number(context.params?.tabId) || 0;
 
     try {
 
-        // const tab = await getTabById(Number(tabId));
-        // 최근등록순 서버사이들 렌더링
         const recentQueryClient = new QueryClient();
-        await prefetchGetTabById(recentQueryClient, Number(tabId));
+        await prefetchGetTabById(recentQueryClient, tabId);
         const recentDehydratedState = dehydrate(recentQueryClient);
 
-        console.log("recentDehydratedState", recentDehydratedState.queries)
+        const detailTab = recentDehydratedState.queries.map(data => data.state.data) as GetTabByIdResponse;
+
         return (
-            <></>
-            // <DetailTab tab={tab}/>
+            <HydrationBoundary state={detailTab}>
+                <DetailTab detailTab={detailTab} tabId={tabId}/>
+            </HydrationBoundary>
         )
     } catch {
         return <NotFound/>;
