@@ -101,7 +101,7 @@ const DetailTab_TabInfo = ({tab}: { tab: GetTabByIdResponse }) => {
                     }
                 </div>
 
-                {/* 좋아요 */}
+                {/* 투표 */}
                 <div className="flex flex-col items-center justify-center space-y-1">
                     {/*<div className="badge badge-outline border-neutral-400">{ratingIds?.length}</div>*/}
 

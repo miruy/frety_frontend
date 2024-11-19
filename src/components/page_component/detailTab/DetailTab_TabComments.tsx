@@ -13,19 +13,14 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import {
-    Bot,
-    CircleUserRound,
     CornerDownRight,
     Ellipsis,
     Eraser, Guitar,
-    MessageCircleMore, MessageSquareMore,
-    SquareUserRound,
-    Trash2, UserRound
+    Trash2
 } from "lucide-react";
 import {ModalContext, ModalTypes} from "@/context/ModalContext";
 import formatTimeSince from "@/utils/formatTimeSince";
 import {AuthContext} from "@/context/AuthContext";
-import {Gugi} from "next/dist/compiled/@next/font/dist/google";
 
 const DetailTab_TabComments = ({tabId}: { tabId: number }) => {
 
@@ -318,7 +313,8 @@ const DetailTab_TabComments = ({tabId}: { tabId: number }) => {
                                             <div className="flex flex-1 border-t">
                                                 <div className="flex flex-1 flex-col py-3">
                                                     <div className="flex justify-between items-center">
-                                                        <div className="text-sm font-semibold">{childComment.data?.userName}</div>
+                                                        <div
+                                                            className="text-sm font-semibold">{childComment.data?.userName}</div>
 
                                                         {isLoggedIn && childComment.data?.userName === loginId &&
                                                             <DropdownMenu>

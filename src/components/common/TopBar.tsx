@@ -27,7 +27,7 @@ const TopBar = () => {
     };
 
     const handleSearchTab = () => {
-        router.push(`/${keyword}`);
+        router.push(`/search/${keyword}`);
         setKeyword("");
     }
 
@@ -68,9 +68,10 @@ const TopBar = () => {
                     <div>
                         {isLoggedIn && loginId ?
                             <>
-                                <Button className="gap-1" variant="ghost" onClick={() => router.push("/bookmark")}>
+                                <Button className="gap-1" variant="ghost"
+                                        onClick={() => router.push(`/@${loginId}`)}>
                                     <Star/>
-                                    <span>즐겨찾는 악보</span>
+                                    <span>내 악보</span>
                                 </Button>
                                 <Button className="gap-1" variant="ghost" onClick={handleLogout}>
                                     <DoorOpen/>
@@ -129,10 +130,10 @@ const TopBar = () => {
                                         className="flex items-center space-x-1 p-2 hover:bg-secondary rounded-lg text-sm cursor-pointer"
                                         onClick={() => {
                                             setOpenSidebar(false);
-                                            router.push("/bookmark");
+                                            router.push(`/@${loginId}`);
                                         }}>
                                         <Star className="w-4"/>
-                                        <span>즐겨찾는 악보</span>
+                                        <span>내 악보</span>
                                     </div>
                                     <div
                                         className="flex items-center space-x-1 p-2 hover:bg-secondary rounded-lg text-sm cursor-pointer"
