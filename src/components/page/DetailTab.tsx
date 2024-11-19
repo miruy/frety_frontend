@@ -34,7 +34,7 @@ const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: n
     const [showDiagram, setShowDiagram] = useState<boolean>(true);
     const router = useRouter();
     const tabContentRef = useRef<HTMLDivElement | null>(null);
-    const {findAllTab, findTab} = useContext(TabContext);
+    const {findAllRecentTabs, findTab} = useContext(TabContext);
     const [loading, setLoading] = useState(false);
 
     const {loginId, isLoggedIn} = useContext(AuthContext);
@@ -64,9 +64,12 @@ const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: n
                     className: "text-sm",
                     theme: "colored",
                 });
-                await findTab.refetch();
-                await findAllTab.refetch();
-                router.push("/");
+
+                await findAllRecentTabs.refetch();
+
+                setTimeout(() => {
+                    window.location.href = "/";
+                }, 2000);
             },
             onError: (error) => {
                 console.log(error)
@@ -92,12 +95,12 @@ const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: n
         };
 
         return (
-            <div className="flex flex-col space-y-0.5 px-3">
+            <div className="flex flex-col space-y-1.5 px-3">
                 <div>정말 악보를 삭제하시겠습니까?</div>
                 <div className="flex justify-end items-center">
-                    <Button type="button" variant="ghost" size="sm" className="text-xs w-fit h-fit px-2 py-1.5"
+                    <Button type="button" variant="ghost" size="sm" className="text-xs w-fit h-fit px-2 py-1"
                             onClick={handleCancel}>취소</Button>
-                    <Button type="button" variant="ghost" size="sm" className="text-xs w-fit h-fit px-2 py-1.5"
+                    <Button type="button" variant="ghost" size="sm" className="text-xs w-fit h-fit px-2 py-1"
                             onClick={handleDelete}>삭제</Button>
                 </div>
             </div>

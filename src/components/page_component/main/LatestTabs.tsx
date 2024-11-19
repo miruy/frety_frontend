@@ -3,17 +3,40 @@ import {useRouter} from "next/navigation";
 import {Heart} from "lucide-react";
 import Pagination from "@/components/page_component/common/Pagination";
 import {PageRsSearchTabsResponse} from "@/openapi/model";
+import {useState} from "react";
+import {useQuery} from "@tanstack/react-query";
+import {searchTabs} from "@/openapi/api/tab/tab";
+import Loading from "@/app/loading";
+import NotFound from "@/app/not-found";
+import * as React from "react";
 
-const LatestTabs = ({tabs, currentPage, setCurrentPage}: {
-    tabs: PageRsSearchTabsResponse,
-    currentPage: number,
-    setCurrentPage: (newPage: number) => void
+const LatestTabs = ({recentTabsData}: {
+    recentTabsData: PageRsSearchTabsResponse,
 }) => {
 
     const router = useRouter();
+    const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 상태
+
+    // 최근등록순 악보 전체조회 클라이언트사이드 렌더링 + 페이지네이션
+    const {
+        data: recentTabs,
+        isLoading: isLoadingRecent,
+        isError: isErrorRecent,
+    } = useQuery({
+        queryKey: ['RecentTabs', currentPage], // 쿼리 키
+        queryFn: () => searchTabs({sort: 'RECENT', page: currentPage, pageSize: 10}),
+        initialData: currentPage === 0 ? recentTabsData : undefined,
+    });
 
     const handleDetailTab = (tabId: number) => {
         router.push("/tab/" + tabId);
+    }
+
+    if (isLoadingRecent) {
+        return <Loading/>
+    }
+    if (isErrorRecent) {
+        return <NotFound/>
     }
 
     return (
@@ -21,7 +44,6 @@ const LatestTabs = ({tabs, currentPage, setCurrentPage}: {
             <Table>
                 <TableHeader>
                     <TableRow className="cursor-default hover:bg-transparent">
-                        <TableHead className="text-center">no</TableHead>
                         <TableHead className="text-center">Artist</TableHead>
                         <TableHead className="text-center">Song</TableHead>
                         <div className="flex flex-1 items-center">
@@ -33,11 +55,10 @@ const LatestTabs = ({tabs, currentPage, setCurrentPage}: {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {tabs.data?.map((latestTab, index) => {
+                    {recentTabs?.data?.map((latestTab, index) => {
                         return (
                             <TableRow key={index} className="cursor-pointer"
                                       onClick={() => handleDetailTab(latestTab.id!)}>
-                                <TableCell className="text-center">{index + 1}</TableCell>
                                 <TableCell className="text-center">{latestTab.artist}</TableCell>
                                 <TableCell className="text-center">{latestTab.song}</TableCell>
                                 <div className="flex flex-1 items-center">
@@ -52,12 +73,12 @@ const LatestTabs = ({tabs, currentPage, setCurrentPage}: {
 
             <div>
                 <Pagination
-                    totalPage={tabs.meta?.totalPage || 1}
+                    totalPage={recentTabs?.meta?.totalPage || 1}
                     setCurrentPage={setCurrentPage}
                     currentPage={currentPage}
                     buttonSize={5}
-                    hasPreviousPage={tabs.meta?.hasPreviousPage}
-                    hasNextPage={tabs.meta?.hasNextPage}
+                    hasPreviousPage={recentTabs?.meta?.hasPreviousPage}
+                    hasNextPage={recentTabs?.meta?.hasNextPage}
                 />
             </div>
         </div>

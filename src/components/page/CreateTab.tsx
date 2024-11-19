@@ -24,6 +24,7 @@ import {useCreateTab} from "@/openapi/api/tab/tab";
 import {Slide, toast} from "react-toastify";
 import {useRouter} from "next/navigation";
 import {AuthContext} from "@/context/AuthContext";
+import {TabContext} from "@/context/TabContext";
 
 const CreateTab = () => {
 

@@ -35,7 +35,7 @@ const TopBar = () => {
         <>
             <div className="hidden sm:flex h-[70px] items-center justify-between p-5">
                 <div
-                    onClick={() => router.push("/")}
+                    onClick={() => window.location.href = "/"}
                     className="text-3xl font-bold hover:text-slate-500 hover:scale-110 duration-300 cursor-pointer">
                     Frety
                 </div>

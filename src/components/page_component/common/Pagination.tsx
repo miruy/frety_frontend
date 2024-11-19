@@ -33,7 +33,7 @@ const Pagination = ({
             <Button
                 size="sm"
                 disabled={!hasPreviousPage}
-                variant="outline"
+                variant="ghost"
                 onClick={() => {
                     setCurrentPage(0);
                 }}
@@ -45,7 +45,7 @@ const Pagination = ({
             {/* 이전 버튼 */}
             <Button
                 size="sm"
-                variant="outline"
+                variant="ghost"
                 disabled={!hasPreviousPage}
                 onClick={() => {
                     if (currentPage <= 0) return;
@@ -70,8 +70,8 @@ const Pagination = ({
                     }}
                     className={`
                         inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium
-                        border border-input bg-background hover:bg-accent hover:text-accent-foreground
-                        h-9 px-3
+                        hover:bg-accent hover:text-accent-foreground
+                        h-9 w-10
                         ${index + startPage === currentPage + 1 && "hover:bg-secondary bg-secondary"}
                     `}
                 >
@@ -83,7 +83,7 @@ const Pagination = ({
             {/* 다음 버튼 */}
             <Button
                 size="sm"
-                variant="outline"
+                variant="ghost"
                 disabled={!hasNextPage}
                 onClick={() => {
                     if (currentPage >= totalPage) return;
@@ -99,7 +99,7 @@ const Pagination = ({
             <Button
                 size="sm"
                 disabled={!hasNextPage}
-                variant="outline"
+                variant="ghost"
                 onClick={() => {
                     setCurrentPage(totalPage - 1);
                 }}

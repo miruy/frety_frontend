@@ -8,36 +8,15 @@ import {Input} from "@/components/ui/input";
 import {Music4, Search} from "lucide-react";
 import * as React from "react";
 import {useContext, useState} from "react";
-import {searchTabs} from "@/openapi/api/tab/tab";
-import {useQuery} from "@tanstack/react-query";
-import NotFound from "@/app/not-found";
-import Loading from "@/app/loading";
 import {PageRsSearchTabsResponse} from "@/openapi/model";
 import {AuthContext} from "@/context/AuthContext";
 import {Slide, toast} from "react-toastify";
 
-interface MainProps {
-    recentTabsData: PageRsSearchTabsResponse;
-    voteTabsData: PageRsSearchTabsResponse;
-}
-
-const Main = ({recentTabsData, voteTabsData}: MainProps) => {
+const Main = ({recentTabsData}: { recentTabsData: PageRsSearchTabsResponse }) => {
 
     const router = useRouter();
     const [keyword, setKeyword] = useState<string>("");
-    const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 상태
     const {isLoggedIn} = useContext(AuthContext);
-
-    // 최근등록순 악보 전체조회 클라이언트사이드 렌더링 + 페이지네이션
-    const {
-        data: recentTabs,
-        isLoading: isLoadingRecent,
-        isError: isErrorRecent,
-    } = useQuery({
-        queryKey: ['RecentTabs', currentPage], // 쿼리 키
-        queryFn: () => searchTabs({sort: 'RECENT', page: currentPage, pageSize: 10}),
-        initialData: currentPage === 0 ? recentTabsData : undefined,
-    });
 
     const handleCreateTab = () => {
 
@@ -59,13 +38,6 @@ const Main = ({recentTabsData, voteTabsData}: MainProps) => {
     const handleSearchTab = () => {
         router.push(`/search/${keyword}`);
         setKeyword("");
-    }
-
-    if (isLoadingRecent) {
-        return <Loading/>
-    }
-    if (isErrorRecent) {
-        return <NotFound/>
     }
 
     return (
@@ -115,8 +87,7 @@ const Main = ({recentTabsData, voteTabsData}: MainProps) => {
                     </div>
 
                     <TabsContent value="latest" className="py-5">
-                        <LatestTabs tabs={recentTabs!} currentPage={currentPage}
-                                    setCurrentPage={setCurrentPage}/>
+                        <LatestTabs recentTabsData={recentTabsData!}/>
                     </TabsContent>
                     <TabsContent value="popular" className="py-5">
                         {/*<PopularTabs tabs={tabs}/>*/}

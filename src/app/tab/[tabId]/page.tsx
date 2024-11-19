@@ -11,11 +11,11 @@ const DetailTabPage = async (context: GetServerSidePropsContext) => {
 
     try {
 
-        const recentQueryClient = new QueryClient();
-        await prefetchGetTabById(recentQueryClient, tabId);
-        const recentDehydratedState = dehydrate(recentQueryClient);
+        const detailQueryClient = new QueryClient();
+        await prefetchGetTabById(detailQueryClient, tabId);
+        const detailDehydratedState = dehydrate(detailQueryClient);
 
-        const detailTab = recentDehydratedState.queries.map(data => data.state.data) as GetTabByIdResponse;
+        const detailTab = detailDehydratedState.queries.map(data => data.state.data) as GetTabByIdResponse;
 
         return (
             <HydrationBoundary state={detailTab}>
