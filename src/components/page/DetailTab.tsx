@@ -95,7 +95,7 @@ const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: n
         };
 
         return (
-            <div className="flex flex-col space-y-1.5 px-3">
+            <div className="flex items-center justify-between">
                 <div>정말 악보를 삭제하시겠습니까?</div>
                 <div className="flex justify-end items-center">
                     <Button type="button" variant="ghost" size="sm" className="text-xs w-fit h-fit px-2 py-1"

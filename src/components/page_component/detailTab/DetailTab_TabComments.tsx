@@ -12,14 +12,26 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import {CornerDownRight, Ellipsis, Eraser, Trash2} from "lucide-react";
+import {
+    Bot,
+    CircleUserRound,
+    CornerDownRight,
+    Ellipsis,
+    Eraser, Guitar,
+    MessageCircleMore, MessageSquareMore,
+    SquareUserRound,
+    Trash2, UserRound
+} from "lucide-react";
 import {ModalContext, ModalTypes} from "@/context/ModalContext";
 import formatTimeSince from "@/utils/formatTimeSince";
+import {AuthContext} from "@/context/AuthContext";
+import {Gugi} from "next/dist/compiled/@next/font/dist/google";
 
 const DetailTab_TabComments = ({tabId}: { tabId: number }) => {
 
     const [commentValue, setCommentValue] = useState<string>("");
     const {openModal} = useContext(ModalContext);
+    const {loginId, isLoggedIn} = useContext(AuthContext);
 
     // 댓글 아이디 전체 조회
     const {
@@ -106,7 +118,8 @@ const DetailTab_TabComments = ({tabId}: { tabId: number }) => {
         data: {
             content: commentValue,
             targetId: tabId,
-            type: "TAB"
+            type: "TAB",
+            userName: loginId!
         }
     })
 
@@ -125,9 +138,9 @@ const DetailTab_TabComments = ({tabId}: { tabId: number }) => {
                 <div>정말 삭제하시겠습니까?</div>
                 <div className="flex items-center">
                     <Button type="button" variant="ghost" size="sm" className="text-xs w-fit h-fit px-2 py-1.5"
-                            onClick={handleDelete}>삭제</Button>
-                    <Button type="button" variant="ghost" size="sm" className="text-xs w-fit h-fit px-2 py-1.5"
                             onClick={handleCancel}>취소</Button>
+                    <Button type="button" variant="ghost" size="sm" className="text-xs w-fit h-fit px-2 py-1.5"
+                            onClick={handleDelete}>삭제</Button>
                 </div>
             </div>
         );
@@ -159,13 +172,27 @@ const DetailTab_TabComments = ({tabId}: { tabId: number }) => {
                 <div className="flex flex-1 space-x-2">
                     <textarea
                         value={commentValue}
+                        disabled={!isLoggedIn}
                         onChange={(event) => setCommentValue(event.target.value)}
-                        placeholder="댓글을 작성해보세요!"
+                        placeholder={isLoggedIn ? "댓글을 남겨보세요." : "로그인 후 이용해주세요."}
                         className="flex-1 resize-none border bg-background outline-none rounded h-40 p-2">
                     </textarea>
 
                     <Button
                         onClick={() => {
+
+                            if (!isLoggedIn) {
+                                toast.warn("로그인 후 이용가능합니다.", {
+                                    position: "top-center",
+                                    autoClose: 2500,
+                                    transition: Slide,
+                                    className: "text-sm",
+                                    theme: "colored",
+                                });
+
+                                return;
+                            }
+
                             if (!commentValue) {
                                 toast.error("내용을 입력하세요.", {
                                     position: "top-center",
@@ -176,6 +203,7 @@ const DetailTab_TabComments = ({tabId}: { tabId: number }) => {
                                 });
                                 return;
                             }
+
                             if (commentValue) {
                                 onCreateCommentSubmit();
                             }
@@ -196,13 +224,28 @@ const DetailTab_TabComments = ({tabId}: { tabId: number }) => {
                                 {/* 댓글 표시 */}
                                 <div className="pb-5">
                                     <div className="flex justify-between items-center">
-                                        <div className="text-sm">댓글 작성자 미구현</div>
+                                        <div className="flex items-center space-x-1.5">
+                                            <Guitar className="w-5 h-5"/>
+                                            <div className="font-semibold">{comment.data.userName}</div>
+                                        </div>
 
                                         <div className="flex items-center space-x-2">
                                             <Button
                                                 variant="outline"
                                                 className="text-[13px] w-fit h-7 px-2.5"
                                                 onClick={() => {
+                                                    if (!isLoggedIn) {
+                                                        toast.warn("로그인 후 이용가능합니다.", {
+                                                            position: "top-center",
+                                                            autoClose: 2500,
+                                                            transition: Slide,
+                                                            className: "text-sm",
+                                                            theme: "colored",
+                                                        });
+
+                                                        return;
+                                                    }
+
                                                     openModal({
                                                         name: ModalTypes.TAB_CHILD_COMMENT_CREATE,
                                                         data: {
@@ -215,40 +258,42 @@ const DetailTab_TabComments = ({tabId}: { tabId: number }) => {
                                                 답글 달기
                                             </Button>
 
-                                            <DropdownMenu>
-                                                <DropdownMenuTrigger asChild>
-                                                    <Button variant="outline" size="icon"
-                                                            className="h-7"><Ellipsis/></Button>
-                                                </DropdownMenuTrigger>
-                                                <DropdownMenuContent side="bottom" align="end"
-                                                                     className="w-fit h-fit p-2">
-                                                    <DropdownMenuGroup>
-                                                        <DropdownMenuItem
-                                                            className="cursor-pointer"
-                                                            onClick={() => {
-                                                                openModal({
-                                                                    name: ModalTypes.TAB_COMMENT_UPDATE,
-                                                                    data: {
-                                                                        tabId: tabId,
-                                                                        commentId: comment!.data!.id!,
-                                                                        comment: comment.data!
-                                                                    }
-                                                                });
-                                                            }}
-                                                        >
-                                                            <Eraser/>
-                                                            <span className="text-[13px]">댓글 수정</span>
-                                                        </DropdownMenuItem>
-                                                        <DropdownMenuItem
-                                                            className="cursor-pointer"
-                                                            onClick={() => onDeleteSubmit(comment!.data!.id!)}
-                                                        >
-                                                            <Trash2/>
-                                                            <span className="text-[13px]">댓글 삭제</span>
-                                                        </DropdownMenuItem>
-                                                    </DropdownMenuGroup>
-                                                </DropdownMenuContent>
-                                            </DropdownMenu>
+                                            {isLoggedIn && comment.data.userName === loginId &&
+                                                <DropdownMenu>
+                                                    <DropdownMenuTrigger asChild>
+                                                        <Button variant="outline" size="icon"
+                                                                className="h-7"><Ellipsis/></Button>
+                                                    </DropdownMenuTrigger>
+                                                    <DropdownMenuContent side="bottom" align="end"
+                                                                         className="w-fit h-fit p-2">
+                                                        <DropdownMenuGroup>
+                                                            <DropdownMenuItem
+                                                                className="cursor-pointer"
+                                                                onClick={() => {
+                                                                    openModal({
+                                                                        name: ModalTypes.TAB_COMMENT_UPDATE,
+                                                                        data: {
+                                                                            tabId: tabId,
+                                                                            commentId: comment!.data!.id!,
+                                                                            comment: comment.data!
+                                                                        }
+                                                                    });
+                                                                }}
+                                                            >
+                                                                <Eraser/>
+                                                                <span className="text-[13px]">댓글 수정</span>
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem
+                                                                className="cursor-pointer"
+                                                                onClick={() => onDeleteSubmit(comment!.data!.id!)}
+                                                            >
+                                                                <Trash2/>
+                                                                <span className="text-[13px]">댓글 삭제</span>
+                                                            </DropdownMenuItem>
+                                                        </DropdownMenuGroup>
+                                                    </DropdownMenuContent>
+                                                </DropdownMenu>
+                                            }
                                         </div>
                                     </div>
 
@@ -273,42 +318,44 @@ const DetailTab_TabComments = ({tabId}: { tabId: number }) => {
                                             <div className="flex flex-1 border-t">
                                                 <div className="flex flex-1 flex-col py-3">
                                                     <div className="flex justify-between items-center">
-                                                        <div className="text-sm">답글 작성자 미구현</div>
+                                                        <div className="text-sm font-semibold">{childComment.data?.userName}</div>
 
-                                                        <DropdownMenu>
-                                                            <DropdownMenuTrigger asChild>
-                                                                <Button variant="outline" size="icon"
-                                                                        className="h-7"><Ellipsis/></Button>
-                                                            </DropdownMenuTrigger>
-                                                            <DropdownMenuContent side="bottom" align="end"
-                                                                                 className="w-fit h-fit p-2">
-                                                                <DropdownMenuGroup>
-                                                                    <DropdownMenuItem
-                                                                        className="cursor-pointer"
-                                                                        onClick={() => {
-                                                                            openModal({
-                                                                                name: ModalTypes.TAB_COMMENT_UPDATE,
-                                                                                data: {
-                                                                                    tabId: tabId,
-                                                                                    commentId: childComment!.data!.id!,
-                                                                                    comment: childComment.data!
-                                                                                }
-                                                                            });
-                                                                        }}
-                                                                    >
-                                                                        <Eraser/>
-                                                                        <span className="text-[13px]">답글 수정</span>
-                                                                    </DropdownMenuItem>
-                                                                    <DropdownMenuItem
-                                                                        className="cursor-pointer"
-                                                                        onClick={() => onDeleteSubmit(childComment!.data!.id!)}
-                                                                    >
-                                                                        <Trash2/>
-                                                                        <span className="text-[13px]">답글 삭제</span>
-                                                                    </DropdownMenuItem>
-                                                                </DropdownMenuGroup>
-                                                            </DropdownMenuContent>
-                                                        </DropdownMenu>
+                                                        {isLoggedIn && childComment.data?.userName === loginId &&
+                                                            <DropdownMenu>
+                                                                <DropdownMenuTrigger asChild>
+                                                                    <Button variant="outline" size="icon"
+                                                                            className="h-7"><Ellipsis/></Button>
+                                                                </DropdownMenuTrigger>
+                                                                <DropdownMenuContent side="bottom" align="end"
+                                                                                     className="w-fit h-fit p-2">
+                                                                    <DropdownMenuGroup>
+                                                                        <DropdownMenuItem
+                                                                            className="cursor-pointer"
+                                                                            onClick={() => {
+                                                                                openModal({
+                                                                                    name: ModalTypes.TAB_COMMENT_UPDATE,
+                                                                                    data: {
+                                                                                        tabId: tabId,
+                                                                                        commentId: childComment!.data!.id!,
+                                                                                        comment: childComment.data!
+                                                                                    }
+                                                                                });
+                                                                            }}
+                                                                        >
+                                                                            <Eraser/>
+                                                                            <span className="text-[13px]">답글 수정</span>
+                                                                        </DropdownMenuItem>
+                                                                        <DropdownMenuItem
+                                                                            className="cursor-pointer"
+                                                                            onClick={() => onDeleteSubmit(childComment!.data!.id!)}
+                                                                        >
+                                                                            <Trash2/>
+                                                                            <span className="text-[13px]">답글 삭제</span>
+                                                                        </DropdownMenuItem>
+                                                                    </DropdownMenuGroup>
+                                                                </DropdownMenuContent>
+                                                            </DropdownMenu>
+                                                        }
                                                     </div>
 
                                                     <div>{childComment.data?.content}</div>

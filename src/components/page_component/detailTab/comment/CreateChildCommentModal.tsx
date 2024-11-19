@@ -4,12 +4,14 @@ import {Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTi
 import {Button} from "@/components/ui/button";
 import {Slide, toast} from "react-toastify";
 import {useCreateComment, useSearchComments} from "@/openapi/api/comment/comment";
+import {AuthContext} from "@/context/AuthContext";
 
 const CreateChildCommentModal = () => {
 
     const {modalState, closeModal} = useContext(ModalContext);
     const [commentValue, setCommentValue] = useState<string>("");
     const {tabId, parentCommentId} = modalState[ModalTypes.TAB_CHILD_COMMENT_CREATE].data;
+    const {loginId} = useContext(AuthContext);
 
     // 댓글 아이디 전체 조회
     const {
@@ -58,7 +60,8 @@ const CreateChildCommentModal = () => {
             content: commentValue,
             targetId: tabId,
             parentCommentId: parentCommentId,
-            type: "TAB"
+            type: "TAB",
+            userName: loginId!,
         }
     })
 
