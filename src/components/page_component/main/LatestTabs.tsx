@@ -10,9 +10,7 @@ import Loading from "@/app/loading";
 import NotFound from "@/app/not-found";
 import * as React from "react";
 
-const LatestTabs = ({recentTabsData}: {
-    recentTabsData: PageRsSearchTabsResponse,
-}) => {
+const LatestTabs = ({recentTabsData}: { recentTabsData: PageRsSearchTabsResponse}) => {
 
     const router = useRouter();
     const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 상태
@@ -63,7 +61,7 @@ const LatestTabs = ({recentTabsData}: {
                                 <TableCell className="text-center">{latestTab.song}</TableCell>
                                 <div className="flex flex-1 items-center">
                                     <TableCell
-                                        className="hidden md:flex flex-1 justify-center items-center text-center">latestTab.ratingCount</TableCell>
+                                        className="hidden md:flex flex-1 justify-center items-center text-center">{latestTab.voteCount}</TableCell>
                                 </div>
                             </TableRow>
                         )

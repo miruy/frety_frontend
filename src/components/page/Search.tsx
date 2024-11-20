@@ -69,7 +69,7 @@ const Search = ({searchedTabData, keyword}: { searchedTabData: PageRsSearchTabsR
                                     <TableCell className="text-center">{searchedTab.song}</TableCell>
                                     <div className="flex flex-1 items-center">
                                         <TableCell
-                                            className="hidden md:flex flex-1 justify-center items-center text-center">{searchedTab.ratingCount}</TableCell>
+                                            className="hidden md:flex flex-1 justify-center items-center text-center">{searchedTab.voteCount}</TableCell>
                                     </div>
                                 </TableRow>
                             )

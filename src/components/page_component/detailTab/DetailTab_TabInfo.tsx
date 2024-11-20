@@ -4,71 +4,60 @@ import {HandHeart, UserRoundPen} from "lucide-react";
 import {formatDate} from "@/utils/formatDate";
 import {GetTabByIdResponse} from "@/openapi/model";
 import {Slide, toast} from "react-toastify";
-import {useContext, useState} from "react";
+import {useContext} from "react";
 import {AuthContext} from "@/context/AuthContext";
+import {useCreateVote} from "@/openapi/api/vote/vote";
+import {TabContext} from "@/context/TabContext";
 
 const DetailTab_TabInfo = ({tab}: { tab: GetTabByIdResponse }) => {
 
-    const {isLoggedIn, loginId} = useContext(AuthContext);
+    const {isLoggedIn, authId} = useContext(AuthContext);
+    const {findTab} = useContext(TabContext);
 
-    // // 악보 평가 아이디 전체 조회
-    // const {
-    //     data: ratingIds,
-    //     refetch: ratingIdsRefetch,
-    // } = useSearchRatings({
-    //         targetId: tab.id!,
-    //         type: "TAB"
-    //     },
-    //     {
-    //         query: {
-    //             queryKey: ['TabRatings', tab.id],
-    //         }
-    //     });
-    //
-    // const {mutate: createRating} = useCreateRating({
-    //     mutation: {
-    //         onSuccess: async () => {
-    //             toast.success("평가해주셔서 감사합니다.", {
-    //                 position: "top-center",
-    //                 autoClose: 2500,
-    //                 transition: Slide,
-    //                 className: "text-sm",
-    //                 theme: "colored",
-    //             });
-    //             await ratingIdsRefetch();
-    //         },
-    //         onError: (error) => {
-    //             console.log(error)
-    //             toast.error("관리자에게 문의하세요", {
-    //                 position: "top-center",
-    //                 autoClose: 2500,
-    //                 transition: Slide,
-    //                 className: "text-sm",
-    //                 theme: "colored",
-    //             });
-    //         }
-    //     }
-    // })
+    const {mutate: createVote} = useCreateVote({
+        mutation: {
+            onSuccess: async () => {
+                toast.success("평가해주셔서 감사합니다.", {
+                    position: "top-center",
+                    autoClose: 2500,
+                    transition: Slide,
+                    className: "text-sm",
+                    theme: "colored",
+                });
+                await findTab.refetch();
+            },
+            onError: (error) => {
+                console.log(error)
+                toast.error("관리자에게 문의하세요", {
+                    position: "top-center",
+                    autoClose: 2500,
+                    transition: Slide,
+                    className: "text-sm",
+                    theme: "colored",
+                });
+            }
+        }
+    })
 
     const onCreateRatingSubmit = () => {
-        // if (!hasLogin) {
-        //     toast.warn("로그인 후 이용해주세요.", {
-        //         position: "top-center",
-        //         autoClose: 2500,
-        //         transition: Slide,
-        //         className: "text-sm",
-        //         theme: "colored",
-        //     });
-        //     return
-        // } else {
-        //     createRating({
-        //         data: {
-        //             targetId: tab.id!,
-        //             type: "TAB",
-        //             rating: true
-        //         }
-        //     })
-        // }
+        if (!isLoggedIn) {
+            toast.warn("로그인 후 이용해주세요.", {
+                position: "top-center",
+                autoClose: 2500,
+                transition: Slide,
+                className: "text-sm",
+                theme: "colored",
+            });
+            return
+        }
+
+        createVote({
+            data: {
+                targetId: tab.id!,
+                type: "TAB",
+                voterId: authId!
+            }
+        })
     }
 
     return (
@@ -103,7 +92,7 @@ const DetailTab_TabInfo = ({tab}: { tab: GetTabByIdResponse }) => {
 
                 {/* 투표 */}
                 <div className="flex flex-col items-center justify-center space-y-1">
-                    {/*<div className="badge badge-outline border-neutral-400">{ratingIds?.length}</div>*/}
+                    <div className="badge badge-outline border-neutral-400">{tab.voteCount}</div>
 
                     <div
                         onClick={onCreateRatingSubmit}

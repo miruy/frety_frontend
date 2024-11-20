@@ -50,7 +50,7 @@ const MyCreatedTabs = ({myCreatedTabs, userName}: { myCreatedTabs: PageRsSearchT
                                     <TableCell className="text-center">{myCreatedTab.song}</TableCell>
                                     <div className="flex flex-1 items-center">
                                         <TableCell
-                                            className="hidden md:flex flex-1 justify-center items-center text-center">myCreatedTab.ratingCount</TableCell>
+                                            className="hidden md:flex flex-1 justify-center items-center text-center">{myCreatedTab.voteCount}</TableCell>
                                     </div>
                                 </TableRow>
                             )

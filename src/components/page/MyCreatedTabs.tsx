@@ -42,7 +42,10 @@ const MyCreatedTabs = ({userName}: { userName: string }) => {
         <div className="px-3 py-10 mx-auto w-full lg:w-[70%] space-y-10">
             <div className="space-y-2 border-b pb-2">
                 <div className="text-2xl sm:text-4xl font-bold tracking-wide">{userName}님이 제작한 악보</div>
-                <div className="text-md sm:text-lg font-semibold tracking-wide text-primary/50">{myCreatedTabs?.data?.length}개의 악보</div>
+                <div
+                    className="text-md sm:text-lg font-semibold tracking-wide text-primary/50">{myCreatedTabs?.data?.length}개의
+                    악보
+                </div>
             </div>
 
             <div className="space-y-10">
@@ -68,7 +71,7 @@ const MyCreatedTabs = ({userName}: { userName: string }) => {
                                     <TableCell className="text-center">{myCreatedTab.song}</TableCell>
                                     <div className="flex flex-1 items-center">
                                         <TableCell
-                                            className="hidden md:flex flex-1 justify-center items-center text-center">myCreatedTab.ratingCount</TableCell>
+                                            className="hidden md:flex flex-1 justify-center items-center text-center">{myCreatedTab.voteCount}</TableCell>
                                     </div>
                                 </TableRow>
                             )
