@@ -1,7 +1,7 @@
 'use client';
 
 import {Button} from "@/components/ui/button";
-import {DoorOpen, IdCard, Menu, Music4, Search, Star, X} from "lucide-react";
+import {DoorOpen, IdCard, LibraryBig, Menu, Music4, Search, X} from "lucide-react";
 import * as React from "react";
 import {Input} from "@/components/ui/input";
 import {useRouter} from "next/navigation";
@@ -11,8 +11,8 @@ import {
     SheetContent, SheetTitle,
     SheetTrigger
 } from "@/components/ui/sheet";
-import SendEmail from "@/components/page_component/topbar/SendEmail";
 import {AuthContext} from "@/context/AuthContext";
+import SendEmail from "@/components/page_component/common/SendEmail";
 
 const TopBar = () => {
 
@@ -70,7 +70,7 @@ const TopBar = () => {
                             <>
                                 <Button className="gap-1" variant="ghost"
                                         onClick={() => router.push(`/@${loginId}`)}>
-                                    <Star/>
+                                    <LibraryBig/>
                                     <span>내 악보</span>
                                 </Button>
                                 <Button className="gap-1" variant="ghost" onClick={handleLogout}>
@@ -132,7 +132,7 @@ const TopBar = () => {
                                             setOpenSidebar(false);
                                             router.push(`/@${loginId}`);
                                         }}>
-                                        <Star className="w-4"/>
+                                        <LibraryBig className="w-4"/>
                                         <span>내 악보</span>
                                     </div>
                                     <div
