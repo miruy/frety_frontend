@@ -1,25 +1,25 @@
 'use client';
 
-import {ChevronRight, Heart, PencilLine} from "lucide-react";
+import {ChevronRight, Heart} from "lucide-react";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
 import {useContext} from "react";
 import {AuthContext} from "@/context/AuthContext";
 import {useQuery} from "@tanstack/react-query";
-import {searchMyCreatedTabs} from "@/openapi/api/tab/tab";
+import {searchTabs} from "@/openapi/api/tab/tab";
 
-const MyCreatedTabs = ({userName}: {userName: string }) => {
+const MyVotedTabs = ({userName}: { userName: string }) => {
 
     const router = useRouter();
     const {authId} = useContext(AuthContext);
 
-    // 내가 제작한 악보 5개 미리보기
+    // 내가 투표한 악보 5개 미리보기
     const {
-        data: myCreatedTabs,
+        data: myVotedTabs,
     } = useQuery({
-        queryKey: ['MyCreatedTabs', authId],
-        queryFn: () => searchMyCreatedTabs(authId!, {page: 0, pageSize: 5}),
+        queryKey: ['MyVotedTabs', authId],
+        queryFn: () => searchTabs({sort: "RECENT", voterId: authId!, page: 0, pageSize: 5}),
     });
 
     const handleDetailTab = (tabId: number) => {
@@ -30,11 +30,11 @@ const MyCreatedTabs = ({userName}: {userName: string }) => {
         <div className="space-y-3">
             <div className="space-y-1.5 border-b pb-2">
                 <div className="flex items-center space-x-2 text-lg sm:text-2xl font-bold tracking-wide">
-                    <PencilLine className="w-4 h-4 sm:w-6 sm:h-6"/>
-                    <div>{userName}님이 제작한 악보</div>
+                    <Heart className="w-4 h-4 sm:w-6 sm:h-6"/>
+                    <div>{userName}님이 좋아하는 악보</div>
                 </div>
                 <div
-                    className="text-sm sm:text-md font-semibold tracking-wide text-primary/50">{myCreatedTabs?.meta?.totalCount}개의
+                    className="text-sm sm:text-md font-semibold tracking-wide text-primary/50">{myVotedTabs?.meta?.totalCount}개의
                     악보
                 </div>
             </div>
@@ -54,15 +54,15 @@ const MyCreatedTabs = ({userName}: {userName: string }) => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {myCreatedTabs?.data?.map((myCreatedTab, index) => {
+                        {myVotedTabs?.data?.map((myVotedTab, index) => {
                             return (
                                 <TableRow key={index} className="cursor-pointer"
-                                          onClick={() => handleDetailTab(myCreatedTab.id!)}>
-                                    <TableCell className="text-center">{myCreatedTab.artist}</TableCell>
-                                    <TableCell className="text-center">{myCreatedTab.song}</TableCell>
+                                          onClick={() => handleDetailTab(myVotedTab.id!)}>
+                                    <TableCell className="text-center">{myVotedTab.artist}</TableCell>
+                                    <TableCell className="text-center">{myVotedTab.song}</TableCell>
                                     <div className="flex flex-1 items-center">
                                         <TableCell
-                                            className="hidden md:flex flex-1 justify-center items-center text-center">{myCreatedTab.voteCount}</TableCell>
+                                            className="hidden md:flex flex-1 justify-center items-center text-center">{myVotedTab.voteCount}</TableCell>
                                     </div>
                                 </TableRow>
                             )
@@ -70,7 +70,7 @@ const MyCreatedTabs = ({userName}: {userName: string }) => {
                     </TableBody>
                 </Table>
 
-                <div className="flex justify-end" onClick={() => router.push(`/@${userName}/creations`)}>
+                <div className="flex justify-end" onClick={() => router.push(`/@${userName}/votes`)}>
                     <Button variant="link"
                             className="w-fit h-fit p-1 text-sm text-primary/50">더보기 <ChevronRight/></Button>
                 </div>
@@ -79,4 +79,4 @@ const MyCreatedTabs = ({userName}: {userName: string }) => {
     )
 }
 
-export default MyCreatedTabs;
+export default MyVotedTabs;

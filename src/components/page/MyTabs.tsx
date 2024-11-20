@@ -6,24 +6,12 @@ import {ChevronRight, Heart, Star} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {Separator} from "@/components/ui/separator";
 import {useRouter} from "next/navigation";
-import {useContext} from "react";
-import {AuthContext} from "@/context/AuthContext";
-import {useQuery} from "@tanstack/react-query";
-import {searchMyCreatedTabs} from "@/openapi/api/tab/tab";
 import MyCreatedTabs from "@/components/page_component/myTab/MyCreatedTabs";
+import MyVotedTabs from "@/components/page_component/myTab/MyVotedTabs";
 
 const MyTabs = ({userName}: { userName: string }) => {
 
     const router = useRouter();
-    const {authId} = useContext(AuthContext);
-
-    // 내가 제작한 악보 5개 미리보기
-    const {
-        data: myCreatedTabs,
-    } = useQuery({
-        queryKey: ['MyCreatedTabs', authId],
-        queryFn: () => searchMyCreatedTabs(authId!, {page: 0, pageSize: 5}),
-    });
 
     const handleDetailTab = () => {
         console.log("detail")
@@ -47,7 +35,7 @@ const MyTabs = ({userName}: { userName: string }) => {
         <div className="px-3 py-10 mx-auto w-full lg:w-[70%] space-y-10">
 
             {/* 제작한 악보 */}
-            <MyCreatedTabs myCreatedTabs={myCreatedTabs!} userName={userName}/>
+            <MyCreatedTabs userName={userName}/>
 
             <Separator className="w-full"/>
 
@@ -104,51 +92,8 @@ const MyTabs = ({userName}: { userName: string }) => {
 
 
             {/* 투표한 악보 */}
-            <div className="space-y-3">
-                <div className="space-y-1.5 border-b pb-2">
-                    <div className="flex items-center space-x-2 text-lg sm:text-2xl font-bold tracking-wide">
-                        <Heart className="w-4 h-4 sm:w-6 sm:h-6"/>
-                        <div>{userName}님이 좋아요 표시한 악보</div>
-                    </div>
-                    <div className="text-sm sm:text-md font-semibold tracking-wide text-primary/50">3개의 악보</div>
-                </div>
+            <MyVotedTabs userName={userName}/>
 
-                <div className="border rounded-lg p-5 space-y-1">
-                    <Table>
-                        <TableHeader>
-                            <TableRow className="cursor-default hover:bg-transparent">
-                                <TableHead className="text-center">Artist</TableHead>
-                                <TableHead className="text-center">Song</TableHead>
-                                <div className="flex flex-1 items-center">
-                                    <TableHead
-                                        className="hidden md:flex flex-1 justify-center items-center text-center">
-                                        <Heart className="w-4"/>
-                                    </TableHead>
-                                </div>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {searchedTabs.map((searchedTab, index) => {
-                                return (
-                                    <TableRow key={index} className="cursor-pointer" onClick={handleDetailTab}>
-                                        <TableCell className="text-center">{searchedTab.artist}</TableCell>
-                                        <TableCell className="text-center">{searchedTab.song}</TableCell>
-                                        <div className="flex flex-1 items-center">
-                                            <TableCell
-                                                className="hidden md:flex flex-1 justify-center items-center text-center">{searchedTab.ratingCount}</TableCell>
-                                        </div>
-                                    </TableRow>
-                                )
-                            })}
-                        </TableBody>
-                    </Table>
-
-                    <div className="flex justify-end" onClick={() => router.push(`/@${userName}/votes`)}>
-                        <Button variant="link"
-                                className="w-fit h-fit p-1 text-sm text-primary/50">더보기 <ChevronRight/></Button>
-                    </div>
-                </div>
-            </div>
         </div>
     )
 }

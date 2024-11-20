@@ -3,7 +3,7 @@ import {GetServerSidePropsContext} from "next";
 import {dehydrate, QueryClient} from "@tanstack/react-query";
 import {prefetchSearchTabs} from "@/openapi/api/tab/tab";
 import {PageRsSearchTabsResponse} from "@/openapi/model";
-import MyFavoriteTabs from "@/components/page/MyFavoriteTabs";
+import MyFavoriteAllTabs from "@/components/page/MyFavoriteAllTabs";
 
 const MyFavoriteTabsPage = async (context: GetServerSidePropsContext) => {
 
@@ -41,7 +41,7 @@ const MyFavoriteTabsPage = async (context: GetServerSidePropsContext) => {
         });
 
         return (
-            <MyFavoriteTabs myFavoriteTabData={myFavoriteTabData} userName={userName}/>
+            <MyFavoriteAllTabs myFavoriteTabData={myFavoriteTabData} userName={userName}/>
         );
     } catch {
         return <NotFound/>;

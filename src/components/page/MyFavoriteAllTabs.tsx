@@ -12,8 +12,8 @@ import Loading from "@/app/loading";
 import NotFound from "@/app/not-found";
 import {PageRsSearchTabsResponse} from "@/openapi/model";
 
-const MyVotedTabs = ({myVotedTabData, userName}: {
-    myVotedTabData: PageRsSearchTabsResponse,
+const MyFavoriteAllTabs = ({myFavoriteTabData, userName}: {
+    myFavoriteTabData: PageRsSearchTabsResponse,
     userName: string
 }) => {
 
@@ -22,13 +22,13 @@ const MyVotedTabs = ({myVotedTabData, userName}: {
 
     // 내가 즐겨찾는 악보 조회로 바꿔야함
     const {
-        data: myVotedTabs,
+        data: myFavoriteTabs,
         isLoading: isLoadingSearch,
         isError: isErrorSearch,
     } = useQuery({
-        queryKey: ['MyFavoriteTabs', currentPage], // 쿼리 키
+        queryKey: ['MyFavoriteAllTabs', currentPage], // 쿼리 키
         queryFn: () => searchTabs({sort: 'RECENT', page: currentPage, pageSize: 10}),
-        initialData: currentPage === 0 ? myVotedTabData : undefined,
+        initialData: currentPage === 0 ? myFavoriteTabData : undefined,
     });
 
     const handleDetailTab = (tabId: number) => {
@@ -64,15 +64,15 @@ const MyVotedTabs = ({myVotedTabData, userName}: {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {myVotedTabs?.data?.map((myVotedTab, index) => {
+                        {myFavoriteTabs?.data?.map((myFavoriteTab, index) => {
                             return (
                                 <TableRow key={index} className="cursor-pointer"
-                                          onClick={() => handleDetailTab(myVotedTab.id!)}>
-                                    <TableCell className="text-center">{myVotedTab.artist}</TableCell>
-                                    <TableCell className="text-center">{myVotedTab.song}</TableCell>
+                                          onClick={() => handleDetailTab(myFavoriteTab.id!)}>
+                                    <TableCell className="text-center">{myFavoriteTab.artist}</TableCell>
+                                    <TableCell className="text-center">{myFavoriteTab.song}</TableCell>
                                     <div className="flex flex-1 items-center">
                                         <TableCell
-                                            className="hidden md:flex flex-1 justify-center items-center text-center">{myVotedTab.ratingCount}</TableCell>
+                                            className="hidden md:flex flex-1 justify-center items-center text-center">{myFavoriteTab.ratingCount}</TableCell>
                                     </div>
                                 </TableRow>
                             )
@@ -82,12 +82,12 @@ const MyVotedTabs = ({myVotedTabData, userName}: {
 
                 <div>
                     <Pagination
-                        totalPage={myVotedTabs?.meta?.totalPage || 1}
+                        totalPage={myFavoriteTabs?.meta?.totalPage || 1}
                         setCurrentPage={setCurrentPage}
                         currentPage={currentPage}
                         buttonSize={5}
-                        hasPreviousPage={myVotedTabs?.meta?.hasPreviousPage}
-                        hasNextPage={myVotedTabs?.meta?.hasNextPage}
+                        hasPreviousPage={myFavoriteTabs?.meta?.hasPreviousPage}
+                        hasNextPage={myFavoriteTabs?.meta?.hasNextPage}
                     />
                 </div>
             </div>
@@ -95,4 +95,4 @@ const MyVotedTabs = ({myVotedTabData, userName}: {
     )
 }
 
-export default MyVotedTabs;
+export default MyFavoriteAllTabs;

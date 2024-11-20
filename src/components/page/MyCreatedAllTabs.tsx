@@ -12,7 +12,7 @@ import Loading from "@/app/loading";
 import NotFound from "@/app/not-found";
 import {AuthContext} from "@/context/AuthContext";
 
-const MyCreatedTabs = ({userName}: { userName: string }) => {
+const MyCreatedAllTabs = ({userName}: { userName: string }) => {
 
     const router = useRouter();
     const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 상태
@@ -23,7 +23,7 @@ const MyCreatedTabs = ({userName}: { userName: string }) => {
         isLoading: isLoadingSearch,
         isError: isErrorSearch,
     } = useQuery({
-        queryKey: ['MyCreatedTabs', currentPage, authId], // 쿼리 키
+        queryKey: ['MyCreatedAllTabs', currentPage, authId], // 쿼리 키
         queryFn: () => searchMyCreatedTabs(authId!, {page: currentPage, pageSize: 10}),
     });
 
@@ -94,4 +94,4 @@ const MyCreatedTabs = ({userName}: { userName: string }) => {
     )
 }
 
-export default MyCreatedTabs;
+export default MyCreatedAllTabs;

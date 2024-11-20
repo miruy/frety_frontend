@@ -1,6 +1,6 @@
 import NotFound from "@/app/not-found";
 import {GetServerSidePropsContext} from "next";
-import MyCreatedTabs from "@/components/page/MyCreatedTabs";
+import MyCreatedAllTabs from "@/components/page/MyCreatedAllTabs";
 
 const MyCreatedTabsPage = async (context: GetServerSidePropsContext) => {
 
@@ -15,7 +15,7 @@ const MyCreatedTabsPage = async (context: GetServerSidePropsContext) => {
 
     try {
         return (
-            <MyCreatedTabs userName={userName}/>
+            <MyCreatedAllTabs userName={userName}/>
         );
     } catch {
         return <NotFound/>;

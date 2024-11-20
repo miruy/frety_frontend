@@ -7,28 +7,24 @@ import Pagination from "@/components/page_component/common/Pagination";
 import {useQuery} from "@tanstack/react-query";
 import {searchTabs} from "@/openapi/api/tab/tab";
 import {useRouter} from "next/navigation";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import Loading from "@/app/loading";
 import NotFound from "@/app/not-found";
-import {PageRsSearchTabsResponse} from "@/openapi/model";
+import {AuthContext} from "@/context/AuthContext";
 
-const MyFavoriteTabs = ({myFavoriteTabData, userName}: {
-    myFavoriteTabData: PageRsSearchTabsResponse,
-    userName: string
-}) => {
+const MyVotedAllTabs = ({userName}: { userName: string }) => {
 
     const router = useRouter();
     const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 상태
+    const {authId} = useContext(AuthContext);
 
-    // 내가 즐겨찾는 악보 조회로 바꿔야함
     const {
-        data: myFavoriteTabs,
+        data: myVotedTabs,
         isLoading: isLoadingSearch,
         isError: isErrorSearch,
     } = useQuery({
-        queryKey: ['MyFavoriteTabs', currentPage], // 쿼리 키
-        queryFn: () => searchTabs({sort: 'RECENT', page: currentPage, pageSize: 10}),
-        initialData: currentPage === 0 ? myFavoriteTabData : undefined,
+        queryKey: ['MyVotedAllTabs', currentPage, authId],
+        queryFn: () => searchTabs({sort: 'RECENT', voterId: authId!, page: currentPage, pageSize: 10}),
     });
 
     const handleDetailTab = (tabId: number) => {
@@ -45,8 +41,11 @@ const MyFavoriteTabs = ({myFavoriteTabData, userName}: {
     return (
         <div className="px-3 py-10 mx-auto w-full lg:w-[70%] space-y-10">
             <div className="space-y-2 border-b pb-2">
-                <div className="text-2xl sm:text-4xl font-bold tracking-wide">{userName}님이 즐겨찾는 악보</div>
-                <div className="text-md sm:text-lg font-semibold tracking-wide text-primary/50">3개의 악보</div>
+                <div className="text-2xl sm:text-4xl font-bold tracking-wide">{userName}님이 좋아하는 악보</div>
+                <div
+                    className="text-md sm:text-lg font-semibold tracking-wide text-primary/50">{myVotedTabs?.data?.length}개의
+                    악보
+                </div>
             </div>
 
             <div className="space-y-10">
@@ -64,15 +63,15 @@ const MyFavoriteTabs = ({myFavoriteTabData, userName}: {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {myFavoriteTabs?.data?.map((myFavoriteTab, index) => {
+                        {myVotedTabs?.data?.map((myVotedTab, index) => {
                             return (
                                 <TableRow key={index} className="cursor-pointer"
-                                          onClick={() => handleDetailTab(myFavoriteTab.id!)}>
-                                    <TableCell className="text-center">{myFavoriteTab.artist}</TableCell>
-                                    <TableCell className="text-center">{myFavoriteTab.song}</TableCell>
+                                          onClick={() => handleDetailTab(myVotedTab.id!)}>
+                                    <TableCell className="text-center">{myVotedTab.artist}</TableCell>
+                                    <TableCell className="text-center">{myVotedTab.song}</TableCell>
                                     <div className="flex flex-1 items-center">
                                         <TableCell
-                                            className="hidden md:flex flex-1 justify-center items-center text-center">{myFavoriteTab.ratingCount}</TableCell>
+                                            className="hidden md:flex flex-1 justify-center items-center text-center">{myVotedTab.voteCount}</TableCell>
                                     </div>
                                 </TableRow>
                             )
@@ -82,12 +81,12 @@ const MyFavoriteTabs = ({myFavoriteTabData, userName}: {
 
                 <div>
                     <Pagination
-                        totalPage={myFavoriteTabs?.meta?.totalPage || 1}
+                        totalPage={myVotedTabs?.meta?.totalPage || 1}
                         setCurrentPage={setCurrentPage}
                         currentPage={currentPage}
                         buttonSize={5}
-                        hasPreviousPage={myFavoriteTabs?.meta?.hasPreviousPage}
-                        hasNextPage={myFavoriteTabs?.meta?.hasNextPage}
+                        hasPreviousPage={myVotedTabs?.meta?.hasPreviousPage}
+                        hasNextPage={myVotedTabs?.meta?.hasNextPage}
                     />
                 </div>
             </div>
@@ -95,4 +94,4 @@ const MyFavoriteTabs = ({myFavoriteTabData, userName}: {
     )
 }
 
-export default MyFavoriteTabs;
+export default MyVotedAllTabs;
