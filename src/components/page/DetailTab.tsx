@@ -4,22 +4,10 @@ import {Switch} from "@/components/ui/switch";
 import {useContext, useEffect, useRef, useState} from "react";
 import {chordsMap} from "@/data/chordsMap";
 import {commonConfigs, customConfigs} from "@/data/drawChordDiagram";
-import {
-    DropdownMenu,
-    DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
-    DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
-import {Button} from "@/components/ui/button";
-import {
-    Ellipsis, Eraser, Star, Trash2,
-} from "lucide-react";
-import {useRouter} from "next/navigation";
 import {GetTabByIdResponse} from "@/openapi/model";
 import {Content} from "@/components/model/tab";
 import {SVGuitarChord} from "svguitar";
 import {getTabById, useDeleteTab} from "@/openapi/api/tab/tab";
-import {Slide, toast} from "react-toastify";
-import {TabContext} from "@/context/TabContext";
 import DetailTab_TabInfo from "@/components/page_component/detailTab/DetailTab_TabInfo";
 import DetailTab_TabComments from "@/components/page_component/detailTab/DetailTab_TabComments";
 import UpdateCommentModal from "@/components/page_component/detailTab/comment/UpdateCommentModal";
@@ -28,13 +16,12 @@ import {useQuery} from "@tanstack/react-query";
 import {AuthContext} from "@/context/AuthContext";
 import Loading from "@/app/loading";
 import NotFound from "@/app/not-found";
+import DetailTab_TabAuthorMenu from "@/components/page_component/detailTab/DetailTab_TabAuthorMenu";
 
 const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: number }) => {
 
     const [showDiagram, setShowDiagram] = useState<boolean>(true);
-    const router = useRouter();
     const tabContentRef = useRef<HTMLDivElement | null>(null);
-    const {findAllRecentTabs} = useContext(TabContext);
     const [loading, setLoading] = useState(false);
     const {loginId, isLoggedIn} = useContext(AuthContext);
 
@@ -50,73 +37,6 @@ const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: n
         initialData: detailTab ? detailTab : undefined,
         staleTime: 0
     });
-
-    // 악보 삭제
-    const {mutate: deleteTab} = useDeleteTab({
-        mutation: {
-            onSuccess: async () => {
-                toast.dismiss();
-
-                toast.success("성공적으로 악보가 삭제되었습니다.", {
-                    position: "top-center",
-                    autoClose: 2500,
-                    transition: Slide,
-                    className: "text-sm",
-                    theme: "colored",
-                });
-
-                await findAllRecentTabs.refetch();
-
-                setTimeout(() => {
-                    window.location.href = "/";
-                }, 2000);
-            },
-            onError: (error) => {
-                console.log(error)
-                toast.error("관리자에게 문의하세요", {
-                    position: "top-center",
-                    autoClose: 2500,
-                    transition: Slide,
-                    className: "text-sm",
-                    theme: "colored",
-                });
-            }
-        }
-    })
-
-    const DeleteAlert = () => {
-
-        const handleCancel = () => {
-            toast.dismiss();
-        }
-
-        const handleDelete = () => {
-            deleteTab({tabId: tab!.id!});
-        };
-
-        return (
-            <div className="flex items-center justify-between">
-                <div>정말 악보를 삭제하시겠습니까?</div>
-                <div className="flex justify-end items-center">
-                    <Button type="button" variant="ghost" size="sm" className="text-xs w-fit h-fit px-2 py-1"
-                            onClick={handleCancel}>취소</Button>
-                    <Button type="button" variant="ghost" size="sm" className="text-xs w-fit h-fit px-2 py-1"
-                            onClick={handleDelete}>삭제</Button>
-                </div>
-            </div>
-        );
-    };
-
-    const onDeleteSubmit = () => {
-        toast.info(<DeleteAlert/>, {
-            position: "top-center",
-            transition: Slide,
-            className: "text-sm",
-            theme: "colored",
-            autoClose: false,
-            closeButton: false
-        },);
-    }
 
     useEffect(() => {
 
@@ -271,32 +191,7 @@ const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: n
 
                         {isLoggedIn &&
                         loginId === tab?.authorName ?
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="outline" size="sm" className="h-10"><Ellipsis/></Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent side="bottom" align="end" className="w-fit h-fit p-2">
-                                    <DropdownMenuGroup>
-                                        <DropdownMenuItem className="cursor-pointer">
-                                            <Star/>
-                                            <span className="text-[14px]">즐겨찾기 추가</span>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            className="cursor-pointer"
-                                            onClick={() => router.push(`/edit/${tab?.id}`)}>
-                                            <Eraser/>
-                                            <span className="text-[14px]">수정</span>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            className="cursor-pointer"
-                                            onClick={onDeleteSubmit}
-                                        >
-                                            <Trash2/>
-                                            <span className="text-[14px]">삭제</span>
-                                        </DropdownMenuItem>
-                                    </DropdownMenuGroup>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
+                            <DetailTab_TabAuthorMenu tabId={tab.id!}/>
                             : <></>
                         }
                     </div>
