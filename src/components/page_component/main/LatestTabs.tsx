@@ -63,7 +63,7 @@ const LatestTabs = ({recentTabsData}: {
                                 <TableCell className="text-center">{latestTab.song}</TableCell>
                                 <div className="flex flex-1 items-center">
                                     <TableCell
-                                        className="hidden md:flex flex-1 justify-center items-center text-center">{latestTab.ratingCount}</TableCell>
+                                        className="hidden md:flex flex-1 justify-center items-center text-center">latestTab.ratingCount</TableCell>
                                 </div>
                             </TableRow>
                         )

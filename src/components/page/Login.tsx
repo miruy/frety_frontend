@@ -21,10 +21,10 @@ const Login = () => {
 
     const {mutate: createToken} = useCreateToken({
         mutation: {
-            onSuccess: async (tokens) => {
+            onSuccess: async (response) => {
 
                 // 로그인 성공 후 상태 업데이트
-                login(createTokenRequest.getValues("loginId"), tokens.accessToken!);
+                login(createTokenRequest.getValues("loginId"), response.accessToken!, response.authId!);
 
                 toast.success("성공적으로 로그인이 완료되었습니다.", {
                     position: "top-center",
@@ -91,7 +91,8 @@ const Login = () => {
         <div className="px-3 py-10 mx-auto w-full md:w-[60%] xl:w-[40%] space-y-10">
             <div className="space-y-2 border-b pb-2">
                 <div className="text-2xl sm:text-4xl font-bold tracking-wide">로그인</div>
-                <div className="text-md sm:text-lg font-semibold tracking-wide text-primary/50">로그인 후 자유롭게 이용가능합니다.</div>
+                <div className="text-md sm:text-lg font-semibold tracking-wide text-primary/50">로그인 후 자유롭게 이용가능합니다.
+                </div>
             </div>
 
             <div className="flex justify-center items-center">

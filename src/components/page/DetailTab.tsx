@@ -34,10 +34,10 @@ const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: n
     const [showDiagram, setShowDiagram] = useState<boolean>(true);
     const router = useRouter();
     const tabContentRef = useRef<HTMLDivElement | null>(null);
-    const {findAllRecentTabs, findTab} = useContext(TabContext);
+    const {findAllRecentTabs} = useContext(TabContext);
     const [loading, setLoading] = useState(false);
-
     const {loginId, isLoggedIn} = useContext(AuthContext);
+
 
     // 최근등록순 악보 전체조회 클라이언트사이드 렌더링 + 페이지네이션
     const {
