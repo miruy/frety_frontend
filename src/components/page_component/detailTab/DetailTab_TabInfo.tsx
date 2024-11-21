@@ -1,6 +1,6 @@
 'use client';
 
-import {HandHeart, Star, UserRoundPen} from "lucide-react";
+import { Heart, Star, UserRoundPen} from "lucide-react";
 import {formatDate} from "@/utils/formatDate";
 import {GetTabByIdResponse} from "@/openapi/model";
 import {Slide, toast} from "react-toastify";
@@ -10,6 +10,9 @@ import {useCreateVote} from "@/openapi/api/vote/vote";
 import {TabContext} from "@/context/TabContext";
 import {getFavorite, useCreateFavorite, useDeleteFavorite} from "@/openapi/api/favorite/favorite";
 import {useQuery} from "@tanstack/react-query";
+import {Badge} from "@/components/ui/badge";
+import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
+import * as React from "react";
 
 const DetailTab_TabInfo = ({tab}: { tab: GetTabByIdResponse }) => {
 
@@ -182,32 +185,59 @@ const DetailTab_TabInfo = ({tab}: { tab: GetTabByIdResponse }) => {
                 <div className="flex items-center space-x-2">
                     {/* 즐겨찾기 */}
                     <div className="flex flex-col items-center justify-center space-y-1">
-                        <div className="badge badge-outline border-neutral-400">{tab.favoriteCount}</div>
+                        <Badge variant="outline">{tab.favoriteCount}</Badge>
 
                         {isFavorite ?
-                            <div
-                                onClick={onDeleteFavoriteSubmit}
-                                className="cursor-pointer p-3 rounded-full hover:bg-secondary active:scale-90 duration-100">
-                                <Star className="stroke-amber-400 fill-amber-400 size-6"/>
-                            </div>
+                            <TooltipProvider>
+                                <Tooltip delayDuration={100}>
+                                    <TooltipTrigger asChild onClick={onDeleteFavoriteSubmit}>
+                                        <div
+                                            className="cursor-pointer p-3 rounded-full hover:bg-secondary active:scale-90 duration-100">
+                                            <Star className="stroke-amber-400 fill-amber-400 size-6"/>
+                                        </div>
+                                    </TooltipTrigger>
+
+                                    <TooltipContent side="bottom" sideOffset={5}>
+                                        <div className="text-xs">즐겨찾기 해제</div>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
                             :
-                            <div
-                                onClick={onCreateFavoriteSubmit}
-                                className="cursor-pointer p-3 rounded-full hover:bg-secondary active:scale-90 duration-100">
-                                <Star className="size-6"/>
-                            </div>
+                            <TooltipProvider>
+                                <Tooltip delayDuration={100}>
+                                    <TooltipTrigger asChild onClick={onCreateFavoriteSubmit}>
+                                        <div
+                                            className="cursor-pointer p-3 rounded-full hover:text-amber-400 hover:bg-secondary active:scale-90 duration-100">
+                                            <Star className="size-6"/>
+                                        </div>
+                                    </TooltipTrigger>
+
+                                    <TooltipContent side="bottom" sideOffset={5}>
+                                        <div className="text-xs">즐겨찾기 등록</div>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
                         }
                     </div>
 
                     {/* 투표 */}
                     <div className="flex flex-col items-center justify-center space-y-1">
-                        <div className="badge badge-outline border-neutral-400">{tab.voteCount}</div>
+                        <Badge variant="outline">{tab.voteCount}</Badge>
 
-                        <div
-                            onClick={onCreateRatingSubmit}
-                            className="cursor-pointer p-2.5 rounded-full hover:bg-secondary active:scale-90 duration-100">
-                            <HandHeart className="size-7"/>
-                        </div>
+                        <TooltipProvider>
+                            <Tooltip delayDuration={100}>
+                                <TooltipTrigger asChild onClick={onCreateRatingSubmit}>
+                                    <div
+                                        className="cursor-pointer p-3 rounded-full hover:text-red-400 hover:bg-secondary active:scale-90 duration-100">
+                                        <Heart className="size-6"/>
+                                    </div>
+                                </TooltipTrigger>
+
+                                <TooltipContent side="bottom" sideOffset={5}>
+                                    <div className="text-xs">좋은 악보예요!</div>
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
                     </div>
                 </div>
             </div>
