@@ -1,6 +1,6 @@
 'use client';
 
-import {Heart} from "lucide-react";
+import {Star} from "lucide-react";
 import * as React from "react";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import Pagination from "@/components/page_component/common/Pagination";
@@ -54,7 +54,7 @@ const MyFavoriteAllTabs = ({userName}: { userName: string }) => {
                             <div className="flex flex-1 items-center">
                                 <TableHead
                                     className="hidden md:flex flex-1 justify-center items-center text-center">
-                                    <Heart className="w-4"/>
+                                    <Star className="w-4"/>
                                 </TableHead>
                             </div>
                         </TableRow>

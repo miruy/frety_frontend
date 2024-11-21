@@ -69,7 +69,7 @@ const TopBar = () => {
                         {isLoggedIn && loginId ?
                             <>
                                 <Button className="gap-1" variant="ghost"
-                                        onClick={() => router.push(`/@${loginId}`)}>
+                                        onClick={() => window.location.href = `/@${loginId}`}>
                                     <LibraryBig/>
                                     <span>내 악보</span>
                                 </Button>
@@ -130,7 +130,7 @@ const TopBar = () => {
                                         className="flex items-center space-x-1 p-2 hover:bg-secondary rounded-lg text-sm cursor-pointer"
                                         onClick={() => {
                                             setOpenSidebar(false);
-                                            router.push(`/@${loginId}`);
+                                            window.location.href = `/@${loginId}`;
                                         }}>
                                         <LibraryBig className="w-4"/>
                                         <span>내 악보</span>

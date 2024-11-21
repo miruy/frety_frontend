@@ -1,6 +1,6 @@
 'use client';
 
-import {ChevronRight, Heart} from "lucide-react";
+import {ChevronRight, Heart, Star} from "lucide-react";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
@@ -30,7 +30,7 @@ const MyFavoriteTabs = ({userName}: { userName: string }) => {
         <div className="space-y-3">
             <div className="space-y-1.5 border-b pb-2">
                 <div className="flex items-center space-x-2 text-lg sm:text-2xl font-bold tracking-wide">
-                    <Heart className="w-4 h-4 sm:w-6 sm:h-6"/>
+                    <Star className="w-4 h-4 sm:w-6 sm:h-6"/>
                     <div>{userName}님이 즐겨찾는 악보</div>
                 </div>
                 <div

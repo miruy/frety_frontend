@@ -1,6 +1,6 @@
 'use client';
 
-import {HandHeart, UserRoundPen} from "lucide-react";
+import {HandHeart, Star, UserRoundPen} from "lucide-react";
 import {formatDate} from "@/utils/formatDate";
 import {GetTabByIdResponse} from "@/openapi/model";
 import {Slide, toast} from "react-toastify";
@@ -8,12 +8,24 @@ import {useContext} from "react";
 import {AuthContext} from "@/context/AuthContext";
 import {useCreateVote} from "@/openapi/api/vote/vote";
 import {TabContext} from "@/context/TabContext";
+import {getFavorite, useCreateFavorite, useDeleteFavorite} from "@/openapi/api/favorite/favorite";
+import {useQuery} from "@tanstack/react-query";
 
 const DetailTab_TabInfo = ({tab}: { tab: GetTabByIdResponse }) => {
 
     const {isLoggedIn, authId} = useContext(AuthContext);
-    const {findTab} = useContext(TabContext);
+    const {findTab, findAllRecentTabs} = useContext(TabContext);
 
+    // 즐겨찾기한 악보인지 조회
+    const {
+        data: isFavorite,
+        refetch: isFavoriteRefetch
+    } = useQuery({
+        queryKey: ['IsMyFavoriteTab', authId, tab.id],
+        queryFn: () => getFavorite({favoriterId: authId!, tabId: tab.id!}),
+    });
+
+    // 투표 등록
     const {mutate: createVote} = useCreateVote({
         mutation: {
             onSuccess: async () => {
@@ -25,6 +37,63 @@ const DetailTab_TabInfo = ({tab}: { tab: GetTabByIdResponse }) => {
                     theme: "colored",
                 });
                 await findTab.refetch();
+                await findAllRecentTabs.refetch();
+            },
+            onError: (error) => {
+                console.log(error)
+                toast.error("관리자에게 문의하세요", {
+                    position: "top-center",
+                    autoClose: 2500,
+                    transition: Slide,
+                    className: "text-sm",
+                    theme: "colored",
+                });
+            }
+        }
+    })
+
+    // 즐겨찾기 등록
+    const {mutate: createFavorite} = useCreateFavorite({
+        mutation: {
+            onSuccess: async () => {
+                toast.success("즐겨찾기가 등록되었습니다.", {
+                    position: "top-center",
+                    autoClose: 2500,
+                    transition: Slide,
+                    className: "text-sm",
+                    theme: "colored",
+                });
+                await findTab.refetch();
+                await findAllRecentTabs.refetch();
+                await isFavoriteRefetch();
+            },
+            onError: (error) => {
+                console.log(error)
+                toast.error("관리자에게 문의하세요", {
+                    position: "top-center",
+                    autoClose: 2500,
+                    transition: Slide,
+                    className: "text-sm",
+                    theme: "colored",
+                });
+            }
+        }
+    })
+
+    // 즐겨찾기 해제
+    const {mutate: deleteFavorite} = useDeleteFavorite({
+        mutation: {
+            onSuccess: async () => {
+                toast.success("즐겨찾기가 해제되었습니다.", {
+                    position: "top-center",
+                    autoClose: 2500,
+                    transition: Slide,
+                    className: "text-sm",
+                    theme: "colored",
+                });
+                await findTab.refetch();
+                await findAllRecentTabs.refetch();
+                await isFavoriteRefetch();
             },
             onError: (error) => {
                 console.log(error)
@@ -60,6 +129,25 @@ const DetailTab_TabInfo = ({tab}: { tab: GetTabByIdResponse }) => {
         })
     }
 
+    const onCreateFavoriteSubmit = () => {
+        createFavorite({
+            data: {
+                targetId: tab.id!,
+                type: "TAB",
+                favoriterId: authId!
+            }
+        })
+    }
+
+    const onDeleteFavoriteSubmit = () => {
+        deleteFavorite({
+            params: {
+                favoriterId: authId!,
+                tabId: tab.id!
+            }
+        })
+    }
+
     return (
         <div>
             {/* 악보 제작자 */}
@@ -90,14 +178,36 @@ const DetailTab_TabInfo = ({tab}: { tab: GetTabByIdResponse }) => {
                     }
                 </div>
 
-                {/* 투표 */}
-                <div className="flex flex-col items-center justify-center space-y-1">
-                    <div className="badge badge-outline border-neutral-400">{tab.voteCount}</div>
 
-                    <div
-                        onClick={onCreateRatingSubmit}
-                        className="cursor-pointer p-2.5 rounded-full hover:bg-secondary active:scale-90 duration-100">
-                        <HandHeart className="size-7"/>
+                <div className="flex items-center space-x-2">
+                    {/* 즐겨찾기 */}
+                    <div className="flex flex-col items-center justify-center space-y-1">
+                        <div className="badge badge-outline border-neutral-400">{tab.favoriteCount}</div>
+
+                        {isFavorite ?
+                            <div
+                                onClick={onDeleteFavoriteSubmit}
+                                className="cursor-pointer p-3 rounded-full hover:bg-secondary active:scale-90 duration-100">
+                                <Star className="stroke-amber-400 fill-amber-400 size-6"/>
+                            </div>
+                            :
+                            <div
+                                onClick={onCreateFavoriteSubmit}
+                                className="cursor-pointer p-3 rounded-full hover:bg-secondary active:scale-90 duration-100">
+                                <Star className="size-6"/>
+                            </div>
+                        }
+                    </div>
+
+                    {/* 투표 */}
+                    <div className="flex flex-col items-center justify-center space-y-1">
+                        <div className="badge badge-outline border-neutral-400">{tab.voteCount}</div>
+
+                        <div
+                            onClick={onCreateRatingSubmit}
+                            className="cursor-pointer p-2.5 rounded-full hover:bg-secondary active:scale-90 duration-100">
+                            <HandHeart className="size-7"/>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -7,7 +7,7 @@ import {commonConfigs, customConfigs} from "@/data/drawChordDiagram";
 import {GetTabByIdResponse} from "@/openapi/model";
 import {Content} from "@/components/model/tab";
 import {SVGuitarChord} from "svguitar";
-import {getTabById, useDeleteTab} from "@/openapi/api/tab/tab";
+import {getTabById} from "@/openapi/api/tab/tab";
 import DetailTab_TabInfo from "@/components/page_component/detailTab/DetailTab_TabInfo";
 import DetailTab_TabComments from "@/components/page_component/detailTab/DetailTab_TabComments";
 import UpdateCommentModal from "@/components/page_component/detailTab/comment/UpdateCommentModal";
@@ -24,7 +24,6 @@ const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: n
     const tabContentRef = useRef<HTMLDivElement | null>(null);
     const [loading, setLoading] = useState(false);
     const {loginId, isLoggedIn} = useContext(AuthContext);
-
 
     // 최근등록순 악보 전체조회 클라이언트사이드 렌더링 + 페이지네이션
     const {
