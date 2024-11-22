@@ -1,0 +1,33 @@
+# *
+User-agent: *
+Allow: /
+
+# *
+User-agent: *
+Allow: /tab/*
+
+# *
+User-agent: *
+Allow: /signup
+
+# *
+User-agent: *
+Allow: /login
+
+# *
+User-agent: *
+Disallow: /create
+
+# *
+User-agent: *
+Disallow: /edit/*
+
+# *
+User-agent: *
+Disallow: /api
+
+# Host
+Host: https://www.frety.me
+
+# Sitemaps
+Sitemap: https://www.frety.me/sitemap.xml

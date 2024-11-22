@@ -11,6 +11,12 @@ const MyTabsPage = async (context: GetServerSidePropsContext) => {
     }
 
     const decodingUserName = decodeURIComponent(ascii_annotation_username); // @dbflarla4966
+
+
+    if (!decodingUserName.startsWith("@")) {
+        return <NotFound/>;
+    }
+
     const userName = decodingUserName.replace("@", "") // dbflarla4966
 
     try {

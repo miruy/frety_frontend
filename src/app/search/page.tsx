@@ -7,10 +7,10 @@ import Search from "@/components/page/Search";
 
 const SearchTabPage = async (context: GetServerSidePropsContext) => {
 
-    const {keyword} = context.params!;
+    let {keyword} = context.params!;
 
-    if (typeof keyword !== 'string') {
-        return <NotFound/>;
+    if (!keyword || typeof keyword !== 'string') {
+        keyword = "검색어를 입력하세요"
     }
 
     const decodingKeyword = decodeURIComponent(keyword);
