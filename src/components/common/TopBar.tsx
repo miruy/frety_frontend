@@ -26,8 +26,9 @@ const TopBar = () => {
         router.push("/");
     };
 
-    const handleSearchTab = () => {
-        router.push(`/search/${keyword}`);
+    const handleSearchTab = (keyword: string) => {
+        const decodingKeyword = decodeURIComponent(keyword);
+        router.push(`/search/${decodingKeyword}`);
         setKeyword("");
     }
 
@@ -49,8 +50,8 @@ const TopBar = () => {
                             className="pl-9 w-[280px] h-[40px] select-none"
                             onChange={(e) => setKeyword(e.target.value)}
                             onKeyDown={(event) => {
-                                if (event.key === 'Enter') {
-                                    handleSearchTab()
+                                if (event.key === "Enter") {
+                                    setTimeout(() => handleSearchTab(keyword), 0); // 상태 업데이트 후 호출
                                 }
                             }}
                         />
@@ -58,7 +59,7 @@ const TopBar = () => {
                             className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 select-none opacity-70"/>
 
                         <Button
-                            onClick={handleSearchTab}
+                            onClick={() => handleSearchTab(keyword)}
                             variant="ghost" size="sm"
                             className="absolute right-1 p-2 w-fit h-fit top-1/2 -translate-y-1/2 select-none">
                             <Search/>

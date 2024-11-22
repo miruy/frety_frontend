@@ -8,6 +8,7 @@ import {Slide, toast} from "react-toastify";
 import {useCreateUser} from "@/openapi/api/user/user";
 import {useRouter} from "next/navigation";
 import {Asterisk} from "lucide-react";
+import {ApiErrorResponse} from "@/components/model/ApiErrorResponse";
 
 const Signup = () => {
 
@@ -30,14 +31,25 @@ const Signup = () => {
                 router.push(`/login`);
             },
             onError: (error) => {
-                console.log(error)
-                toast.error("관리자에게 문의하세요", {
-                    position: "top-center",
-                    autoClose: 2500,
-                    transition: Slide,
-                    className: "text-sm",
-                    theme: "colored",
-                });
+                console.log(error);
+                const errorData = error.response?.data as ApiErrorResponse;
+                if (errorData.error === "Invalid Credentials") {
+                    toast.error(errorData.message, {
+                        position: "top-center",
+                        autoClose: 2500,
+                        transition: Slide,
+                        className: "text-sm",
+                        theme: "colored",
+                    });
+                } else {
+                    toast.error("관리자에게 문의하세요", {
+                        position: "top-center",
+                        autoClose: 2500,
+                        transition: Slide,
+                        className: "text-sm",
+                        theme: "colored",
+                    });
+                }
             },
         }
     })
@@ -169,8 +181,8 @@ const Signup = () => {
                                    {...createUserRequest.register("password")}
                                    className="h-[50px] pl-9" placeholder="비밀번호"/>
 
-                            <div className="absolute -bottom-6 flex items-center text-sm text-primary/50">
-                                <Asterisk className="size-4"/>
+                            <div className="absolute -bottom-5 flex items-center text-xs text-primary/50">
+                                <Asterisk className="size-3"/>
                                 <div>비밀번호는 문자, 숫자, 특수문자를 포함한 5글자 이상이어야 합니다.</div>
                             </div>
                         </div>

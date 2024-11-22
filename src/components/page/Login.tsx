@@ -9,6 +9,7 @@ import {Slide, toast} from "react-toastify";
 import {useCreateToken} from "@/openapi/api/auth/auth";
 import {useContext} from "react";
 import {AuthContext} from "@/context/AuthContext";
+import {ApiErrorResponse} from "@/components/model/ApiErrorResponse";
 
 const Login = () => {
 
@@ -36,14 +37,25 @@ const Login = () => {
                 router.push(`/`, {});
             },
             onError: (error) => {
-                console.log(error)
-                toast.error("관리자에게 문의하세요", {
-                    position: "top-center",
-                    autoClose: 2500,
-                    transition: Slide,
-                    className: "text-sm",
-                    theme: "colored",
-                });
+                console.log(error);
+                const errorData = error.response?.data as ApiErrorResponse;
+                if (errorData.error === "Invalid Credentials") {
+                    toast.error(errorData.message, {
+                        position: "top-center",
+                        autoClose: 2500,
+                        transition: Slide,
+                        className: "text-sm",
+                        theme: "colored",
+                    });
+                } else {
+                    toast.error("관리자에게 문의하세요", {
+                        position: "top-center",
+                        autoClose: 2500,
+                        transition: Slide,
+                        className: "text-sm",
+                        theme: "colored",
+                    });
+                }
             },
         }
     })
