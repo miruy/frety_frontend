@@ -1,7 +1,7 @@
 'use client';
 
 import {Switch} from "@/components/ui/switch";
-import {useContext, useEffect, useRef, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import {chordsMap} from "@/data/chordsMap";
 import {commonConfigs, customConfigs} from "@/data/drawChordDiagram";
 import {GetTabByIdResponse} from "@/openapi/model";
@@ -17,6 +17,7 @@ import {AuthContext} from "@/context/AuthContext";
 import Loading from "@/app/loading";
 import NotFound from "@/app/not-found";
 import DetailTab_TabAuthorMenu from "@/components/page_component/detailTab/DetailTab_TabAuthorMenu";
+import DetailTab_TabAutoScrollButton from "@/components/page_component/detailTab/DetailTab_TabAutoScrollButton";
 
 const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: number }) => {
 
@@ -24,6 +25,7 @@ const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: n
     const tabContentRef = useRef<HTMLDivElement | null>(null);
     const [loading, setLoading] = useState(false);
     const {loginId, isLoggedIn} = useContext(AuthContext);
+    const scrollContainerRef = useRef<HTMLDivElement | null>(null); // 스크롤 컨테이너 참조
 
     // 최근등록순 악보 전체조회 클라이언트사이드 렌더링 + 페이지네이션
     const {
@@ -149,7 +151,6 @@ const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: n
                                     tooltipDiv.appendChild(tooltipContentDiv);
 
 
-
                                     chordDiv.appendChild(tooltipDiv);
 
                                     // 마우스 이벤트로 툴팁 표시/숨기기
@@ -232,6 +233,10 @@ const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: n
                     </div>
 
                     <div className="flex items-center space-x-2">
+                        {/* 자동 스크롤 속도조절 버튼 */}
+                        <DetailTab_TabAutoScrollButton scrollContainerRef={scrollContainerRef}/>
+
+                        {/* 코드 다이어그램 숨기기 버튼 */}
                         <div className="hidden sm:flex items-center border h-10 rounded-md px-3">
                             <label className="label cursor-pointer">
                                 <div className="flex items-center space-x-2">
@@ -251,8 +256,10 @@ const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: n
                     </div>
                 </div>
 
-                {/* 악보 내용 */}
-                <div ref={tabContentRef}/>
+                <div ref={scrollContainerRef} className="h-screen overflow-x-scroll">
+                    {/* 악보 내용 */}
+                    <div ref={tabContentRef}/>
+                </div>
 
                 {/* 악보 정보 */}
                 <DetailTab_TabInfo tab={tab!}/>
