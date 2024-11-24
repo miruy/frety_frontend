@@ -92,7 +92,7 @@ const DetailTab_TabAuthorMenu = ({tabId}: { tabId: number }) => {
             <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm" className="h-10"><Ellipsis/></Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent side="bottom" align="end" className="w-fit h-fit p-2">
+            <DropdownMenuContent side="bottom" align="end" className="w-fit h-fit">
                 <DropdownMenuGroup>
                     <DropdownMenuItem
                         className="cursor-pointer"

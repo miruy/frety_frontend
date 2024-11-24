@@ -98,7 +98,7 @@ const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: n
 
                                 // 코드 출력
                                 const chordDiv = document.createElement('div');
-                                chordDiv.className = `absolute text-sm font-semibold text-primary/60 mt-[-26px] text-center
+                                chordDiv.className = `absolute text-sm font-semibold text-primary/60 mt-[-26px] text-center cursor-default
                                         ${line.chord?.length === 1 && `left-1 w-[10px]`}
                                         ${line.chord?.length === 2 && `left-0 w-[20px]`}
                                         ${line.chord?.length === 3 && `-left-[9px] w-[40px]`}
@@ -107,6 +107,61 @@ const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: n
                                         ${line.chord?.length === 6 && `-left-[16px] w-[60px]`}
                     `;
                                 chordDiv.textContent = line.chord;
+
+
+                                // 코드에 마우스 호버 시 다이어그램툴팁 표시
+                                if (!showDiagram) {
+                                    const tooltipDiv = document.createElement('div');
+                                    tooltipDiv.className = `absolute flex flex-col items-center left-3 top-full mt-1 bg-white shadow-lg z-[1000] text-white text-xs rounded p-3 hidden`;
+
+
+                                    // 코드 이름 출력
+                                    const tooltipTitleDiv = document.createElement('div');
+                                    tooltipTitleDiv.className = 'flex font-semibold text-[16px] text-primary';
+                                    tooltipTitleDiv.textContent = line.chord;
+                                    tooltipDiv.appendChild(tooltipTitleDiv);
+
+                                    // 코드 다이어그램 출력
+                                    const tooltipContentDiv = document.createElement('div');
+                                    const chordDiagram = new SVGuitarChord(tooltipContentDiv);
+                                    const chord = chordsMap[line.chord];
+                                    const customConfig = customConfigs[line.chord]; // 프렛 설정을 위한 커스텀 설정
+                                    tooltipContentDiv.className = `${customConfig ? 'w-[55px] h-[55px] ' : 'w-12 h-12'}`;
+
+                                    chordDiagram
+                                        .configure({
+                                            ...commonConfigs,
+                                            ...customConfig,
+                                        })
+                                        .chord(chord)
+                                        .draw()
+
+                                    // 프랫 번호 위치 설정
+                                    const tuningText = tooltipContentDiv.querySelectorAll('text.tuning');
+                                    if (tuningText.length > 1) {
+
+                                        const currentX = parseFloat(tuningText[0].getAttribute('x') || '0');
+                                        const currentY = parseFloat(tuningText[0].getAttribute('y') || '0');
+
+                                        tuningText[0].setAttribute('x', (currentX - 177).toString()); // 왼쪽으로 이동
+                                        tuningText[0].setAttribute('y', (currentY + 40).toString());   // 아래로 이동
+                                    }
+                                    tooltipDiv.appendChild(tooltipContentDiv);
+
+
+
+                                    chordDiv.appendChild(tooltipDiv);
+
+                                    // 마우스 이벤트로 툴팁 표시/숨기기
+                                    chordDiv.addEventListener('mouseenter', () => {
+                                        tooltipDiv.classList.remove('hidden');
+                                    });
+                                    chordDiv.addEventListener('mouseleave', () => {
+                                        tooltipDiv.classList.add('hidden');
+                                    });
+                                }
+
+
                                 diagram_chordDiv.appendChild(chordDiv);
 
                             }

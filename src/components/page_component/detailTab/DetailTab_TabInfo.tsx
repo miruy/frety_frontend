@@ -1,10 +1,10 @@
 'use client';
 
-import { Heart, Star, UserRoundPen} from "lucide-react";
+import {Heart, Star, UserRoundPen} from "lucide-react";
 import {formatDate} from "@/utils/formatDate";
 import {GetTabByIdResponse} from "@/openapi/model";
 import {Slide, toast} from "react-toastify";
-import {useContext} from "react";
+import {useContext, useState} from "react";
 import {AuthContext} from "@/context/AuthContext";
 import {useCreateVote} from "@/openapi/api/vote/vote";
 import {TabContext} from "@/context/TabContext";
@@ -18,6 +18,9 @@ const DetailTab_TabInfo = ({tab}: { tab: GetTabByIdResponse }) => {
 
     const {isLoggedIn, authId} = useContext(AuthContext);
     const {findTab, findAllRecentTabs} = useContext(TabContext);
+    const [voteScrollPosition, setVoteScrollPosition] = useState<number>(0);
+    const [createFavoriteScrollPosition, setCreateFavoriteScrollPosition] = useState<number>(0);
+    const [deleteFavoriteScrollPosition, setDeleteFavoriteScrollPosition] = useState<number>(0);
 
     // 즐겨찾기한 악보인지 조회
     const {
@@ -41,6 +44,7 @@ const DetailTab_TabInfo = ({tab}: { tab: GetTabByIdResponse }) => {
                 });
                 await findTab.refetch();
                 await findAllRecentTabs.refetch();
+                window.scrollTo(0, voteScrollPosition); // 저장된 위치로 스크롤
             },
             onError: (error) => {
                 console.log(error)
@@ -69,6 +73,7 @@ const DetailTab_TabInfo = ({tab}: { tab: GetTabByIdResponse }) => {
                 await findTab.refetch();
                 await findAllRecentTabs.refetch();
                 await isFavoriteRefetch();
+                window.scrollTo(0, createFavoriteScrollPosition); // 저장된 위치로 스크롤
             },
             onError: (error) => {
                 console.log(error)
@@ -97,6 +102,7 @@ const DetailTab_TabInfo = ({tab}: { tab: GetTabByIdResponse }) => {
                 await findTab.refetch();
                 await findAllRecentTabs.refetch();
                 await isFavoriteRefetch();
+                window.scrollTo(0, deleteFavoriteScrollPosition); // 저장된 위치로 스크롤
             },
             onError: (error) => {
                 console.log(error)
@@ -123,6 +129,8 @@ const DetailTab_TabInfo = ({tab}: { tab: GetTabByIdResponse }) => {
             return
         }
 
+        setVoteScrollPosition(window.scrollY); // 현재 위치 저장
+
         createVote({
             data: {
                 targetId: tab.id!,
@@ -133,6 +141,8 @@ const DetailTab_TabInfo = ({tab}: { tab: GetTabByIdResponse }) => {
     }
 
     const onCreateFavoriteSubmit = () => {
+        setCreateFavoriteScrollPosition(window.scrollY); // 현재 위치 저장
+
         createFavorite({
             data: {
                 targetId: tab.id!,
@@ -143,6 +153,8 @@ const DetailTab_TabInfo = ({tab}: { tab: GetTabByIdResponse }) => {
     }
 
     const onDeleteFavoriteSubmit = () => {
+        setDeleteFavoriteScrollPosition(window.scrollY); // 현재 위치 저장
+
         deleteFavorite({
             params: {
                 favoriterId: authId!,
