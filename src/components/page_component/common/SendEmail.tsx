@@ -98,7 +98,7 @@ const SendEmail = () => {
                 <div className="fixed bottom-[55px] right-[55px] sm:bottom-[65px] sm:right-[65px]">
                     <div className="bg-background border rounded-lg shadow-lg w-fit h-fit p-4 space-y-3">
                         <div>
-                            <div className="font-bold text-sm">찾으시는 기타 코드가 없으신가요?</div>
+                            <div className="font-bold text-sm">찾으시는 기타 코드가 없나요?</div>
                             <div className="hidden sm:flex text-xs text-primary/70">
                                 필요한 기타 코드를 신청해주세요. 빠른 시일 내에 검토 후 업데이트하겠습니다.
                             </div>

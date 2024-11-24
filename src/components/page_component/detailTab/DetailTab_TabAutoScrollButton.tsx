@@ -22,7 +22,7 @@ const DetailTab_TabAutoScrollButton = ({scrollContainerRef}: AutoScrollButtonPro
 
     // 속도를 낮추는 함수
     const decreaseSpeed = () => {
-        setSpeed((prev) => Math.max(0, prev - 1)); // 속도 1씩 감소
+        setSpeed((prev) => Math.max(1, prev - 1)); // 속도 1씩 감소
     };
 
     // 속도를 올리는 함수
