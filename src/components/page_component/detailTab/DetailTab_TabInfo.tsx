@@ -141,6 +141,17 @@ const DetailTab_TabInfo = ({tab}: { tab: GetTabByIdResponse }) => {
     }
 
     const onCreateFavoriteSubmit = () => {
+        if (!isLoggedIn) {
+            toast.warn("로그인 후 이용해주세요.", {
+                position: "top-center",
+                autoClose: 2500,
+                transition: Slide,
+                className: "text-sm",
+                theme: "colored",
+            });
+            return
+        }
+
         setCreateFavoriteScrollPosition(window.scrollY); // 현재 위치 저장
 
         createFavorite({
