@@ -8,14 +8,14 @@ export async function POST(req: Request) {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: process.env.NEXT_PUBLIC_EMAIL,
-                pass: process.env.NEXT_PUBLIC_PASSWORD,
+                user: process.env.EMAIL,
+                pass: process.env.EMAIL_PASSWORD,
             },
         });
 
         const mailOptions = {
-            from: process.env.NEXT_PUBLIC_EMAIL,
-            to: process.env.NEXT_PUBLIC_EMAIL,
+            from: process.env.EMAIL,
+            to: process.env.EMAIL,
             subject: 'Frety 기타 코드 신청',
             html: `<h1>신청 코드</h1><h3>${content}</h3>`,
         };
