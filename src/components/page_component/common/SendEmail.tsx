@@ -8,12 +8,40 @@ import * as React from "react";
 import {useState} from "react";
 import {Slide, toast} from "react-toastify";
 import Loading from "@/app/loading";
+import {useSendEmail} from "@/openapi/api/email/email";
 
 const SendEmail = () => {
 
     const [showAddChordCard, setShowAddChordCard] = useState<boolean>(false);
     const [addChord, setAddChord] = useState<string>("");
     const [loading, setLoading] = useState(false);
+
+    // 이메일 전송
+    const {mutate: sendEmail} = useSendEmail({
+        mutation: {
+            onSuccess: async () => {
+                setLoading(false);
+
+                toast.success("기타 코드 신청이 완료되었습니다.", {
+                    position: "top-center",
+                    autoClose: 2500,
+                    transition: Slide,
+                    className: "text-sm",
+                    theme: "colored",
+                });
+            },
+            onError: (error) => {
+                console.log(error)
+                toast.error("관리자에게 문의하세요", {
+                    position: "top-center",
+                    autoClose: 2500,
+                    transition: Slide,
+                    className: "text-sm",
+                    theme: "colored",
+                });
+            }
+        }
+    })
 
     const sendEmailForAddChord = async () => {
 
@@ -30,43 +58,16 @@ const SendEmail = () => {
 
         setAddChord("");
         setShowAddChordCard(false);
+        setLoading(true);
+
         await sendContactEmail(addChord);
     }
 
-    const sendContactEmail = async (content: string) => {
-        setLoading(true);
-
-        try {
-            const response = await fetch('/api/contact', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({content}),
-            });
-
-            if (response.ok) {
-                toast.success("기타 코드 신청이 완료되었습니다.", {
-                    position: "top-center",
-                    autoClose: 2500,
-                    transition: Slide,
-                    className: "text-sm",
-                    theme: "colored",
-                });
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error("기타 코드 신청에 실패했습니다. 관리자에게 문의하세요.", {
-                position: "top-center",
-                autoClose: 2500,
-                transition: Slide,
-                className: "text-sm",
-                theme: "colored",
-            });
-        } finally {
-            setLoading(false);
+    const sendContactEmail = async (content: string) => sendEmail({
+        data: {
+            chord: content,
         }
-    };
+    });
 
     return (
         <>
