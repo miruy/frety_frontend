@@ -1,6 +1,6 @@
 export default {
     frety: {
-        input: 'https://api.frety.me/frety/api-docs',
+        input: 'https://api.frety.me/v3/api-docs',
         output: {
             mode: 'tags-split',
             target: 'src/openapi/api',
