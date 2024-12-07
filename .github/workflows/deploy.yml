@@ -58,7 +58,7 @@ jobs:
   docker:
     name: 도커 이미지 빌드와 푸시
     runs-on: ubuntu-latest
-    needs: tag
+    needs: build
     steps:
       - uses: actions/checkout@v3
       - name: .next 가져오기
