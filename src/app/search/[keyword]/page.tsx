@@ -1,24 +1,30 @@
-import {GetServerSidePropsContext} from "next";
 import NotFound from "@/app/not-found";
 import {prefetchSearchTabs} from "@/openapi/api/tab/tab";
 import {dehydrate, HydrationBoundary, QueryClient} from "@tanstack/react-query";
 import {PageRsSearchTabsResponse} from "@/openapi/model";
 import Search from "@/components/page/Search";
 
-const SearchTabPage = async (context: GetServerSidePropsContext) => {
+interface Props {
+    params: {
+        keyword: string;
+    };
+}
 
-    const {keyword} = context.params!;
+const SearchTabPage = async ({params}: Props) => {
 
-    if (typeof keyword !== 'string') {
-        return <NotFound/>;
-    }
+    const {keyword} = params;
 
     const decodingKeyword = decodeURIComponent(keyword);
 
     try {
 
         const searchTabQueryClient = new QueryClient();
-        await prefetchSearchTabs(searchTabQueryClient, {sort: "RECENT", keyword: decodingKeyword, page: 0, pageSize: 10});
+        await prefetchSearchTabs(searchTabQueryClient, {
+            sort: "RECENT",
+            keyword: decodingKeyword,
+            page: 0,
+            pageSize: 10
+        });
         const searchBySongDehydratedState = dehydrate(searchTabQueryClient);
 
         const searchTabQueries = searchBySongDehydratedState.queries || [];

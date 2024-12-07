@@ -1,6 +1,6 @@
 import NotFound from "@/app/not-found";
 import {getTabById, prefetchGetTabById} from "@/openapi/api/tab/tab";
-import {GetServerSidePropsContext, Metadata} from "next";
+import {Metadata} from "next";
 import {dehydrate, HydrationBoundary, QueryClient} from "@tanstack/react-query";
 import DetailTab from "@/components/page/DetailTab";
 import {GetTabByIdResponse} from "@/openapi/model";
@@ -18,7 +18,7 @@ export async function generateMetadata({params}: TabProps): Promise<Metadata> {
     const tab = await getTabById(tabId);
 
     return {
-        title: tab.artist && tab.song ? tab.artist + " - " + tab.song: 'Frety | 기타 악보',
+        title: tab.artist && tab.song ? tab.artist + " - " + tab.song : 'Frety | 기타 악보',
         description: tab.authorName ? "Frety | " + tab.authorName + "님이 제작한 기타 악보입니다." : 'Frety | 기타 악보',
         keywords: tab.artist || tab.song ? tab.artist + ", " + tab.song + ", " + tab.authorName : 'Frety | 기타 악보',
         openGraph: {
@@ -52,9 +52,15 @@ export async function generateMetadata({params}: TabProps): Promise<Metadata> {
     }
 }
 
-const DetailTabPage = async (context: GetServerSidePropsContext) => {
+interface Props {
+    params: {
+        tabId: string;
+    };
+}
 
-    const tabId = Number(context.params?.tabId) || 0;
+const DetailTabPage = async ({params}: Props) => {
+
+    const tabId = Number(params?.tabId) || 0;
 
     try {
 

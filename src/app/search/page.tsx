@@ -1,17 +1,18 @@
-import {GetServerSidePropsContext} from "next";
 import NotFound from "@/app/not-found";
 import {prefetchSearchTabs} from "@/openapi/api/tab/tab";
 import {dehydrate, HydrationBoundary, QueryClient} from "@tanstack/react-query";
 import {PageRsSearchTabsResponse} from "@/openapi/model";
 import Search from "@/components/page/Search";
 
-const SearchTabPage = async (context: GetServerSidePropsContext) => {
+interface Props {
+    params: {
+        keyword: string;
+    };
+}
 
-    let {keyword} = context.params!;
+const SearchTabPage = async ({params}: Props) => {
 
-    if (!keyword || typeof keyword !== 'string') {
-        keyword = "검색어를 입력하세요"
-    }
+    const {keyword} = params;
 
     const decodingKeyword = decodeURIComponent(keyword);
 
