@@ -1,22 +1,21 @@
 import NotFound from "@/app/not-found";
-import {GetServerSidePropsContext} from "next";
 import MyVotedAllTabs from "@/components/page/MyVotedAllTabs";
 
-const MyVotedTabsPage = async (context: GetServerSidePropsContext) => {
+interface Props {
+    params: {
+        ascii_annotation_username: string;
+    };
+}
 
-    const {ascii_annotation_username} = context.params!;
+const MyVotedTabsPage = async ({params}: Props) => {
 
-    if (typeof ascii_annotation_username !== 'string') {
-        return <NotFound/>;
-    }
+    const {ascii_annotation_username} = params;
 
     const decodingUserName = decodeURIComponent(ascii_annotation_username); // @dbflarla4966
     const userName = decodingUserName.replace("@", "") // dbflarla4966
 
     try {
-        return (
-            <MyVotedAllTabs userName={userName}/>
-        );
+        return <MyVotedAllTabs userName={userName}/>
     } catch {
         return <NotFound/>;
     }

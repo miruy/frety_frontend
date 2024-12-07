@@ -1,17 +1,17 @@
 import NotFound from "@/app/not-found";
 import MyTabs from "@/components/page/MyTabs";
-import {GetServerSidePropsContext} from "next";
 
-const MyTabsPage = async (context: GetServerSidePropsContext) => {
+interface Props {
+    params: {
+        ascii_annotation_username: string;
+    };
+}
 
-    const {ascii_annotation_username} = context.params!;
+const MyTabsPage = async ({params}: Props) => {
 
-    if (typeof ascii_annotation_username !== 'string') {
-        return <NotFound/>;
-    }
+    const {ascii_annotation_username} = params;
 
     const decodingUserName = decodeURIComponent(ascii_annotation_username); // @dbflarla4966
-
 
     if (!decodingUserName.startsWith("@")) {
         return <NotFound/>;
@@ -20,9 +20,7 @@ const MyTabsPage = async (context: GetServerSidePropsContext) => {
     const userName = decodingUserName.replace("@", "") // dbflarla4966
 
     try {
-        return (
-            <MyTabs userName={userName}/>
-        );
+        return <MyTabs userName={userName}/>
     } catch {
         return <NotFound/>;
     }

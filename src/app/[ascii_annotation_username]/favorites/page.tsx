@@ -1,23 +1,21 @@
 import NotFound from "@/app/not-found";
-import {GetServerSidePropsContext} from "next";
 import MyFavoriteAllTabs from "@/components/page/MyFavoriteAllTabs";
 
-const MyFavoriteTabsPage = async (context: GetServerSidePropsContext) => {
+interface Props {
+    params: {
+        ascii_annotation_username: string;
+    };
+}
 
-    const {ascii_annotation_username} = context.params!;
+const MyFavoriteTabsPage = async ({params}: Props) => {
 
-    if (typeof ascii_annotation_username !== 'string') {
-        return <NotFound/>;
-    }
+    const {ascii_annotation_username} = params;
 
     const decodingUserName = decodeURIComponent(ascii_annotation_username); // @dbflarla4966
     const userName = decodingUserName.replace("@", "") // dbflarla4966
 
     try {
-
-        return (
-            <MyFavoriteAllTabs userName={userName}/>
-        );
+        return <MyFavoriteAllTabs userName={userName}/>
     } catch {
         return <NotFound/>;
     }
