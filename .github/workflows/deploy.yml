@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
       - name: Copy .env.production.sample to .env.production
@@ -28,12 +28,12 @@ jobs:
           export NODE_OPTIONS=--max_old_space_size=4096
           npm run build
       - name: .next 저장
-        uses: actions/upload-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: .next-artifact
           path: .next
       - name: public 저장
-        uses: actions/upload-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: public-artifact
           path: public
@@ -61,12 +61,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: .next 가져오기
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: .next-artifact
           path: .next
       - name: public 가져오기
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: public-artifact
           path: public
