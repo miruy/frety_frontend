@@ -28,13 +28,7 @@ jobs:
           export NODE_OPTIONS=--max_old_space_size=4096
           npm run build
       - run: |
-          echo "Build 완료 후 디렉토리 확인"
           ls -la
-          if [ ! -d ".next" ]; then
-            echo "Error: .next 디렉토리가 없습니다."
-            exit 1
-          fi
-          ls -la .next
       - name: .next 저장
         uses: actions/upload-artifact@v3
         with:
