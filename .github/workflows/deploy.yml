@@ -1,4 +1,4 @@
-name: deloy
+name: deploy
 
 on:
   push:
@@ -27,11 +27,16 @@ jobs:
       - run: |
           export NODE_OPTIONS=--max_old_space_size=4096
           npm run build
+      - run: |
+          echo "Build 완료 후 디렉토리 확인"
+          ls -la
+          ls -la .next
       - name: .next 저장
         uses: actions/upload-artifact@v4
         with:
           name: next-artifact
           path: .next
+          retention-days: 1
       - name: public 저장
         uses: actions/upload-artifact@v4
         with:
