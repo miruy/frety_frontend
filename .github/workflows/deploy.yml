@@ -33,13 +33,12 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: next-artifact
-          path: .next
-          retention-days: 1
+          path: .next/
       - name: public 저장
         uses: actions/upload-artifact@v3
         with:
           name: public-artifact
-          path: public
+          path: public/
           retention-days: 1
 
   tag:
@@ -67,12 +66,12 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: next-artifact
-          path: .next
+          path: .next/
       - name: public 가져오기
         uses: actions/download-artifact@v3
         with:
           name: public-artifact
-          path: public
+          path: public/
       - name: Docker Buildx 설치
         uses: docker/setup-buildx-action@v2
       - name: Docker Hub 로그인
