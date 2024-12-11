@@ -30,6 +30,10 @@ jobs:
       - run: |
           echo "Build 완료 후 디렉토리 확인"
           ls -la
+          if [ ! -d ".next" ]; then
+            echo "Error: .next 디렉토리가 없습니다."
+            exit 1
+          fi
           ls -la .next
       - name: .next 저장
         uses: actions/upload-artifact@v4
