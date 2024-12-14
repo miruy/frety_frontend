@@ -35,6 +35,11 @@ jobs:
           name: next
           path: .next/
           include-hidden-files: true
+      - name: .next 저장
+        uses: actions/upload-artifact@v4
+        with:
+          name: public
+          path: public/
 
   tag:
     outputs:
@@ -61,6 +66,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: next
+      - name: .next 가져오기
+        uses: actions/download-artifact@v4
+        with:
+          name: public
       - name: .next 디렉토리 확인
         run: |
           ls -la
@@ -76,7 +85,7 @@ jobs:
       - name: 빌드 앤 푸시
         uses: docker/build-push-action@v3
         with:
-          file: Dockerfile-prod
+          file: Dockerfile
           context: .
           push: true
           tags: |
