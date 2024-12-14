@@ -34,6 +34,7 @@ jobs:
         with:
           name: next
           path: .next/
+          include-hidden-files: true
 
   tag:
     outputs:
