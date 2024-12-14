@@ -83,7 +83,6 @@ const Home = async () => {
             recentData = query.state.data as PageRsSearchTabsResponse;
         });
 
-
         // 인기 순 악보 전체조회
         const voteQueryClient = new QueryClient();
         await prefetchSearchTabs(voteQueryClient, {sort: "VOTE", page: 0, pageSize: 10});
@@ -120,9 +119,9 @@ const Home = async () => {
                     jsonLd={jsonLd}
                 />
 
-                <HydrationBoundary state={recentData}>
+                {/*<HydrationBoundary state={recentData}>*/}
                     <Main recentTabsData={recentData} voteTabsData={voteData}/>
-                </HydrationBoundary>
+                {/*</HydrationBoundary>*/}
             </>
         );
     } catch {
