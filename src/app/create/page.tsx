@@ -47,7 +47,7 @@ export default function CreateTabPage() {
         'description': 'Frety | 악보 제작',
         'url': `https://www.frety.me/cretae`,
         'image': {
-            '@type': `articleImage_create}`,
+            '@type': `articleImage_create`,
             'url': 'https://www.frety.me/image/favicon.png',
             'width': 800,
             'height': 600,

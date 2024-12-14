@@ -42,7 +42,8 @@ const Search = ({searchedTabData, keyword}: { searchedTabData: PageRsSearchTabsR
     return (
         <div className="px-3 py-10 mx-auto w-full lg:w-[70%] space-y-10">
             <div className="space-y-2 border-b pb-2">
-                <div className="text-2xl sm:text-4xl font-bold tracking-wide">{keyword}</div>
+                <div
+                    className="text-2xl sm:text-4xl font-bold tracking-wide">{keyword != "" ? "검색어를 입력하세요" : keyword}</div>
                 <div className="text-md sm:text-lg font-semibold tracking-wide text-primary/50">검색결과</div>
             </div>
 
