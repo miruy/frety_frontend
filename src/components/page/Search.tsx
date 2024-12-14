@@ -43,40 +43,44 @@ const Search = ({searchedTabData, keyword}: { searchedTabData: PageRsSearchTabsR
         <div className="px-3 py-10 mx-auto w-full lg:w-[70%] space-y-10">
             <div className="space-y-2 border-b pb-2">
                 <div
-                    className="text-2xl sm:text-4xl font-bold tracking-wide">{keyword != "" ? "검색어를 입력하세요" : keyword}</div>
+                    className="text-2xl sm:text-4xl font-bold tracking-wide">{keyword === "undefined" ? "검색어를 입력하세요" : keyword}</div>
                 <div className="text-md sm:text-lg font-semibold tracking-wide text-primary/50">검색결과</div>
             </div>
 
             <div className="space-y-10">
-                <Table>
-                    <TableHeader>
-                        <TableRow className="cursor-default hover:bg-transparent">
-                            <TableHead className="text-center">Artist</TableHead>
-                            <TableHead className="text-center">Song</TableHead>
-                            <div className="flex flex-1 items-center">
-                                <TableHead
-                                    className="hidden md:flex flex-1 justify-center items-center text-center">
-                                    <Heart className="w-4"/>
-                                </TableHead>
-                            </div>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {searchedTabs?.data?.map((searchedTab, index) => {
-                            return (
-                                <TableRow key={index} className="cursor-pointer"
-                                          onClick={() => handleDetailTab(searchedTab.id!)}>
-                                    <TableCell className="text-center">{searchedTab.artist}</TableCell>
-                                    <TableCell className="text-center">{searchedTab.song}</TableCell>
-                                    <div className="flex flex-1 items-center">
-                                        <TableCell
-                                            className="hidden md:flex flex-1 justify-center items-center text-center">{searchedTab.voteCount}</TableCell>
-                                    </div>
-                                </TableRow>
-                            )
-                        })}
-                    </TableBody>
-                </Table>
+                {searchedTabs?.data?.length != 0 ?
+                    <Table>
+                        <TableHeader>
+                            <TableRow className="cursor-default hover:bg-transparent">
+                                <TableHead className="text-center">Artist</TableHead>
+                                <TableHead className="text-center">Song</TableHead>
+                                <div className="flex flex-1 items-center">
+                                    <TableHead
+                                        className="hidden md:flex flex-1 justify-center items-center text-center">
+                                        <Heart className="w-4"/>
+                                    </TableHead>
+                                </div>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {searchedTabs?.data?.map((searchedTab, index) => {
+                                return (
+                                    <TableRow key={index} className="cursor-pointer"
+                                              onClick={() => handleDetailTab(searchedTab.id!)}>
+                                        <TableCell className="text-center">{searchedTab.artist}</TableCell>
+                                        <TableCell className="text-center">{searchedTab.song}</TableCell>
+                                        <div className="flex flex-1 items-center">
+                                            <TableCell
+                                                className="hidden md:flex flex-1 justify-center items-center text-center">{searchedTab.voteCount}</TableCell>
+                                        </div>
+                                    </TableRow>
+                                )
+                            })}
+                        </TableBody>
+                    </Table>
+                    :
+                    <div className="text-center py-20">검색결과가 없습니다.</div>
+                }
 
                 <div>
                     <Pagination

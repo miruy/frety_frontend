@@ -18,6 +18,8 @@ const MyFavoriteAllTabs = ({userName}: { userName: string }) => {
     const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 상태
     const {authId} = useContext(AuthContext);
 
+    console.log("authId", authId)
+
     const {
         data: myFavoriteTabs,
         isLoading: isLoadingSearch,

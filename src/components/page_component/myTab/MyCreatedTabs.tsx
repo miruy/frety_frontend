@@ -4,22 +4,19 @@ import {ChevronRight, Heart, PencilLine} from "lucide-react";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
-import {useContext} from "react";
-import {AuthContext} from "@/context/AuthContext";
 import {useQuery} from "@tanstack/react-query";
 import {searchMyCreatedTabs} from "@/openapi/api/tab/tab";
 
 const MyCreatedTabs = ({userName}: {userName: string }) => {
 
     const router = useRouter();
-    const {authId} = useContext(AuthContext);
 
     // 내가 제작한 악보 5개 미리보기
     const {
         data: myCreatedTabs,
     } = useQuery({
-        queryKey: ['MyCreatedTabs', authId],
-        queryFn: () => searchMyCreatedTabs(authId!, {page: 0, pageSize: 5}),
+        queryKey: ['MyCreatedTabs', userName],
+        queryFn: () => searchMyCreatedTabs(userName!, {page: 0, pageSize: 5}),
     });
 
     const handleDetailTab = (tabId: number) => {

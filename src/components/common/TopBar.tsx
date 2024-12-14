@@ -27,12 +27,14 @@ const TopBar = () => {
     };
 
     const handleSearchTab = (keyword: string) => {
-        let decodingKeyword = decodeURIComponent(keyword);
-        if (decodingKeyword == "") {
-            decodingKeyword = "검색어를 입력하세요";
-        }
+        const decodingKeyword = decodeURIComponent(keyword);
 
-        router.push(`/search/${decodingKeyword}`);
+        if (decodingKeyword == "") {
+            router.push(`/search`);
+        }
+        if (decodingKeyword != "") {
+            router.push(`/search/${decodingKeyword}`);
+        }
         setKeyword("");
     }
 

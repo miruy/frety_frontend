@@ -180,10 +180,15 @@ const DetailTab_TabInfo = ({tab}: { tab: GetTabByIdResponse }) => {
             <div className="flex items-center justify-end mb-2 space-x-0.5">
                 <div className="flex items-center space-x-1">
                     <UserRoundPen className="w-4 sm:w-5"/>
-                    <div className="text-xs sm:text-sm">제작 :</div>
+                    <div className="text-xs sm:text-sm cursor-default">제작 :</div>
                 </div>
 
-                <div className="text-xs sm:text-sm">{tab?.authorName}</div>
+                <div
+                    className="text-xs sm:text-sm hover:text-primary/60 cursor-pointer"
+                    onClick={() => window.location.href = `/@${tab?.authorName}`}
+                >
+                    {tab?.authorName}
+                </div>
             </div>
 
             {/* 등록일, 수정일 */}

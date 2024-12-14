@@ -7,24 +7,22 @@ import Pagination from "@/components/page_component/common/Pagination";
 import {useQuery} from "@tanstack/react-query";
 import {searchMyCreatedTabs} from "@/openapi/api/tab/tab";
 import {useRouter} from "next/navigation";
-import {useContext, useState} from "react";
+import {useState} from "react";
 import Loading from "@/app/loading";
 import NotFound from "@/app/not-found";
-import {AuthContext} from "@/context/AuthContext";
 
 const MyCreatedAllTabs = ({userName}: { userName: string }) => {
 
     const router = useRouter();
     const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 상태
-    const {authId} = useContext(AuthContext);
 
     const {
         data: myCreatedTabs,
         isLoading: isLoadingSearch,
         isError: isErrorSearch,
     } = useQuery({
-        queryKey: ['MyCreatedAllTabs', currentPage, authId], // 쿼리 키
-        queryFn: () => searchMyCreatedTabs(authId!, {page: currentPage, pageSize: 10}),
+        queryKey: ['MyCreatedAllTabs', currentPage, userName], // 쿼리 키
+        queryFn: () => searchMyCreatedTabs(userName!, {page: currentPage, pageSize: 10}),
     });
 
     const handleDetailTab = (tabId: number) => {

@@ -3,7 +3,7 @@ import {
     prefetchSearchTabs,
 } from "@/openapi/api/tab/tab";
 import NotFound from "@/app/not-found";
-import {dehydrate, QueryClient, HydrationBoundary} from "@tanstack/react-query";
+import {dehydrate, QueryClient} from "@tanstack/react-query";
 import {PageRsSearchTabsResponse} from "@/openapi/model";
 import SeoHead from "@/components/common/SeoHead";
 import {Metadata} from "next";
