@@ -1,6 +1,5 @@
 import CreateTab from "@/components/page/CreateTab";
 import {Metadata} from "next";
-import {getTabById} from "@/openapi/api/tab/tab";
 import SeoHead from "@/components/common/SeoHead";
 
 export async function generateMetadata(): Promise<Metadata> {

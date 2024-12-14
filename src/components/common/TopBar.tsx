@@ -31,7 +31,7 @@ const TopBar = () => {
         if (decodingKeyword == "") {
             decodingKeyword = "검색어를 입력하세요";
         }
-        
+
         router.push(`/search/${decodingKeyword}`);
         setKeyword("");
     }
@@ -40,7 +40,7 @@ const TopBar = () => {
         <>
             <div className="hidden sm:flex h-[70px] items-center justify-between p-5">
                 <div
-                    onClick={() => window.location.href = "/"}
+                    onClick={() => router.push("/")}
                     className="text-3xl font-bold hover:text-slate-500 hover:scale-110 duration-300 cursor-pointer">
                     Frety
                 </div>
