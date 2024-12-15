@@ -1,9 +1,9 @@
 import Main from "@/components/page/Main";
 import {
-    prefetchSearchTabs,
+    prefetchSearchTabs, searchTabs,
 } from "@/openapi/api/tab/tab";
 import NotFound from "@/app/not-found";
-import {dehydrate, QueryClient} from "@tanstack/react-query";
+import {dehydrate, HydrationBoundary, QueryClient} from "@tanstack/react-query";
 import {PageRsSearchTabsResponse} from "@/openapi/model";
 import SeoHead from "@/components/common/SeoHead";
 import {Metadata} from "next";
@@ -119,9 +119,11 @@ const Home = async () => {
                     jsonLd={jsonLd}
                 />
 
-                {/*<HydrationBoundary state={recentData}>*/}
-                    <Main recentTabsData={recentData} voteTabsData={voteData}/>
-                {/*</HydrationBoundary>*/}
+                <HydrationBoundary state={recentData}>
+                    <Main recentTabsData={recentData}
+                          // voteTabsData={voteData}
+                    />
+                </HydrationBoundary>
             </>
         );
     } catch {

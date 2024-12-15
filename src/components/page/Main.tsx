@@ -11,11 +11,12 @@ import {useContext, useState} from "react";
 import {PageRsSearchTabsResponse} from "@/openapi/model";
 import {AuthContext} from "@/context/AuthContext";
 import {Slide, toast} from "react-toastify";
-import PopularTabs from "@/components/page_component/main/PopularTabs";
 
-const Main = ({recentTabsData, voteTabsData}: {
+const Main = ({recentTabsData
+                  // , voteTabsData
+}: {
     recentTabsData: PageRsSearchTabsResponse,
-    voteTabsData: PageRsSearchTabsResponse
+    // voteTabsData: PageRsSearchTabsResponse
 }) => {
 
     const router = useRouter();
@@ -94,7 +95,7 @@ const Main = ({recentTabsData, voteTabsData}: {
                         <LatestTabs recentTabsData={recentTabsData!}/>
                     </TabsContent>
                     <TabsContent value="popular" className="py-5">
-                        <PopularTabs voteTabsData={voteTabsData!}/>
+                        {/*<PopularTabs voteTabsData={voteTabsData!}/>*/}
                     </TabsContent>
                 </Tabs>
             </div>
