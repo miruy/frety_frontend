@@ -75,7 +75,7 @@ const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: n
                                 const chordDiagram = new SVGuitarChord(chordDiagramDiv);
                                 const chord = chordsMap[line.chord];
                                 const customConfig = customConfigs[line.chord]; // 프렛 설정을 위한 커스텀 설정
-                                chordDiagramDiv.className = `${showDiagram ? 'flex' : 'hidden'} ${customConfig ? 'w-[55px] h-[55px] ' : 'w-12 h-12'} items-center absolute mt-[-96px]`;
+                                chordDiagramDiv.className = `${showDiagram ? 'flex' : 'hidden'} ${customConfig ? 'w-[55px] h-[55px] ' : 'w-11 h-11'} items-center absolute mt-[-96px]`;
 
                                 chordDiagram
                                     .configure({
@@ -171,7 +171,7 @@ const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: n
 
                             // 음절 출력
                             const textDiv = document.createElement('div');
-                            textDiv.className = "relative inline-block min-w-[16px] mx-0.5 text-center";
+                            textDiv.className = "relative inline-block min-w-[16px] mx-1 text-center";
                             textDiv.innerHTML = line.text === ' ' ? '&nbsp;&nbsp;&nbsp;' : line.text;
                             syllabelDiv.appendChild(textDiv);
 
