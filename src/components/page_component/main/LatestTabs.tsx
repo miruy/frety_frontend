@@ -32,7 +32,7 @@ const LatestTabs = ({recentTabsData}: { recentTabsData: PageRsSearchTabsResponse
     } = useSearchTabs({page: currentPage, pageSize: 10}, {
         query: {
             queryKey: ['RecentTabs', currentPage],
-            initialData: currentPage === 0 ? recentTabsData : undefined
+            // initialData: currentPage === 0 ? recentTabsData : undefined
         },
     });
 
