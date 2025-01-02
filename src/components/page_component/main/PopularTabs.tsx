@@ -67,7 +67,7 @@ const PopularTabs = ({voteTabsData}: { voteTabsData: PageRsSearchTabsResponse })
                 {/*})}*/}
                 {/*</TableBody>*/}
             </Table>
-            <div className="flex flex-1 justify-center">현재 준비 중인 서비스입니다.</div>
+            <div className="flex flex-1 justify-center text-sm">현재 준비 중인 서비스입니다.</div>
 
             {/*<div>*/}
             {/*    <Pagination*/}
