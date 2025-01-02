@@ -1,4 +1,4 @@
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
+import {Table, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {useRouter} from "next/navigation";
 import {PageRsSearchTabsResponse} from "@/openapi/model";
 import {Heart} from "lucide-react";
@@ -8,7 +8,6 @@ import {searchTabs} from "@/openapi/api/tab/tab";
 import Loading from "@/app/loading";
 import NotFound from "@/app/not-found";
 import * as React from "react";
-import Pagination from "@/components/page_component/common/Pagination";
 
 const PopularTabs = ({voteTabsData}: { voteTabsData: PageRsSearchTabsResponse }) => {
 
@@ -52,33 +51,34 @@ const PopularTabs = ({voteTabsData}: { voteTabsData: PageRsSearchTabsResponse })
                         </div>
                     </TableRow>
                 </TableHeader>
-                <TableBody>
-                    {voteTabs?.data?.map((voteTab, index) => {
-                        return (
-                            <TableRow key={index} className="cursor-pointer"
-                                      onClick={() => handleDetailTab(voteTab.id!)}>
-                                <TableCell className="text-center">{voteTab.artist}</TableCell>
-                                <TableCell className="text-center">{voteTab.song}</TableCell>
-                                <div className="flex flex-1 items-center">
-                                    <TableCell
-                                        className="hidden md:flex flex-1 justify-center items-center text-center">{voteTab.voteCount}</TableCell>
-                                </div>
-                            </TableRow>
-                        )
-                    })}
-                </TableBody>
+                {/*<TableBody>*/}
+                {/*{voteTabs?.data?.map((voteTab, index) => {*/}
+                {/*    return (*/}
+                {/*        <TableRow key={index} className="cursor-pointer"*/}
+                {/*                  onClick={() => handleDetailTab(voteTab.id!)}>*/}
+                {/*            <TableCell className="text-center">{voteTab.artist}</TableCell>*/}
+                {/*            <TableCell className="text-center">{voteTab.song}</TableCell>*/}
+                {/*            <div className="flex flex-1 items-center">*/}
+                {/*                <TableCell*/}
+                {/*                    className="hidden md:flex flex-1 justify-center items-center text-center">{voteTab.voteCount}</TableCell>*/}
+                {/*            </div>*/}
+                {/*        </TableRow>*/}
+                {/*    )*/}
+                {/*})}*/}
+                {/*</TableBody>*/}
             </Table>
+            <div className="flex flex-1 justify-center">현재 준비 중인 서비스입니다.</div>
 
-            <div>
-                <Pagination
-                    totalPage={voteTabs?.meta?.totalPage || 1}
-                    setCurrentPage={setCurrentPage}
-                    currentPage={currentPage}
-                    buttonSize={5}
-                    hasPreviousPage={voteTabs?.meta?.hasPreviousPage}
-                    hasNextPage={voteTabs?.meta?.hasNextPage}
-                />
-            </div>
+            {/*<div>*/}
+            {/*    <Pagination*/}
+            {/*        totalPage={voteTabs?.meta?.totalPage || 1}*/}
+            {/*        setCurrentPage={setCurrentPage}*/}
+            {/*        currentPage={currentPage}*/}
+            {/*        buttonSize={5}*/}
+            {/*        hasPreviousPage={voteTabs?.meta?.hasPreviousPage}*/}
+            {/*        hasNextPage={voteTabs?.meta?.hasNextPage}*/}
+            {/*    />*/}
+            {/*</div>*/}
         </div>
     )
 }

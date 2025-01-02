@@ -4,26 +4,36 @@ import {Heart} from "lucide-react";
 import Pagination from "@/components/page_component/common/Pagination";
 import {PageRsSearchTabsResponse} from "@/openapi/model";
 import {useState} from "react";
-import {useQuery} from "@tanstack/react-query";
-import {searchTabs} from "@/openapi/api/tab/tab";
+import {useSearchTabs} from "@/openapi/api/tab/tab";
 import Loading from "@/app/loading";
 import NotFound from "@/app/not-found";
 import * as React from "react";
 
-const LatestTabs = ({recentTabsData}: { recentTabsData: PageRsSearchTabsResponse}) => {
+const LatestTabs = ({recentTabsData}: { recentTabsData: PageRsSearchTabsResponse }) => {
 
     const router = useRouter();
     const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 상태
 
     // 최근등록순 악보 전체조회 클라이언트사이드 렌더링 + 페이지네이션
+    // const {
+    //     data: recentTabs,
+    //     isLoading: isLoadingRecent,
+    //     isError: isErrorRecent,
+    // } = useQuery({
+    //     queryKey: ['RecentTabs', currentPage], // 쿼리 키
+    //     queryFn: () => searchTabs({sort: 'RECENT', page: currentPage, pageSize: 10}),
+    //     initialData: currentPage === 0 ? recentTabsData : undefined,
+    // });
+
     const {
         data: recentTabs,
         isLoading: isLoadingRecent,
         isError: isErrorRecent,
-    } = useQuery({
-        queryKey: ['RecentTabs', currentPage], // 쿼리 키
-        queryFn: () => searchTabs({sort: 'RECENT', page: currentPage, pageSize: 10}),
-        initialData: currentPage === 0 ? recentTabsData : undefined,
+    } = useSearchTabs({page: currentPage, pageSize: 10}, {
+        query: {
+            queryKey: ['RecentTabs', currentPage],
+            initialData: currentPage === 0 ? recentTabsData : undefined
+        },
     });
 
     const handleDetailTab = (tabId: number) => {
