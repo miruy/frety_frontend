@@ -37,7 +37,7 @@ const DetailTab_TabAutoScrollButton = ({scrollContainerRef}: AutoScrollButtonPro
                 if (scrollContainerRef.current) {
                     scrollContainerRef.current.scrollTop += speed;
                 }
-            }, 16); // 60fps
+            }, 50);
         } else {
             if (intervalRef.current) {
                 clearInterval(intervalRef.current);

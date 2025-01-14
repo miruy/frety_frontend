@@ -48,7 +48,7 @@ const Main = ({recentTabsData, voteTabsData}: {
         <div className="flex flex-col px-3 py-10 mx-auto w-full lg:w-[70%]">
             <div className="space-y-2 border-b pb-2">
                 <div className="text-4xl font-bold tracking-wide">Frety</div>
-                <div className="text-md sm:text-lg font-semibold tracking-wide text-primary/50">프렛위에서 완성되는 당신의 기타 코드
+                <div className="text-md sm:text-lg font-semibold tracking-wide text-primary/50">프렛 위에서 완성되는 당신의 기타 코드
                 </div>
             </div>
 
@@ -90,6 +90,7 @@ const Main = ({recentTabsData, voteTabsData}: {
                             className="text-xs sm:text-sm">악보 제작</Button>
                     </div>
 
+                    {/* 데이터 넘겨만 주고 안씀 */}
                     <TabsContent value="latest" className="py-5">
                         <LatestTabs recentTabsData={recentTabsData!}/>
                     </TabsContent>

@@ -2332,6 +2332,17 @@ export const chordsMap: { [key: string]: Chord } = {
         ],
         barres: [],
     },
+    "G#dim7/D": {
+        fingers: [
+            [1, 1],
+            [2, 0],
+            [3, 1],
+            [4, 0],
+            [5, 'x'],
+            [6, 'x'],
+        ],
+        barres: [],
+    },
     "Gaug": {
         fingers: [
             [4, 1],

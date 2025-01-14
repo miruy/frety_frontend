@@ -37,7 +37,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
         while (true) {
             const tabsResponse = await searchTabs({
-                sort: "RECENT",
+                // sort: "RECENT",
                 page: currentPage,
                 pageSize: pageSize,
             });
