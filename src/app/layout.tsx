@@ -24,6 +24,8 @@ export default function RootLayout({
     return (
         <html lang="en">
         <head>
+            {/* 구글 서치 콘솔 태그 */}
+            <meta name="google-site-verification" content="M--jRwaogWtTTKyxW0yjKvV1U9fq7dbP9VHd7c3nPoc"/>
         </head>
         <body
             className={cn(
