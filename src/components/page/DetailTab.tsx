@@ -93,20 +93,23 @@ const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: n
                                     const currentY = parseFloat(tuningText[0].getAttribute('y') || '0');
 
                                     tuningText[0].setAttribute('x', (currentX - 177).toString()); // 왼쪽으로 이동
-                                    tuningText[0].setAttribute('y', (currentY + 40).toString());   // 아래로 이동
+                                    tuningText[0].setAttribute('y', (currentY + 50).toString());   // 아래로 이동
                                 }
                                 diagram_chordDiv.appendChild(chordDiagramDiv);
 
 
                                 // 코드 출력
                                 const chordDiv = document.createElement('div');
-                                chordDiv.className = `absolute text-sm font-semibold text-primary/60 mt-[-26px] text-center cursor-default
-                                        ${line.chord?.length === 1 && `left-1 w-[10px]`}
-                                        ${line.chord?.length === 2 && `left-0 w-[20px]`}
+                                chordDiv.className = `absolute text-[13px] tracking-tighter font-semibold text-primary/60 text-center cursor-default
+                                        ${line.chord?.length === 1 && `left-2 w-[10px]`}
+                                        ${line.chord?.length === 2 && `left-1.5 w-[20px]`}
                                         ${line.chord?.length === 3 && `-left-[9px] w-[40px]`}
-                                        ${line.chord?.length === 4 && `-left-[9px] w-[50px]`}
+                                        ${line.chord?.length === 4 && `-left-[11px] w-[50px]`}
                                         ${line.chord?.length === 5 && `-left-[19px] w-[60px]`}
                                         ${line.chord?.length === 6 && `-left-[16px] w-[60px]`}
+                                        ${line.chord.length === 7 && '-left-[18px] w-[70px]'}
+                                        ${line.chord.length === 8 && '-left-[20px] w-[70px]'}
+                                        ${tuningText.length > 1 ? 'mt-[-15px]' : 'mt-[-35px]'}
                     `;
                                 chordDiv.textContent = line.chord;
 
@@ -114,7 +117,7 @@ const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: n
                                 // 코드에 마우스 호버 시 다이어그램툴팁 표시
                                 if (!showDiagram) {
                                     const tooltipDiv = document.createElement('div');
-                                    tooltipDiv.className = `absolute flex flex-col items-center left-3 top-full mt-1 bg-white shadow-lg z-[1000] text-white text-xs rounded p-3 hidden`;
+                                    tooltipDiv.className = `absolute flex flex-col items-center left-3 top-full mt-1 bg-white shadow-lg z-[1000] text-white text-xs rounded p-3.5 hidden`;
 
 
                                     // 코드 이름 출력
@@ -128,7 +131,7 @@ const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: n
                                     const chordDiagram = new SVGuitarChord(tooltipContentDiv);
                                     const chord = chordsMap[line.chord];
                                     const customConfig = customConfigs[line.chord]; // 프렛 설정을 위한 커스텀 설정
-                                    tooltipContentDiv.className = `${customConfig ? 'w-[55px] h-[55px] ' : 'w-12 h-12'}`;
+                                    tooltipContentDiv.className = `${customConfig ? 'w-[55px] h-[55px]' : 'w-12 h-12 mr-2.5'}`;
 
                                     chordDiagram
                                         .configure({
