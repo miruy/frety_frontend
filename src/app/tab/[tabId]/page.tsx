@@ -19,14 +19,14 @@ export async function generateMetadata({params}: TabProps): Promise<Metadata> {
 
     return {
         title: tab.artist && tab.song ? tab.artist + " - " + tab.song : 'Frety | 기타 악보',
-        description: '프렛 위에서 완성되는 당신의 기타 코드',
+        description: '프렛티(Frety). 프렛 위에서 완성되는 당신의 기타 코드.',
         keywords: tab.artist || tab.song ? tab.artist + ", " + tab.song + ", " + tab.authorName : 'Frety | 기타 악보',
         openGraph: {
             type: 'article',
             url: `https://www.frety.me/tab/${tab.id}`,
             siteName: 'Frety - 프렛티',
             title: tab.artist && tab.song ? tab.artist + " - " + tab.song : 'Frety | 기타 악보',
-            description: '프렛 위에서 완성되는 당신의 기타 코드',
+            description: '프렛티(Frety). 프렛 위에서 완성되는 당신의 기타 코드.',
             locale: 'ko_KR',
             images: [
                 {
@@ -74,7 +74,7 @@ const DetailTabPage = async ({params}: Props) => {
             '@context': 'https://schema.org',
             '@type': 'article',
             'name': detailTab.artist && detailTab.song ? detailTab.artist + " - " + detailTab.song : 'Frety | 기타 악보',
-            'description': '프렛 위에서 완성되는 당신의 기타 코드',
+            'description': '프렛티(Frety). 프렛 위에서 완성되는 당신의 기타 코드.',
             'url': `https://www.frety.me/tab/${detailTab.id}`,
             'image': {
                 '@type': `articleImage_${detailTab.id}`,

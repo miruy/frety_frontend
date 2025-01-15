@@ -10,14 +10,14 @@ import {Metadata} from "next";
 
 export const metadata: Metadata = {
     title: 'Frety',
-    description: '프렛 위에서 완성되는 당신의 기타 코드',
+    description: '프렛티(Frety). 프렛 위에서 완성되는 당신의 기타 코드.',
     keywords: ["Frety", "FRETY", "guitar", "chord", "프렛티", "기타", "악보", "코드"],
     openGraph: {
         type: 'website',
         url: `https://www.frety.me`,
         siteName: 'Frety - 프렛티',
         title: 'Frety - 프렛티',
-        description: '프렛 위에서 완성되는 당신의 기타 코드',
+        description: '프렛티(Frety). 프렛 위에서 완성되는 당신의 기타 코드.',
         locale: 'ko_KR',
         images: [
             {
@@ -46,7 +46,7 @@ const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'website',
     'name': 'Frety',
-    'description': '프렛 위에서 완성되는 당신의 기타 코드',
+    'description': '프렛티(Frety). 프렛 위에서 완성되는 당신의 기타 코드.',
     'url': 'https://www.frety.me',
     'image': {
         '@type': 'websiteImage',

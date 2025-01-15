@@ -22,9 +22,9 @@ export async function generateMetadata({params}: Props): Promise<Metadata> {
     }
 
     return {
-        title: 'Frety | ' + decodingKeyword,
-        description: 'Frety | ' + decodingKeyword,
-        keywords: 'Frety | ' + decodingKeyword,
+        title: '검색 | ' + decodingKeyword,
+        description: '검색 | ' + decodingKeyword,
+        keywords: '검색 | ' + decodingKeyword,
         openGraph: {
             type: 'article',
             url: `https://www.frety.me/search`,
