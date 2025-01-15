@@ -25,6 +25,8 @@ import {Slide, toast} from "react-toastify";
 import {useRouter} from "next/navigation";
 import {AuthContext} from "@/context/AuthContext";
 import {TabContext} from "@/context/TabContext";
+import {DragDropContext, Draggable, DropResult} from 'react-beautiful-dnd';
+import {StrictModeDroppable} from "@/components/page_component/common/StrictModeDroppable";
 
 const EditTab = ({tab}: { tab: GetTabByIdResponse }) => {
 
@@ -213,6 +215,7 @@ const EditTab = ({tab}: { tab: GetTabByIdResponse }) => {
 
         // 변환된 가사 데이터를 parsedLyrics에 업데이트
         setParsedLyrics((prevData) => [...prevData, {lineData, comment: ""}]);
+        console.log("가사 데이터", parsedLyrics)
     }
 
     // 음절 클릭 시 코드 셀렉터 표시/숨기기 및 해당 위치 저장 (7)
@@ -313,6 +316,12 @@ const EditTab = ({tab}: { tab: GetTabByIdResponse }) => {
         };
     }, []);
 
+    const onDragEnd = ({source, destination}: DropResult) => {
+        console.log("드롭")
+        console.log("source :", source)
+        console.log("destination :", destination)
+    };
+
     useEffect(() => {
         if (tab) {
             editTabForm.reset(
@@ -350,6 +359,48 @@ const EditTab = ({tab}: { tab: GetTabByIdResponse }) => {
 
     return (
         <div className="px-3 py-10 mx-auto w-full md:w-[90%] xl:w-[70%] space-y-10">
+
+
+
+            {/*<div>*/}
+            {/*    드래그앤드롭 테스트*/}
+            {/*    <DragDropContext onDragEnd={onDragEnd}>*/}
+            {/*        <StrictModeDroppable droppableId="parsedLyricId">*/}
+            {/*            {(provided) => (*/}
+            {/*                <div ref={provided.innerRef} {...provided.droppableProps}>*/}
+            {/*                    {users.map((user: User, index: number) => (*/}
+            {/*                        <Draggable*/}
+            {/*                            key={user.name}*/}
+            {/*                            draggableId={user.id}*/}
+            {/*                            index={index}*/}
+            {/*                        >*/}
+            {/*                            {(provided_two) => (*/}
+            {/*                                <div*/}
+            {/*                                    className="bg-blue-200"*/}
+            {/*                                    ref={provided_two.innerRef}*/}
+            {/*                                    {...provided_two.draggableProps}*/}
+            {/*                                    {...provided_two.dragHandleProps}*/}
+            {/*                                >*/}
+            {/*                                    <div*/}
+            {/*                                        className="bg-red-200"*/}
+            {/*                                        key={index + 1}*/}
+            {/*                                        id={user.id}*/}
+            {/*                                    >*/}
+            {/*                                        {user.name}*/}
+            {/*                                    </div>*/}
+            {/*                                </div>*/}
+            {/*                            )}*/}
+            {/*                        </Draggable>*/}
+            {/*                    ))}*/}
+            {/*                    {provided.placeholder}*/}
+            {/*                </div>*/}
+            {/*            )}*/}
+            {/*        </StrictModeDroppable>*/}
+            {/*    </DragDropContext>*/}
+            {/*</div>*/}
+
+
+
             <div className="space-y-2 border-b pb-2">
                 <div className="text-2xl sm:text-4xl font-bold tracking-wide">악보 수정</div>
                 <div className="text-md sm:text-lg font-semibold tracking-wide text-primary/50">
@@ -513,7 +564,8 @@ const EditTab = ({tab}: { tab: GetTabByIdResponse }) => {
                                                 {/* 코드 셀렉터 (2) */}
                                                 {showChordSelector && selectedSyllable?.lineIndex === lineIndex && selectedSyllable.syllableIndex === syllableIndex &&
                                                     <div className="absolute z-[1000] mt-2 ml-3">
-                                                        <ChordSelector setChord={setChord} deleteChord={deleteChord}/>
+                                                        <ChordSelector setChord={setChord}
+                                                                       deleteChord={deleteChord}/>
                                                     </div>
                                                 }
 
