@@ -481,7 +481,7 @@ const EditTab = ({tab}: { tab: GetTabByIdResponse }) => {
                                                 {/* 선택한 코드 표시 (3) */}
                                                 {syllable.chord && (
                                                     <div
-                                                        className={`absolute text-sm font-semibold text-primary/60 mt-[-23px]
+                                                        className={`absolute text-[13px] tracking-tighter font-semibold text-primary/60 mt-[-23px]
                                                      ${syllable.chord.length === 1 && 'left-1 w-[10px]'} 
                                                         ${syllable.chord.length === 2 && 'left-0 w-[20px]'}
                                                         ${syllable.chord.length === 3 && '-left-[5px] w-[40px]'}
@@ -489,7 +489,7 @@ const EditTab = ({tab}: { tab: GetTabByIdResponse }) => {
                                                         ${syllable.chord.length === 5 && '-left-[12px] w-[60px]'}
                                                         ${syllable.chord.length === 6 && '-left-[16px] w-[60px]'}
                                                         ${syllable.chord.length === 7 && '-left-[18px] w-[70px]'}
-                                                        ${syllable.chord.length === 8 && '-left-[20px] w-[70px]'}
+                                                        ${syllable.chord.length === 8 && '-left-[19px] w-[70px]'}
                                                     `}>
                                                         {syllable.chord}
                                                     </div>
