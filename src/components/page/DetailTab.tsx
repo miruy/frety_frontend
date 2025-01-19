@@ -49,6 +49,7 @@ const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: n
                 setLoading(false);
 
                 try {
+                    console.log("contnet", tab.content)
                     // JSON 문자열을 객체로 변환
                     const parsedTab = JSON.parse(tab.content!);
 
