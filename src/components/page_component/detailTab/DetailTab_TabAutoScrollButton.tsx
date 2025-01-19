@@ -27,7 +27,7 @@ const DetailTab_TabAutoScrollButton = ({scrollContainerRef}: AutoScrollButtonPro
 
     // 속도를 올리는 함수
     const increaseSpeed = () => {
-        setSpeed((prev) => Math.min(prev + 1, 5)); // 속도 1씩 증가
+        setSpeed((prev) => Math.min(prev + 1, 10)); // 속도 1씩 증가
     };
 
     // 스크롤 로직
@@ -51,11 +51,11 @@ const DetailTab_TabAutoScrollButton = ({scrollContainerRef}: AutoScrollButtonPro
                 clearInterval(intervalRef.current);
             }
         };
-    }, [scrolling, speed]);
+    }, [scrolling, speed, scrollContainerRef]);
 
     return (
         <ToggleGroup type="multiple" variant="outline">
-
+            {/*className="fixed top-[250px] right-[264px] gap-0.5"*/}
             {/* 스크롤 시작/멈춤 버튼 */}
             <ToggleGroupItem
                 onClick={toggleScroll}
