@@ -51,11 +51,11 @@ const DetailTab_TabAutoScrollButton = ({scrollContainerRef}: AutoScrollButtonPro
                 clearInterval(intervalRef.current);
             }
         };
-    }, [scrolling, speed, scrollContainerRef]);
+    }, [scrolling, speed]);
 
     return (
         <ToggleGroup type="multiple" variant="outline">
-            {/*className="fixed top-[250px] right-[264px] gap-0.5"*/}
+
             {/* 스크롤 시작/멈춤 버튼 */}
             <ToggleGroupItem
                 onClick={toggleScroll}
