@@ -99,19 +99,20 @@ const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: n
 
 
                                 // 코드 출력
+                                const chordWithoutParenthesis = line.chord.split('(')[0].trim();
                                 const chordDiv = document.createElement('div');
                                 chordDiv.className = `absolute text-[13px] tracking-tighter font-semibold text-primary/60 text-center cursor-default
-                                        ${line.chord?.length === 1 && `left-2 w-[10px]`}
-                                        ${line.chord?.length === 2 && `left-1.5 w-[20px]`}
-                                        ${line.chord?.length === 3 && `-left-[9px] w-[40px]`}
-                                        ${line.chord?.length === 4 && `-left-[11px] w-[50px]`}
-                                        ${line.chord?.length === 5 && `-left-[19px] w-[60px]`}
-                                        ${line.chord?.length === 6 && `-left-[16px] w-[60px]`}
-                                        ${line.chord.length === 7 && '-left-[18px] w-[70px]'}
-                                        ${line.chord.length === 8 && '-left-[20px] w-[70px]'}
+                                        ${chordWithoutParenthesis?.length === 1 && `left-2.5 w-[10px]`}
+                                        ${chordWithoutParenthesis?.length === 2 && `left-1.5 w-[20px]`}
+                                        ${chordWithoutParenthesis?.length === 3 && `-left-[4px] w-[40px]`}
+                                        ${chordWithoutParenthesis?.length === 4 && `-left-[11px] w-[50px]`}
+                                        ${chordWithoutParenthesis?.length === 5 && `-left-[19px] w-[60px]`}
+                                        ${chordWithoutParenthesis?.length === 6 && `-left-[16px] w-[60px]`}
+                                        ${chordWithoutParenthesis.length === 7 && '-left-[18px] w-[70px]'}
+                                        ${chordWithoutParenthesis.length === 8 && '-left-[20px] w-[70px]'}
                                         ${tuningText.length > 1 ? 'mt-[-15px]' : 'mt-[-35px]'}
                     `;
-                                chordDiv.textContent = line.chord;
+                                chordDiv.textContent = chordWithoutParenthesis;
 
 
                                 // 코드에 마우스 호버 시 다이어그램툴팁 표시
@@ -123,7 +124,7 @@ const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: n
                                     // 코드 이름 출력
                                     const tooltipTitleDiv = document.createElement('div');
                                     tooltipTitleDiv.className = 'flex font-semibold text-[16px] text-primary';
-                                    tooltipTitleDiv.textContent = line.chord;
+                                    tooltipTitleDiv.textContent = chordWithoutParenthesis;
                                     tooltipDiv.appendChild(tooltipTitleDiv);
 
                                     // 코드 다이어그램 출력
