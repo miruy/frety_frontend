@@ -24,6 +24,7 @@ import {useCreateTab} from "@/openapi/api/tab/tab";
 import {Slide, toast} from "react-toastify";
 import {useRouter} from "next/navigation";
 import {AuthContext} from "@/context/AuthContext";
+import {DragDropContext, Draggable, Droppable, DropResult} from "react-beautiful-dnd";
 
 const CreateTab = () => {
 
@@ -257,6 +258,24 @@ const CreateTab = () => {
         }
     }
 
+    // 드래그앤드롭으로 가사 위치 변경
+    const onDragEnd = (result: DropResult) => {
+        // 드롭이 유효하지 않을 경우 리턴
+        if (!result.destination) return;
+
+        // 배열 복사
+        const updatedLyrics = Array.from(parsedLyrics);
+
+        // 드래그된 요소를 추출
+        const [movedItem] = updatedLyrics.splice(result.source.index, 1);
+
+        // 새로운 위치에 요소를 삽입
+        updatedLyrics.splice(result.destination.index, 0, movedItem);
+
+        // 상태 업데이트
+        setParsedLyrics(updatedLyrics);
+    };
+
     // ESC 키를 누르면 코드 셀렉터 닫기
     useEffect(() => {
         const handleEscKey = (event: KeyboardEvent) => {
@@ -403,127 +422,158 @@ const CreateTab = () => {
                 {/* 악보 제작 방법 */}
                 <HowToCreateTab/>
 
-                {/* 한 행씩 업로드 된 가사 표시 */}
-                <div>
-                    {parsedLyrics.map(({lineData, comment}, lineIndex) => (
-                        <div key={lineIndex} className="flex flex-col mt-14 space-y-3">
-                            <div className="flex items-center justify-between">
-                                <div className="relative flex items-center">
-                                    {lineData.map((syllable, syllableIndex) => {
-                                        return (
-                                            <div key={syllableIndex} className="relative">
+                {/* 드래그앤드롭이 적용된 가사 업로드 */}
+                <DragDropContext onDragEnd={onDragEnd}>
+                    <Droppable droppableId="parsedLyrics">
+                        {(provided) => (
+                            <div ref={provided.innerRef} {...provided.droppableProps} className=" p-1">
+                                {parsedLyrics.map(({lineData, comment}, lineIndex) => {
+                                    return (
+                                        <Draggable
+                                            key={lineIndex}
+                                            draggableId={String(lineIndex)}
+                                            index={lineIndex}
+                                        >
+                                            {(provided, snapshot) => (
+                                                <div
+                                                    className={`flex flex-col mt-14 space-y-3 p-1 hover:bg-blue-50/70 rounded-lg
+                                                    ${snapshot.isDragging && 'bg-red-50'}
+                                                    ${snapshot.isDropAnimating && 'bg-green-50'}
+                                                    `}
+                                                    ref={provided.innerRef}
+                                                    {...provided.draggableProps}
+                                                    {...provided.dragHandleProps}
+                                                >
 
-                                                {/* 선택한 코드 표시 (3) */}
-                                                {syllable.chord && (
-                                                    <div
-                                                        className={`absolute text-[13px] tracking-tighter font-semibold text-primary/60 mt-[-23px]
-                                                     ${syllable.chord.length === 1 && 'left-1 w-[10px]'} 
-                                                        ${syllable.chord.length === 2 && 'left-0 w-[20px]'}
-                                                        ${syllable.chord.length === 3 && '-left-[5px] w-[40px]'}
-                                                        ${syllable.chord.length === 4 && '-left-[9px] w-[50px]'}
-                                                        ${syllable.chord.length === 5 && '-left-[12px] w-[60px]'}
-                                                        ${syllable.chord.length === 6 && '-left-[16px] w-[60px]'}
-                                                        ${syllable.chord.length === 7 && '-left-[18px] w-[70px]'}
-                                                        ${syllable.chord.length === 8 && '-left-[19px] w-[70px]'}
-                                                    `}>
-                                                        {syllable.chord}
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="relative flex items-center">
+                                                            {lineData.map((syllable, syllableIndex) => {
+                                                                return (
+                                                                    <div key={syllableIndex} className="relative">
+
+                                                                        {/* 선택한 코드 표시 (3) */}
+                                                                        {syllable.chord && (
+                                                                            <div
+                                                                                className={`absolute text-[13px] tracking-tighter font-semibold text-primary/60 mt-[-23px]
+                                                                                 ${syllable.chord.length === 1 && 'left-1 w-[10px]'} 
+                                                                                    ${syllable.chord.length === 2 && 'left-0 w-[20px]'}
+                                                                                    ${syllable.chord.length === 3 && '-left-[5px] w-[40px]'}
+                                                                                    ${syllable.chord.length === 4 && '-left-[9px] w-[50px]'}
+                                                                                    ${syllable.chord.length === 5 && '-left-[12px] w-[60px]'}
+                                                                                    ${syllable.chord.length === 6 && '-left-[16px] w-[60px]'}
+                                                                                    ${syllable.chord.length === 7 && '-left-[18px] w-[70px]'}
+                                                                                    ${syllable.chord.length === 8 && '-left-[19px] w-[70px]'}
+                                                                                `}>
+                                                                                {syllable.chord}
+                                                                            </div>
+                                                                        )}
+
+                                                                        {/* 각 음절 (1) */}
+                                                                        <span
+                                                                            className={`
+                                                                            ${
+                                                                                selectedSyllable?.lineIndex === lineIndex &&
+                                                                                selectedSyllable.syllableIndex === syllableIndex &&
+                                                                                showChordSelector ? 'bg-primary/20' : ''} 
+                                                                            ${!syllable.text.trim() ? 'bg-primary/10' : ''}
+                                                                            relative hover:bg-primary/25 cursor-pointer inline-block min-w-[16px] mx-0.5 text-center`}
+                                                                            onClick={() => clickSyllable(lineIndex, syllableIndex)}
+                                                                            dangerouslySetInnerHTML={{
+                                                                                __html: syllable.text === ' ' ? '&nbsp;&nbsp;&nbsp;' : syllable.text,
+                                                                            }}
+                                                                        />
+
+                                                                        {/* 코드 셀렉터 (2) */}
+                                                                        {showChordSelector && selectedSyllable?.lineIndex === lineIndex && selectedSyllable.syllableIndex === syllableIndex &&
+                                                                            <div
+                                                                                className="absolute z-[1000] mt-2 ml-3">
+                                                                                <ChordSelector setChord={setChord}
+                                                                                               deleteChord={deleteChord}/>
+                                                                            </div>
+                                                                        }
+
+                                                                    </div>
+                                                                )
+                                                            })}
+                                                        </div>
+
+                                                        <div className="flex items-center space-x-0.5">
+                                                            <Toggle aria-label="Toggle_Comment" size="sm"
+                                                                    variant="outline"
+                                                                    className="bg-white"
+                                                                    onClick={() => {
+                                                                        // 코멘트 입력창 표시 토글
+                                                                        setLyricComment((prev) => {
+                                                                            const newLyricComment = [...prev];
+                                                                            newLyricComment[lineIndex] = !newLyricComment[lineIndex]; // 현재 행의 상태만 토글
+                                                                            return newLyricComment;
+                                                                        });
+                                                                    }}
+                                                            >
+                                                                <PencilLine className="size-4"/>
+                                                            </Toggle>
+
+                                                            <Button
+                                                                type="button"
+                                                                variant="outline"
+                                                                size="sm"
+                                                                className="p-2"
+                                                                onClick={() => {
+                                                                    // 삭제할 행의 인덱스를 기억한 뒤, 해당 행의 코멘트 상태를 false로 설정하여 입력창을 숨김
+                                                                    setLyricComment((prev) => {
+                                                                        const newLyricComment = [...prev];
+                                                                        newLyricComment.splice(lineIndex, 1); // 삭제할 행의 상태 제거
+                                                                        return newLyricComment; // 업데이트된 상태 반환
+                                                                    });
+
+                                                                    // 가사 행 삭제
+                                                                    setParsedLyrics((prevData) => prevData.filter((_, i) => i !== lineIndex));
+                                                                }}>
+                                                                <X/>
+                                                            </Button>
+                                                        </div>
                                                     </div>
-                                                )}
 
-                                                {/* 각 음절 (1) */}
-                                                <span
-                                                    className={`
-                                                ${
-                                                        selectedSyllable?.lineIndex === lineIndex &&
-                                                        selectedSyllable.syllableIndex === syllableIndex &&
-                                                        showChordSelector ? 'bg-primary/20' : ''} 
-                                                ${!syllable.text.trim() ? 'bg-primary/5' : ''}
-                                                relative hover:bg-primary/20 cursor-pointer inline-block min-w-[16px] mx-0.5 text-center`}
-                                                    onClick={() => clickSyllable(lineIndex, syllableIndex)}
-                                                    dangerouslySetInnerHTML={{
-                                                        __html: syllable.text === ' ' ? '&nbsp;&nbsp;&nbsp;' : syllable.text,
-                                                    }}
-                                                />
+                                                    {lyricComment[lineIndex] &&
+                                                        <div className="flex flex-col">
+                                                            <div>
+                                                                <label className="relative">
+                                                                    <Input
+                                                                        id="comment"
+                                                                        className="pl-12 h-10 focus-visible:ring-0"
+                                                                        type="text"
+                                                                        value={comment}
+                                                                        onChange={(e) => {
+                                                                            const lyricComment = e.target.value; // 사용자가 입력한 코멘트
+                                                                            setParsedLyrics((prevData) => {
+                                                                                const updatedData = [...prevData];
+                                                                                updatedData[lineIndex] = {
+                                                                                    ...updatedData[lineIndex],
+                                                                                    comment: lyricComment
+                                                                                }; // 해당 행의 comment 업데이트
+                                                                                return updatedData;
+                                                                            });
+                                                                        }}
+                                                                    />
+                                                                    <div
+                                                                        className="absolute left-4 top-1/2 -translate-y-1/2 select-none text-xs">
+                                                                        <NotebookPen className="size-4 opacity-60"/>
+                                                                    </div>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    }
 
-                                                {/* 코드 셀렉터 (2) */}
-                                                {showChordSelector && selectedSyllable?.lineIndex === lineIndex && selectedSyllable.syllableIndex === syllableIndex &&
-                                                    <div className="absolute z-[1000] mt-2 ml-3">
-                                                        <ChordSelector setChord={setChord} deleteChord={deleteChord}/>
-                                                    </div>
-                                                }
-
-                                            </div>
-                                        )
-                                    })}
-                                </div>
-
-                                <div className="flex items-center space-x-0.5">
-                                    <Toggle aria-label="Toggle_Comment" size="sm" variant="outline"
-                                            onClick={() => {
-                                                // 코멘트 입력창 표시 토글
-                                                setLyricComment((prev) => {
-                                                    const newLyricComment = [...prev];
-                                                    newLyricComment[lineIndex] = !newLyricComment[lineIndex]; // 현재 행의 상태만 토글
-                                                    return newLyricComment;
-                                                });
-                                            }}
-                                    >
-                                        <PencilLine className="size-4"/>
-                                    </Toggle>
-
-                                    <Button
-                                        type="button"
-                                        variant="outline"
-                                        size="sm"
-                                        className="p-2"
-                                        onClick={() => {
-                                            // 삭제할 행의 인덱스를 기억한 뒤, 해당 행의 코멘트 상태를 false로 설정하여 입력창을 숨김
-                                            setLyricComment((prev) => {
-                                                const newLyricComment = [...prev];
-                                                newLyricComment.splice(lineIndex, 1); // 삭제할 행의 상태 제거
-                                                return newLyricComment; // 업데이트된 상태 반환
-                                            });
-
-                                            // 가사 행 삭제
-                                            setParsedLyrics((prevData) => prevData.filter((_, i) => i !== lineIndex));
-                                        }}>
-                                        <X/>
-                                    </Button>
-                                </div>
+                                                </div>
+                                            )}
+                                        </Draggable>
+                                    )
+                                })}
+                                {provided.placeholder}
                             </div>
-
-                            {lyricComment[lineIndex] &&
-                                <div className="flex flex-col">
-                                    <div>
-                                        <label className="relative">
-                                            <Input
-                                                id="comment"
-                                                className="pl-12 h-10 focus-visible:ring-0"
-                                                type="text"
-                                                value={comment}
-                                                onChange={(e) => {
-                                                    const lyricComment = e.target.value; // 사용자가 입력한 코멘트
-                                                    setParsedLyrics((prevData) => {
-                                                        const updatedData = [...prevData];
-                                                        updatedData[lineIndex] = {
-                                                            ...updatedData[lineIndex],
-                                                            comment: lyricComment
-                                                        }; // 해당 행의 comment 업데이트
-                                                        return updatedData;
-                                                    });
-                                                }}
-                                            />
-                                            <div
-                                                className="absolute left-4 top-1/2 -translate-y-1/2 select-none text-xs">
-                                                <NotebookPen className="size-4 opacity-60"/>
-                                            </div>
-                                        </label>
-                                    </div>
-                                </div>
-                            }
-                        </div>
-                    ))}
-                </div>
+                        )}
+                    </Droppable>
+                </DragDropContext>
 
                 {/* 가사 입력창 */}
                 <div className="py-10">
