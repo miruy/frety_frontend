@@ -74,6 +74,7 @@ export const customConfigs: Record<string, CustomConfig> = {
     "E#": definedCustomConfigs.tuning8,
     "E#m": definedCustomConfigs.tuning8,
     "Eb": definedCustomConfigs.tuning6,
+    "Em9(B)": definedCustomConfigs.tuning3,
     "Ebm": definedCustomConfigs.tuning6,
     "Fb": definedCustomConfigs.tuning7,
     "Fbm": definedCustomConfigs.tuning7,

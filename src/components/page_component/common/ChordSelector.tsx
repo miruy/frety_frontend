@@ -22,11 +22,11 @@ const chordData: { [key: string]: string[] } = {
     "B 코드": [
         "B", "B#", "B#7", "B#9", "B#M7", "B#m", "B#m7", "B#sus4", "B13", "B5",
         "B6", "B7", "B7sus4", "B9", "BM7", "Badd9", "Baug", "Bb", "Bbm", "Bdim",
-        "Bm", "Bm11", "Bm6", "Bm7", "Bm7/G", "Bm9", "Bsus2", "Bsus4"
+        "Bm", "Bm11", "Bm6", "Bm7(A)", "Bm7(B)", "Bm7/G", "Bm9", "Bsus2", "Bsus4"
     ],
     "C 코드": [
         "C", "C#", "C#7", "C#9", "C#M7", "C#m", "C#m7", "C#sus4", "C13", "C5",
-        "C6", "C7", "C7sus4", "C9", "CM7", "Cadd9", "Caug", "Cb", "Cbm", "Cdim",
+        "C6", "C7", "C7sus4", "C9", "CM7", "Cadd9(A)", "Cadd9(B)", "Caug", "Cb", "Cbm", "Cdim",
         "Cm", "Cm11", "Cm6", "Cm7", "Cm7/G", "Cm9", "Csus2", "Csus4"
     ],
     "D 코드": [
@@ -37,7 +37,7 @@ const chordData: { [key: string]: string[] } = {
     "E 코드": [
         "E", "E#", "E#7", "E#M7", "E#m", "E#m7", "E#sus4", "E13", "E5", "E6",
         "E7", "E7sus4", "E9", "EM7", "Eadd9", "Eaug", "Eb", "Ebm", "Edim", "Em",
-        "Em6", "Em7", "Esus2", "Esus4"
+        "Em6", "Em7(A)", "Em7(B)", "Em7(C)", "Em7(D)", "Em9(A)", "Em9(B)", "Esus2", "Esus4"
     ],
     "F 코드": [
         "F", "F#", "F#7", "F#M7", "F#m", "F#m7", "F#m7-5", "F#sus4", "F13", "F5",
@@ -45,7 +45,7 @@ const chordData: { [key: string]: string[] } = {
         "Fm6", "Fm7", "Fsus2", "Fsus4"
     ],
     "G 코드": [
-        "G", "G#", "G#7", "G#M7", "G#m", "G#m7", "G#m7-5", "G#sus4", "G/B", "G13", "G5",
+        "G(A)", "G(B)", "G#", "G#7", "G#M7", "G#m", "G#m7", "G#m7-5", "G#sus4", "G/B", "G13", "G5",
         "G6", "G7", "G9", "GM7", "Gadd9", "Gaug", "Gb", "Gbm", "Gdim", "G#dim7/D", "Gm",
         "Gm6", "Gm7", "Gsus2", "Gsus4"
     ]

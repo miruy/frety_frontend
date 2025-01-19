@@ -151,7 +151,7 @@ export const chordsMap: { [key: string]: Chord } = {
             [3, 3],
             [4, 3],
             [5, 1],
-            [6,'x'],
+            [6, 'x'],
         ],
         barres: [
             {
@@ -602,7 +602,7 @@ export const chordsMap: { [key: string]: Chord } = {
         ],
         barres: [],
     },
-    "Bm7": {
+    "Bm7(A)": {
         fingers: [
             [2, 3],
             [4, 4],
@@ -616,6 +616,17 @@ export const chordsMap: { [key: string]: Chord } = {
                 color: '#000000',
             },
         ],
+    },
+    "Bm7(B)": {
+        fingers: [
+            [5, 2],
+            [3, 2],
+            [1, 3],
+            [2, 3],
+            [4, 0],
+            [6, 'x'],
+        ],
+        barres: [],
     },
     "Bsus4": {
         fingers: [
@@ -1070,12 +1081,23 @@ export const chordsMap: { [key: string]: Chord } = {
         ],
         barres: [],
     },
-    "Cadd9": {
+    "Cadd9(A)": {
         fingers: [
             [4, 2],
             [2, 3],
             [5, 3],
             [1, 0],
+            [3, 0],
+            [6, 'x'],
+        ],
+        barres: [],
+    },
+    "Cadd9(B)": {
+        fingers: [
+            [4, 2],
+            [1, 3],
+            [2, 3],
+            [5, 3],
             [3, 0],
             [6, 'x'],
         ],
@@ -1612,13 +1634,68 @@ export const chordsMap: { [key: string]: Chord } = {
         ],
         barres: [],
     },
-    "Em7": {
+    "Em7(A)": {
         fingers: [
             [5, 2],
             [1, 0],
             [2, 0],
             [3, 0],
             [4, 0],
+            [6, 0],
+        ],
+        barres: [],
+    },
+    "Em7(B)": {
+        fingers: [
+            [4, 2],
+            [1, 3],
+            [2, 3],
+            [3, 0],
+            [5, 0],
+            [6, 0],
+        ],
+        barres: [],
+    },
+    "Em7(C)": {
+        fingers: [
+            [5, 2],
+            [4, 2],
+            [2, 3],
+            [1, 0],
+            [3, 0],
+            [6, 0],
+        ],
+        barres: [],
+    },
+    "Em7(D)": {
+        fingers: [
+            [5, 2],
+            [4, 2],
+            [1, 3],
+            [2, 3],
+            [3, 0],
+            [6, 0],
+        ],
+        barres: [],
+    },
+    "Em9(A)": {
+        fingers: [
+            [5, 2],
+            [1, 2],
+            [2, 0],
+            [3, 0],
+            [4, 0],
+            [6, 0],
+        ],
+        barres: [],
+    },
+    "Em9(B)": {
+        fingers: [
+            [2, 2],
+            [4, 3],
+            [1, 0],
+            [3, 0],
+            [5, 0],
             [6, 0],
         ],
         barres: [],
@@ -2071,12 +2148,23 @@ export const chordsMap: { [key: string]: Chord } = {
         ],
         barres: [],
     },
-    "G": {
+    "G(A)": {
         fingers: [
             [5, 2],
             [1, 3],
             [6, 3],
             [2, 0],
+            [3, 0],
+            [4, 0],
+        ],
+        barres: [],
+    },
+    "G(B)": {
+        fingers: [
+            [5, 2],
+            [1, 3],
+            [2, 3],
+            [6, 3],
             [3, 0],
             [4, 0],
         ],
@@ -2324,11 +2412,12 @@ export const chordsMap: { [key: string]: Chord } = {
     "Gadd9": {
         fingers: [
             [3, 2],
-            [5, 2],
-            [1, 3],
             [6, 3],
             [1, 'x'],
+            [2, 0],
+            [3, 0],
             [4, 0],
+            [5, 0],
         ],
         barres: [],
     },
