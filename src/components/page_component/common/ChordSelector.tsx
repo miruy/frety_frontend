@@ -7,6 +7,9 @@ import {
     CommandList,
     CommandSeparator
 } from "@/components/ui/command";
+import {SVGuitarChord} from "svguitar";
+import {commonConfigs, customConfigs} from "@/data/drawChordDiagram";
+import {chordsMap} from "@/data/chordsMap";
 
 interface ChordSelectorProps {
     setChord: (chord: string) => void;
@@ -53,6 +56,46 @@ const chordData: { [key: string]: string[] } = {
 
 
 const ChordSelector = ({setChord, deleteChord}: ChordSelectorProps) => {
+
+    // 코드다이어그램 미리보기
+    const drawChordDiagram = (container: HTMLDivElement, chordName: string) => {
+
+        if (!container) return;
+
+        // 기존 내용 초기화 (중복 방지)
+        container.innerHTML = "";
+
+        // 다이어그램 생성
+        const chordDiagram = new SVGuitarChord(container);
+        const customConfig = customConfigs[chordName];
+        const chord = chordsMap[chordName];
+
+        chordDiagram
+            .configure({
+                ...commonConfigs,
+                ...customConfig,
+            })
+            .chord(chord)
+            .draw();
+
+        // SVG 크기 설정
+        const svgElement = container.querySelector("svg");
+        if (svgElement) {
+            svgElement.style.height = "50px"; // 높이 설정
+            svgElement.style.width = "50px"; // 너비 설정
+        }
+
+        // 프랫 번호 위치 설정
+        const tuningText = container.querySelectorAll("text.tuning");
+        if (tuningText.length > 1) {
+            const currentX = parseFloat(tuningText[0].getAttribute("x") || "0");
+            const currentY = parseFloat(tuningText[0].getAttribute("y") || "0");
+
+            tuningText[0].setAttribute("x", (currentX - 177).toString()); // 왼쪽으로 이동
+            tuningText[0].setAttribute("y", (currentY + 55).toString());  // 아래로 이동
+        }
+    };
+
     return (
         <Command className="rounded-lg border shadow-md w-[230px]">
             <CommandInput placeholder="Search"/>
@@ -70,17 +113,27 @@ const ChordSelector = ({setChord, deleteChord}: ChordSelectorProps) => {
                         <CommandSeparator/>
                         <CommandGroup heading={key}
                                       className="[&_[cmdk-group-heading]]:text-[14px] [&_[cmdk-group-heading]]:cursor-default">
-                            {chordData[key].map((value, valueIndex) => (
-                                <CommandItem
-                                    key={valueIndex}
-                                    className="text-xs cursor-pointer"
-                                    onSelect={() => {
-                                        setChord(value)
-                                    }}
-                                >
-                                    <span>{value}</span>
-                                </CommandItem>
-                            ))}
+                            {chordData[key].map((value, valueIndex) => {
+                                return (
+                                    <CommandItem
+                                        key={valueIndex}
+                                        className="flex justify-between text-xs cursor-pointer"
+                                        onSelect={() => {
+                                            setChord(value)
+                                        }}
+                                    >
+                                        <div>{value}</div>
+
+                                        <div
+                                            ref={(ref) => {
+                                                if (ref) {
+                                                    drawChordDiagram(ref, value); // 다이어그램 즉시 생성
+                                                }
+                                            }}
+                                        ></div>
+                                    </CommandItem>
+                                )
+                            })}
                         </CommandGroup>
                     </div>
                 ))}
