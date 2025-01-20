@@ -49,7 +49,7 @@ const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: n
                 setLoading(false);
 
                 try {
-                    console.log("contnet", tab.content)
+                    // console.log("contnet", tab.content)
                     // JSON 문자열을 객체로 변환
                     const parsedTab = JSON.parse(tab.content!);
 
@@ -78,13 +78,13 @@ const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: n
                                 const customConfig = customConfigs[line.chord]; // 프렛 설정을 위한 커스텀 설정
                                 chordDiagramDiv.className = `${showDiagram ? 'flex' : 'hidden'} ${customConfig ? 'w-[55px] h-[55px] ' : 'w-11 h-11'} items-center absolute mt-[-96px]`;
 
-                                chordDiagram
-                                    .configure({
-                                        ...commonConfigs,
-                                        ...customConfig,
-                                    })
-                                    .chord(chord)
-                                    .draw()
+                                // chordDiagram
+                                //     .configure({
+                                //         ...commonConfigs,
+                                //         ...customConfig,
+                                //     })
+                                //     .chord(chord)
+                                //     .draw()
 
                                 // 프랫 번호 위치 설정
                                 const tuningText = chordDiagramDiv.querySelectorAll('text.tuning');
@@ -135,13 +135,13 @@ const DetailTab = ({detailTab, tabId}: { detailTab: GetTabByIdResponse, tabId: n
                                     const customConfig = customConfigs[line.chord]; // 프렛 설정을 위한 커스텀 설정
                                     tooltipContentDiv.className = `${customConfig ? 'w-[55px] h-[55px]' : 'w-12 h-12 mr-2.5'}`;
 
-                                    chordDiagram
-                                        .configure({
-                                            ...commonConfigs,
-                                            ...customConfig,
-                                        })
-                                        .chord(chord)
-                                        .draw()
+                                    // chordDiagram
+                                    //     .configure({
+                                    //         ...commonConfigs,
+                                    //         ...customConfig,
+                                    //     })
+                                    //     .chord(chord)
+                                    //     .draw()
 
                                     // 프랫 번호 위치 설정
                                     const tuningText = tooltipContentDiv.querySelectorAll('text.tuning');
