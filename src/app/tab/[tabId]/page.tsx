@@ -18,14 +18,14 @@ export async function generateMetadata({params}: TabProps): Promise<Metadata> {
     const tab = await getTabById(tabId);
 
     return {
-        title: tab.artist && tab.song ? tab.artist + " - " + tab.song + " 기타 코드 프렛티(Frety)" : 'Frety | 기타 악보',
+        title: tab.artist && tab.song ? tab.artist + " - " + tab.song + " 기타 코드 프렛티(Frety)" : '기타 코드 프렛티(Frety)',
         description: '프렛티(Frety). 프렛 위에서 완성되는 당신의 기타 코드.',
-        keywords: tab.artist || tab.song ? tab.artist + ", " + tab.song + ", " + tab.authorName : 'Frety | 기타 악보',
+        keywords: tab.artist || tab.song ? tab.artist + ", " + tab.song + ", " + tab.authorName : '기타 코드 프렛티(Frety)',
         openGraph: {
             type: 'article',
             url: `https://www.frety.me/tab/${tab.id}`,
-            siteName: 'Frety - 프렛티',
-            title: tab.artist && tab.song ? tab.artist + " - " + tab.song + " 기타 코드 프렛티(Frety)" : 'Frety | 기타 악보',
+            siteName: 'Frety 프렛티',
+            title: tab.artist && tab.song ? tab.artist + " - " + tab.song + " 기타 코드 프렛티(Frety)" : '기타 코드 프렛티(Frety)',
             description: '프렛티(Frety). 프렛 위에서 완성되는 당신의 기타 코드.',
             locale: 'ko_KR',
             images: [
@@ -73,7 +73,7 @@ const DetailTabPage = async ({params}: Props) => {
         const jsonLd = {
             '@context': 'https://schema.org',
             '@type': 'article',
-            'name': detailTab.artist && detailTab.song ? detailTab.artist + " - " + detailTab.song + "기타 코드 프렛티(Frety)" : 'Frety | 기타 악보',
+            'name': detailTab.artist && detailTab.song ? detailTab.artist + " - " + detailTab.song + "기타 코드 프렛티(Frety)" : '기타 코드 프렛티(Frety)',
             'description': detailTab.artist && detailTab.song ? detailTab.artist + detailTab.song + '기타 코드 프렛티(Frety)' : '프렛티(Frety). 프렛 위에서 완성되는 당신의 기타 코드.',
             'url': `https://www.frety.me/tab/${detailTab.id}`,
             'image': {

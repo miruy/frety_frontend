@@ -53,7 +53,7 @@ const SeoHead = ({
             <meta property="og:description" content={ogDescription}/>
             <meta property="og:type" content={ogType}/>
             <meta property="og:url" content={ogUrl}/>
-            <meta property="og:site_name" content="Frety - 프렛티"/>
+            <meta property="og:site_name" content="Frety 프렛티"/>
             <meta property="og:locale" content="ko_KR"/>
             <meta property="og:image" content={ogImage}/>
             <meta property="og:image:width" content="800"/>
