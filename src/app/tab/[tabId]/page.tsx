@@ -19,7 +19,7 @@ export async function generateMetadata({params}: TabProps): Promise<Metadata> {
 
     return {
         title: tab.artist && tab.song ? tab.artist + " - " + tab.song + " 기타 코드 프렛티(Frety)" : '기타 코드 프렛티(Frety)',
-        description: '프렛티(Frety). 프렛 위에서 완성되는 당신의 기타 코드.',
+        description: tab.artist && tab.song ?  tab.artist + " - " + tab.song + '기타 코드 프렛티(Frety). 프렛 위에서 완성되는 당신의 기타 코드.' :'프렛티(Frety). 프렛 위에서 완성되는 당신의 기타 코드.' ,
         keywords: tab.artist || tab.song ? tab.artist + ", " + tab.song + ", " + tab.authorName : '기타 코드 프렛티(Frety)',
         openGraph: {
             type: 'article',
