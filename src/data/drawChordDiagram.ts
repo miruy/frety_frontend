@@ -88,6 +88,7 @@ export const customConfigs: Record<string, CustomConfig> = {
     "G#M7": definedCustomConfigs.tuning4,
     "G#m7": definedCustomConfigs.tuning4,
     "G#sus4": definedCustomConfigs.tuning4,
+    "Gsus4": definedCustomConfigs.tuning3,
 
     // 기본 설정이 없을 때 사용할 공통 설정
     default: {

@@ -2345,14 +2345,19 @@ export const chordsMap: { [key: string]: Chord } = {
     },
     "Gsus4": {
         fingers: [
-            [1, 3],
-            [2, 3],
-            [5, 3],
-            [6, 3],
-            [4, 0],
-            [3, 0],
+            [3, 4],
+            [4, 4],
+            [5, 4],
+            [6, 0]
         ],
-        barres: [],
+        barres: [
+            {
+                fromString: 6,
+                toString: 1,
+                fret: 2,
+                color: '#000000',
+            },
+        ],
     },
     "Gsus2": {
         fingers: [

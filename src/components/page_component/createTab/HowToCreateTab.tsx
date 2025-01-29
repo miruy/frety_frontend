@@ -28,7 +28,7 @@ const HowToCreateTab = () => {
 
                 <div className="ml-5">3. 위치 변경을 원하는 가사를 <span className="font-bold">드래그 앤 드롭</span>하여 변경할 수 있습니다.</div>
 
-                <div className="ml-5">3. 악보 작성을 마쳤다면, <span className="font-bold">저장 버튼</span>을 눌러 당신의
+                <div className="ml-5">4. 악보 작성을 마쳤다면, <span className="font-bold">저장 버튼</span>을 눌러 당신의
                     악보를 <span className="font-bold">Frety</span>에 공유하세요!
                 </div>
             </div>
