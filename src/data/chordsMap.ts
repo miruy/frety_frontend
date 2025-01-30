@@ -25,6 +25,17 @@ export const chordsMap: { [key: string]: Chord } = {
         ],
         barres: [],
     },
+    "A/E": {
+        fingers: [
+            [2, 2],
+            [3, 2],
+            [4, 2],
+            [1, 0], // open-string
+            [5, 'x'], // silent-string(mute)
+            [6, 0],
+        ],
+        barres: [],
+    },
     "A#": {
         fingers: [
             [2, 3],
@@ -1649,13 +1660,24 @@ export const chordsMap: { [key: string]: Chord } = {
             },
         ],
     },
-    "E7": {
+    "E7(A)": {
         fingers: [
             [3, 1],
             [5, 2],
             [1, 0],
             [2, 0],
             [4, 0],
+            [6, 0],
+        ],
+        barres: [],
+    },
+    "E7(B)": {
+        fingers: [
+            [3, 1],
+            [5, 2],
+            [4, 2],
+            [2, 3],
+            [1, 0],
             [6, 0],
         ],
         barres: [],
