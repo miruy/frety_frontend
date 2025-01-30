@@ -376,6 +376,21 @@ export const chordsMap: { [key: string]: Chord } = {
         ],
         barres: [],
     },
+    "A/C#": {
+        fingers: [
+            [1, 'x'],
+            [5, 4],
+            [6, 'x'],
+        ],
+        barres: [
+            {
+                fromString: 4,
+                toString: 2,
+                fret: 2,
+                color: '#000000',
+            },
+        ],
+    },
     "B": {
         fingers: [
             [2, 4],

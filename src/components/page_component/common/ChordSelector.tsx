@@ -20,7 +20,7 @@ const chordData: { [key: string]: string[] } = {
     "A 코드": [
         "A", "A#", "A#7", "A#9", "A#M7", "A#m", "A#m7", "A#sus4", "A13", "A5",
         "A6", "A7", "A7sus4", "A9", "AM7", "Aadd9", "Aaug", "Ab", "Abm", "Adim",
-        "Am", "Am11", "Am6", "Am7", "Am7/G", "Am9", "Asus2", "Asus4"
+        "Am", "Am11", "Am6", "Am7", "A/C#", "Am7/G", "Am9", "Asus2", "Asus4"
     ],
     "B 코드": [
         "B", "B#", "B#7", "B#9", "B#M7", "B#m", "B#m7", "B#sus4", "B13", "B5",
