@@ -1466,6 +1466,17 @@ export const chordsMap: { [key: string]: Chord } = {
             },
         ],
     },
+    "D/E": {
+        fingers: [
+            [3, 2],
+            [2, 3],
+            [1, 'x'],
+            [4, 4],
+            [5, 'x'],
+            [6, 0],
+        ],
+        barres: [],
+    },
     "D/F#": {
         fingers: [
             [1, 2],
