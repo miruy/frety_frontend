@@ -2004,6 +2004,17 @@ export const chordsMap: { [key: string]: Chord } = {
         ],
         barres: [],
     },
+    "F#m9": {
+        fingers: [
+            [1, 4],
+            [2, 2],
+            [3, 2],
+            [4, 2],
+            [5, 'x'],
+            [6, 2],
+        ],
+        barres: [],
+    },
     "Fbm": {
         fingers: [
             [2, 3],

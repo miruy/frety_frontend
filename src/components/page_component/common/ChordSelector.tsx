@@ -43,7 +43,7 @@ const chordData: { [key: string]: string[] } = {
         "Em6", "Em7(A)", "Em7(B)", "Em7(C)", "Em7(D)", "Em9(A)", "Em9(B)", "Esus2", "Esus4"
     ],
     "F 코드": [
-        "F", "F#", "F#7", "F#M7", "F#m", "F#m7", "F#m7-5", "F#sus4", "F13", "F5",
+        "F", "F#", "F#7", "F#M7", "F#m", "F#m7", "F#m9", "F#m7-5", "F#sus4", "F13", "F5",
         "F6", "F7", "F9", "FM7", "Fadd9", "Faug", "Fb", "Fbm", "Fdim", "Fm",
         "Fm6", "Fm7", "Fsus2", "Fsus4"
     ],
