@@ -1438,7 +1438,7 @@ export const chordsMap: { [key: string]: Chord } = {
         ],
         barres: [],
     },
-    "Dadd9": {
+    "Dadd9(A)": {
         fingers: [
             [4, 4],
             [2, 5],
@@ -1453,6 +1453,15 @@ export const chordsMap: { [key: string]: Chord } = {
                 color: '#000000',
             },
         ],
+    },
+    "Dadd9(B)": {
+        fingers: [
+            [3, 2],
+            [2, 3],
+            [5, 'x'],
+            [6, 'x'],
+        ],
+        barres: [],
     },
     "Ddim": {
         fingers: [
