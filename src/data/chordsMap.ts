@@ -1394,6 +1394,17 @@ export const chordsMap: { [key: string]: Chord } = {
         ],
         barres: [],
     },
+    "D#dim": {
+        fingers: [
+            [2, 1],
+            [4, 1],
+            [1, 2],
+            [3, 2],
+            [5, 'x'],
+            [6, 'x'],
+        ],
+        barres: [],
+    },
     "D6": {
         fingers: [
             [1, 2],
@@ -1564,6 +1575,17 @@ export const chordsMap: { [key: string]: Chord } = {
             [5, 2],
             [1, 0],
             [2, 0],
+            [3, 0],
+            [6, 0],
+        ],
+        barres: [],
+    },
+    "Em/D": {
+        fingers: [
+            [4, 2],
+            [5, 2],
+            [1, 3],
+            [2, 3],
             [3, 0],
             [6, 0],
         ],

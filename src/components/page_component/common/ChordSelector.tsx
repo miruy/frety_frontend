@@ -34,12 +34,12 @@ const chordData: { [key: string]: string[] } = {
     ],
     "D 코드": [
         "D", "D#", "D#7", "D#M7", "D#m", "D#m7", "D#sus4", "D/E", "D/F#", "D13", "D5",
-        "D6", "D7", "D7sus4", "D9", "DM7", "Dadd9", "Daug", "Db", "Dbm", "Ddim",
+        "D6", "D7", "D7sus4", "D9", "DM7", "Dadd9", "Daug", "Db", "Dbm", "D#dim", "Ddim",
         "Dm", "Dm6", "Dm7", "Dsus2", "Dsus4",
     ],
     "E 코드": [
         "E", "E#", "E#7", "E#M7", "E#m", "E#m7", "E#sus4", "E13", "E5", "E6",
-        "E7(A)", "E7(B)", "E7sus4", "E9", "EM7", "Eadd9", "Eaug", "Eb", "Ebm", "Edim", "Em",
+        "E7(A)", "E7(B)", "E7sus4", "E9", "EM7", "Eadd9", "Eaug", "Eb", "Ebm", "Edim", "Em", "Em/D",
         "Em6", "Em7(A)", "Em7(B)", "Em7(C)", "Em7(D)", "Em9(A)", "Em9(B)", "Esus2", "Esus4"
     ],
     "F 코드": [
