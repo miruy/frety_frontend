@@ -149,7 +149,7 @@ const Signup = () => {
                             </svg>
                             <Input type="text"
                                    {...createUserRequest.register("name")}
-                                   className="h-[50px] pl-9" placeholder="이름"/>
+                                   className="h-[50px] pl-9" placeholder="닉네임"/>
                         </div>
 
                         <div className="relative">
